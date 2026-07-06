@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Calculator | Purl guide</title>
+<style>
+  :root{--bg:#FBF8F5;--surface:#FFFFFF;--primary:#7C5E9B;--primary-dark:#5E4478;--text:#2C2630;--muted:#6f6676;--border:#ECE6E1;}
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{margin:0;background:var(--bg);color:var(--text);line-height:1.6;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+  .wrap{max-width:720px;margin:0 auto;padding:28px 22px 72px}
+  .top{display:flex;align-items:center;gap:11px;text-decoration:none;margin-bottom:26px}
+  .top img{width:34px;height:34px;object-fit:contain;flex:none}
+  .top .name{font-weight:700;font-size:15px;color:var(--muted);letter-spacing:.02em}
+  .content h1{font-size:29px;line-height:1.2;margin:10px 0 14px}
+  .content h2{font-size:20px;margin:30px 0 8px;color:var(--primary-dark)}
+  .content h3{font-size:16px;margin:22px 0 6px;color:var(--primary-dark)}
+  .content p{margin:0 0 14px}
+  .content ul,.content ol{margin:0 0 14px;padding-left:22px}
+  .content li{margin:0 0 7px}
+  .content a{color:var(--primary)}
+  .content code{background:var(--surface);border:1px solid var(--border);border-radius:5px;padding:1px 5px;font-size:.92em}
+  .content hr{border:none;border-top:1px solid var(--border);margin:28px 0}
+  .content blockquote{margin:0 0 14px;padding:2px 16px;border-left:3px solid var(--border);color:var(--muted)}
+  .content strong{color:var(--text)}
+  .pages{margin-top:44px;padding-top:18px;border-top:1px solid var(--border)}
+  .pages h2{font-size:13px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);margin:0 0 10px}
+  .pages ul{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:8px}
+  .pages a{display:inline-block;background:var(--surface);border:1px solid var(--border);border-radius:999px;
+    padding:6px 13px;color:var(--primary);text-decoration:none;font-size:14px;font-weight:600}
+  .pages a:hover{border-color:var(--primary)}
+  .pages a[aria-current=page]{background:var(--primary);color:#fff;border-color:var(--primary)}
+  footer{margin-top:34px;color:var(--muted);font-size:13px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<a class="top" href="index.html"><img src="../logo.png" alt="Purl logo" /><span class="name">PURL GUIDE</span></a>
+<div class="content">
+<h1>Calculator</h1>
+<p>Two calculators in the app:</p>
+<ul>
+<li><strong>The big one</strong>: opened from More → Calculator, from the pattern
+reader header, from the PDF viewer tools, or from the calculator
+icon next to a project&#39;s gauge row. Multi-mode: gauge swatch,
+stitch resize, even shaping, skeins needed, plus a four-function
+calculator.</li>
+<li><strong>The little one</strong>: inline four-function calculator inside the
+PDF viewer&#39;s tools dial. Quick arithmetic mid-row without leaving
+the PDF.</li>
+</ul>
+<p>This page covers the big one.</p>
+<h2>Tabs</h2>
+<p>Two main tabs at the top:</p>
+<ul>
+<li><strong>Craft</strong>: gauge / resize / shaping / skeins.</li>
+<li><strong>Plain</strong>: basic four-function calculator.</li>
+</ul>
+<p>Switch by tapping.</p>
+<h2>Craft mode</h2>
+<p>Inside Craft, sections stack vertically. Scroll through them.
+You can fill in just the one you need; the others stay empty.</p>
+<h3>Gauge swatch</h3>
+<p>You knit a swatch. You measure it:</p>
+<ul>
+<li>Number of <strong>stitches</strong> across.</li>
+<li>Over what <strong>width</strong> (cm or in).</li>
+<li>Number of <strong>rows</strong> down.</li>
+<li>Over what <strong>height</strong>.</li>
+</ul>
+<p>The calculator gives you stitches-per-cm and rows-per-cm (or
+per-inch), plus a hint at the implied yarn weight.</p>
+<h3>Stitch resize</h3>
+<p>You have a pattern. The pattern was knit at a certain gauge, but
+you knit at a different gauge. How many stitches do you cast on
+to hit the same finished dimensions?</p>
+<ul>
+<li>Pattern&#39;s gauge (sts × rows / over).</li>
+<li>Your actual gauge.</li>
+<li>The pattern&#39;s original stitch count.</li>
+</ul>
+<p>Output: the stitch count you need at your gauge. Same for rows.</p>
+<h3>Even shaping</h3>
+<p>You need to decrease (or increase) some number of stitches
+evenly across a row.</p>
+<ul>
+<li>Total stitches.</li>
+<li>How many to decrease (or increase).</li>
+<li>Edge padding optional.</li>
+</ul>
+<p>Output: an instruction string like &quot;k4, <em>k2tog, k7</em> until 6 sts,
+k6&quot;, what you&#39;d write into a custom shaping row.</p>
+<p>The calc rounds in favour of leaving extra rather than running
+short.</p>
+<h3>Skeins needed</h3>
+<p>You estimate the project needs X meters of yarn. Each skein
+is Y meters. How many skeins do you buy?</p>
+<p>Output: skeins (rounded up), with <strong>+10%</strong> and <strong>+20%</strong> safety
+lines so you can pick your risk tolerance.</p>
+<h2>Plain mode</h2>
+<p>Standard four-function calculator with a small session history.
+Closing the calculator clears the history.</p>
+<h2>Seeding from a project</h2>
+<p>Open the calculator from a project&#39;s gauge row (the calculator
+icon next to the actual-gauge line) and the gauge swatch opens
+pre-filled with what you recorded. Saves you re-typing.</p>
+<p>Open from the pattern reader header and the craft tab opens by
+default but no specific gauge is pre-loaded (there&#39;s no project
+context).</p>
+<h2>Tips</h2>
+<ul>
+<li>Stitches-per-cm is more precise than per-10cm, but the display
+shows the span you typed (so &quot;22 sts over 10 cm&quot; stays as
+written; the math is done at higher precision under the
+hood).</li>
+<li>The Plain tab handles negative numbers and decimals fine, but
+doesn&#39;t have scientific functions (sin/cos/log). Use your
+phone&#39;s built-in calculator if you need those.</li>
+</ul>
+<h2>See also</h2>
+<ul>
+<li><a href="projects.html">Projects</a>: the gauge row and the
+calculator-icon path.</li>
+<li><a href="pdf-tools.html">PDF tools</a>: the inline four-function calc
+inside the PDF viewer.</li>
+</ul>
+
+</div>
+<nav class="pages"><h2>All pages</h2><ul><li><a href="index.html">User guide</a></li><li><a href="getting-started.html">Getting started</a></li><li><a href="yarn-stash.html">Yarn stash</a></li><li><a href="patterns.html">Patterns</a></li><li><a href="projects.html">Projects</a></li><li><a href="pdf-tools.html">PDF tools</a></li><li><a href="barcode-templates.html">Barcode templates</a></li><li><a href="backups.html">Backups and recovery</a></li><li><a href="terminology.html">Terminology glossary</a></li><li><a href="calculator.html" aria-current="page">Calculator</a></li><li><a href="faq.html">FAQ</a></li></ul></nav>
+<footer>Part of Purl, a knitting and crochet companion. <a href="../">purl-site home</a></footer>
+</div>
+</body>
+</html>

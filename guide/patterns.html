@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Patterns | Purl guide</title>
+<style>
+  :root{--bg:#FBF8F5;--surface:#FFFFFF;--primary:#7C5E9B;--primary-dark:#5E4478;--text:#2C2630;--muted:#6f6676;--border:#ECE6E1;}
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{margin:0;background:var(--bg);color:var(--text);line-height:1.6;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+  .wrap{max-width:720px;margin:0 auto;padding:28px 22px 72px}
+  .top{display:flex;align-items:center;gap:11px;text-decoration:none;margin-bottom:26px}
+  .top img{width:34px;height:34px;object-fit:contain;flex:none}
+  .top .name{font-weight:700;font-size:15px;color:var(--muted);letter-spacing:.02em}
+  .content h1{font-size:29px;line-height:1.2;margin:10px 0 14px}
+  .content h2{font-size:20px;margin:30px 0 8px;color:var(--primary-dark)}
+  .content h3{font-size:16px;margin:22px 0 6px;color:var(--primary-dark)}
+  .content p{margin:0 0 14px}
+  .content ul,.content ol{margin:0 0 14px;padding-left:22px}
+  .content li{margin:0 0 7px}
+  .content a{color:var(--primary)}
+  .content code{background:var(--surface);border:1px solid var(--border);border-radius:5px;padding:1px 5px;font-size:.92em}
+  .content hr{border:none;border-top:1px solid var(--border);margin:28px 0}
+  .content blockquote{margin:0 0 14px;padding:2px 16px;border-left:3px solid var(--border);color:var(--muted)}
+  .content strong{color:var(--text)}
+  .pages{margin-top:44px;padding-top:18px;border-top:1px solid var(--border)}
+  .pages h2{font-size:13px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);margin:0 0 10px}
+  .pages ul{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:8px}
+  .pages a{display:inline-block;background:var(--surface);border:1px solid var(--border);border-radius:999px;
+    padding:6px 13px;color:var(--primary);text-decoration:none;font-size:14px;font-weight:600}
+  .pages a:hover{border-color:var(--primary)}
+  .pages a[aria-current=page]{background:var(--primary);color:#fff;border-color:var(--primary)}
+  footer{margin-top:34px;color:var(--muted);font-size:13px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<a class="top" href="index.html"><img src="../logo.png" alt="Purl logo" /><span class="name">PURL GUIDE</span></a>
+<div class="content">
+<h1>Patterns</h1>
+<p>Two kinds: <strong>PDF patterns</strong> you&#39;ve bought or downloaded, and
+<strong>written patterns</strong> you type into the app yourself. Both live in
+the Patterns tab; both can be attached to a project; both have a
+reading mode that tracks where you are.</p>
+<h2>Importing a PDF</h2>
+<p>Tap <strong>Patterns</strong> → <strong>+ Import</strong>. Pick a PDF from your phone
+(Downloads, Drive, Files, anywhere). Purl copies it into its own
+storage so you can delete the original if you want.</p>
+<p>The first time you open the PDF, the app generates a page-1
+thumbnail for the cover (takes a second or two); the cover
+shows up on the pattern card afterwards.</p>
+<p>You can replace the auto cover with any photo via <strong>Edit details</strong>
+(the pencil on the pattern card).</p>
+<h2>The PDF viewer</h2>
+<p>Tap a PDF pattern to open it. The viewer has a lot of tools, see
+<a href="pdf-tools.html">PDF tools</a> for the deep dive. The basics:</p>
+<ul>
+<li><strong>Scroll</strong> through pages with your finger.</li>
+<li><strong>Pinch</strong> to zoom in. Pull to refresh isn&#39;t a thing; the page
+just stays where you left it.</li>
+<li><strong>Tools dial</strong> (the floating button): pen, marker, ruler,
+counters, sticky notes, bookmarks, terminology, calculator,
+more.</li>
+<li><strong>Done</strong> in the toolbar closes the drawing mode but stays in
+the PDF; <strong>back</strong> in the corner returns to the patterns list.</li>
+</ul>
+<p>Your drawings, notes, bookmarks, and reading position are saved
+automatically. Close the PDF and come back days later, you land
+back where you were.</p>
+<h2>Writing your own pattern</h2>
+<p>Tap <strong>Patterns</strong> → <strong>+ New</strong>. The editor is structured around
+<strong>sections</strong> + <strong>steps</strong>:</p>
+<ul>
+<li>A <strong>section</strong> is a chunk like &quot;Cuff&quot;, &quot;Body&quot;, &quot;Sleeve&quot;,
+&quot;Increase rounds&quot;.</li>
+<li>A <strong>step</strong> inside a section is one row or one instruction.</li>
+</ul>
+<p>For each step you type a <strong>label</strong> (often the row number) and the
+<strong>instruction text</strong>. Steps stack up; sections stack up. As you
+build, the right-hand column shows what the reader will look like.</p>
+<p>Other fields:</p>
+<ul>
+<li><strong>Title</strong>, <strong>designer</strong> (autofills from past patterns +
+imported PDFs), <strong>craft</strong> (knitting / crochet), <strong>photo</strong>,
+<strong>category</strong>, <strong>folder</strong>.</li>
+<li><strong>Sizes</strong>, <strong>gauge</strong>, <strong>materials</strong>: free-text, useful for the
+reader to see at a glance.</li>
+<li><strong>Abbreviations</strong>: your pattern-specific glossary
+(k2tog → knit 2 together). The bundled terminology glossary
+is available too, but per-pattern abbreviations let you
+override or extend.</li>
+<li><strong>Notes</strong>: free-text. Links get auto-detected and become
+tappable.</li>
+</ul>
+<h2>Reading a written pattern</h2>
+<p>Tap a written pattern to open the reader. Two modes:</p>
+<ul>
+<li><strong>Read mode</strong>: just scroll. Useful for skimming or referring
+back.</li>
+<li><strong>Track mode</strong>: highlights the current step. <strong>Next</strong> marks
+it complete and moves to the next; <strong>Prev</strong> un-marks the
+previous. Progress percentage at the top.</li>
+</ul>
+<p>Your last-opened position is restored on return, both your
+current step AND your manual scroll position. If you scrolled
+ahead to peek at row 17 before closing, you land back at row 17
+on reopen, not at your current step.</p>
+<p>The header buttons:</p>
+<ul>
+<li><strong>Terminology</strong>: opens the glossary in the pattern&#39;s craft.</li>
+<li><strong>Calculator</strong>: opens the calculator (gauge, resize, shaping,
+skeins).</li>
+<li><strong>Pattern info</strong>: gauge / sizes / materials in a sheet.</li>
+</ul>
+<p>Pinnable counters: tap the counters tool to add a draggable counter
+pill (e.g. &quot;Decrease row&quot;, starting at 12, decrement each time).
+Position them wherever they&#39;re out of the way.</p>
+<h2>Sharing a pattern with a friend</h2>
+<p>Patterns you&#39;ve written (not PDFs you imported, those have their
+own copyright) can be shared as a small <strong>.purlp</strong> file:</p>
+<ol>
+<li>Open the pattern&#39;s detail / preview pane.</li>
+<li><strong>Share</strong> sends the .purlp via the system share sheet (email,
+AirDrop, Drive, etc.).</li>
+<li>Your friend opens the file on their phone. If they have Purl
+installed, it opens straight in the Patterns tab and the
+pattern is added.</li>
+</ol>
+<p>PDFs share the same way except you use your phone&#39;s normal share
+flow on the underlying PDF file.</p>
+<h2>Organising</h2>
+<ul>
+<li><strong>Categories</strong>: Sweater, Hat, Mittens, etc. Custom; you add
+what you want from the picker.</li>
+<li><strong>Folders</strong>: groupings independent of category. A folder might
+be &quot;Knit-along 2026&quot; or &quot;Christmas presents&quot;.</li>
+<li><strong>Group by</strong>: at the top of the patterns list: by craft, by
+designer, by category. Or none.</li>
+<li><strong>Sort</strong>: by recent (last-opened), by added (when you
+imported), by name, by usage (how many projects).</li>
+<li><strong>Search</strong>: folds accents, matches title / designer / category
+/ craft.</li>
+</ul>
+<h2>The &quot;Continue Reading&quot; strip</h2>
+<p>On the Projects tab, the strip at the top shows the 3
+most-recently-opened patterns that have active or planned
+projects. Tap one to jump straight into reading, skipping the
+project-detail step. The list refreshes every time you open a
+pattern, so your &quot;recent crafting&quot; stays at the top.</p>
+<h2>See also</h2>
+<ul>
+<li><a href="pdf-tools.html">PDF tools</a>: the deep dive on the PDF viewer.</li>
+<li><a href="projects.html">Projects</a>: how patterns and projects
+interact.</li>
+<li><a href="backups.html">Backups + recovery</a>: the <code>.purlp</code> format and
+what travels in a <code>.purl</code> backup.</li>
+</ul>
+
+</div>
+<nav class="pages"><h2>All pages</h2><ul><li><a href="index.html">User guide</a></li><li><a href="getting-started.html">Getting started</a></li><li><a href="yarn-stash.html">Yarn stash</a></li><li><a href="patterns.html" aria-current="page">Patterns</a></li><li><a href="projects.html">Projects</a></li><li><a href="pdf-tools.html">PDF tools</a></li><li><a href="barcode-templates.html">Barcode templates</a></li><li><a href="backups.html">Backups and recovery</a></li><li><a href="terminology.html">Terminology glossary</a></li><li><a href="calculator.html">Calculator</a></li><li><a href="faq.html">FAQ</a></li></ul></nav>
+<footer>Part of Purl, a knitting and crochet companion. <a href="../">purl-site home</a></footer>
+</div>
+</body>
+</html>

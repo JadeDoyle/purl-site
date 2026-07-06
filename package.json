@@ -1,0 +1,13 @@
+{
+  "name": "purl-site",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Public site for Purl: landing, privacy policy, and user guide.",
+  "scripts": {
+    "build:guide": "node build-guide.mjs"
+  },
+  "devDependencies": {
+    "marked": "^18.0.5"
+  }
+}

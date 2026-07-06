@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Yarn stash | Purl guide</title>
+<style>
+  :root{--bg:#FBF8F5;--surface:#FFFFFF;--primary:#7C5E9B;--primary-dark:#5E4478;--text:#2C2630;--muted:#6f6676;--border:#ECE6E1;}
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{margin:0;background:var(--bg);color:var(--text);line-height:1.6;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+  .wrap{max-width:720px;margin:0 auto;padding:28px 22px 72px}
+  .top{display:flex;align-items:center;gap:11px;text-decoration:none;margin-bottom:26px}
+  .top img{width:34px;height:34px;object-fit:contain;flex:none}
+  .top .name{font-weight:700;font-size:15px;color:var(--muted);letter-spacing:.02em}
+  .content h1{font-size:29px;line-height:1.2;margin:10px 0 14px}
+  .content h2{font-size:20px;margin:30px 0 8px;color:var(--primary-dark)}
+  .content h3{font-size:16px;margin:22px 0 6px;color:var(--primary-dark)}
+  .content p{margin:0 0 14px}
+  .content ul,.content ol{margin:0 0 14px;padding-left:22px}
+  .content li{margin:0 0 7px}
+  .content a{color:var(--primary)}
+  .content code{background:var(--surface);border:1px solid var(--border);border-radius:5px;padding:1px 5px;font-size:.92em}
+  .content hr{border:none;border-top:1px solid var(--border);margin:28px 0}
+  .content blockquote{margin:0 0 14px;padding:2px 16px;border-left:3px solid var(--border);color:var(--muted)}
+  .content strong{color:var(--text)}
+  .pages{margin-top:44px;padding-top:18px;border-top:1px solid var(--border)}
+  .pages h2{font-size:13px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);margin:0 0 10px}
+  .pages ul{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:8px}
+  .pages a{display:inline-block;background:var(--surface);border:1px solid var(--border);border-radius:999px;
+    padding:6px 13px;color:var(--primary);text-decoration:none;font-size:14px;font-weight:600}
+  .pages a:hover{border-color:var(--primary)}
+  .pages a[aria-current=page]{background:var(--primary);color:#fff;border-color:var(--primary)}
+  footer{margin-top:34px;color:var(--muted);font-size:13px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<a class="top" href="index.html"><img src="../logo.png" alt="Purl logo" /><span class="name">PURL GUIDE</span></a>
+<div class="content">
+<h1>Yarn stash</h1>
+<p>What&#39;s in your basket, your bin, your closet. Tracked so you know
+what you have without rummaging.</p>
+<h2>Adding yarn</h2>
+<p>Tap <strong>Stash</strong> → <strong>+ Add yarn</strong>. The form has a lot of fields but
+only a few are required. You can save with just a brand and a
+skein count, and fill in the rest later.</p>
+<p>The fields:</p>
+<ul>
+<li><strong>Brand</strong>: Sandnes Garn, DROPS, KFO, Lopi, etc. Start typing and
+you&#39;ll see suggestions: yarns you&#39;ve added before, plus a
+built-in catalogue of Nordic producers.</li>
+<li><strong>Yarn name</strong>: once you&#39;ve picked a brand, the names cascade
+to that brand&#39;s yarns (Alpaca, Karisma, Léttlopi, etc.). Picking
+a known yarn auto-fills weight, fibre composition, and meterage,
+but only into fields you haven&#39;t typed in yet, so it never
+overwrites you.</li>
+<li><strong>Colour</strong>: by name (Cream, Bluebell) or by number, or both.
+Picks from the colourway catalogue for the chosen brand + yarn
+when one exists, plus colours you&#39;ve used before.</li>
+<li><strong>Skeins</strong>: how many you have.</li>
+<li><strong>Dye lot</strong>: important for matching skeins across purchases.
+Same colour, different dye lot, slightly different shade.</li>
+<li><strong>Weight</strong>: Lace / Fingering / DK / Aran / etc. The industry
+names, same in English and Norwegian.</li>
+<li><strong>Fibre composition</strong>: pick fibres and percentages. 80% wool +
+20% nylon, for example.</li>
+<li><strong>Meters per skein</strong> + <strong>grams per skein</strong>: what the ball-band
+says.</li>
+</ul>
+<p>Less-common fields live behind <strong>Advanced</strong>: crochet hook + gauge,
+care instructions, origin, price, store. Open it the moment you
+need to record any of them.</p>
+<h2>Multi-colour yarns</h2>
+<p>Self-striping, variegated, gradient: yarns that aren&#39;t one colour.
+Tap the <strong>Add colour</strong> chip in the colour section to add a second
+(or third, or tenth) hex. The yarn shows as vertical stripes on the
+detail banner and as a pie slice on stash thumbnails.</p>
+<h2>Scanning a ball-band</h2>
+<p>If the yarn has a barcode, tap the <strong>barcode icon</strong> next to the Add
+yarn button (yarn tab only). The camera opens; scan the code on the
+ball-band.</p>
+<p>Three things can happen:</p>
+<ul>
+<li><strong>Already in your stash</strong>: the app asks if you want to add
+another skein to that yarn, or open it.</li>
+<li><strong>Recognised product</strong>: opens the Add-yarn form prefilled with
+the brand, name, weight, fibre, gauge, needle. You just fill in
+the colour and dye lot.</li>
+<li><strong>Unknown code</strong>: opens a blank form with the code attached.
+As you fill in the brand + name + weight and save, the app
+remembers the code-to-yarn association for next time.</li>
+</ul>
+<p>Over time your scan library fills out. See <a href="barcode-templates.html">barcode
+templates</a> for the full picture.</p>
+<h2>Editing a yarn</h2>
+<p>Tap any yarn row to open its detail screen. <strong>Edit</strong> in the
+top-right opens the form again. <strong>Create copy</strong> lets you clone a
+yarn (useful when you&#39;ve bought &quot;the same yarn but a different
+colour&quot;, keeps everything you typed once, just change the
+colour).</p>
+<h2>Weighing yarn as you use it</h2>
+<p>When you&#39;re using yarn in a project, you can record how much you&#39;ve
+used. On the project detail screen, each yarn row has a
+<strong>speedometer button</strong>. Tap it to log grams (or meters) consumed.
+The yarn&#39;s skein count decrements automatically (using whichever
+math is most accurate, grams ÷ grams-per-skein preferred).</p>
+<p>You can also adjust on the way back: weighed too much, scale was
+off, just edit the same field on the project and the stash recomputes.</p>
+<h2>Sorting + filtering</h2>
+<p>Above the list:</p>
+<ul>
+<li><strong>Search</strong>: folds accents (Jarbo finds Järbo, Lopi finds Löpí),
+matches brand / yarn / colour / fibre / dye-lot.</li>
+<li><strong>Sort</strong>: by name, by brand, by quantity, or by knit gauge
+(coarsest first, matches how Norwegian knitters look at
+weight). Remembered between opens.</li>
+<li><strong>Hide empty</strong>: collapse anything with zero skeins.</li>
+<li><strong>Group expansion</strong>: tap a group&#39;s chevron to expand or
+collapse it.</li>
+</ul>
+<h2>Equipment</h2>
+<p>Switch to the <strong>Equipment</strong> view via the toggle at the top of
+the Stash tab. Same idea: add needles, hooks, and accessories;
+edit them later.</p>
+<p>For interchangeable needles, the model splits a set into <strong>tips</strong>
+and <strong>cables</strong> so you can track what tips + cables you own
+independently. Picking needles in a project gives you all the
+combinations.</p>
+<h2>Notes field</h2>
+<p>Every yarn (and every project, pattern, etc.) has a notes field.
+Whatever you type there shows up on the detail view; if you paste
+or type a web link (http or www), it becomes a tappable underlined
+link that opens in your browser.</p>
+<h2>See also</h2>
+<ul>
+<li><a href="patterns.html">Patterns</a>: what you knit <em>with</em> the yarn.</li>
+<li><a href="projects.html">Projects</a>: the project + yarn combination.</li>
+<li><a href="barcode-templates.html">Barcode templates</a>: the deeper scanning
+story.</li>
+</ul>
+
+</div>
+<nav class="pages"><h2>All pages</h2><ul><li><a href="index.html">User guide</a></li><li><a href="getting-started.html">Getting started</a></li><li><a href="yarn-stash.html" aria-current="page">Yarn stash</a></li><li><a href="patterns.html">Patterns</a></li><li><a href="projects.html">Projects</a></li><li><a href="pdf-tools.html">PDF tools</a></li><li><a href="barcode-templates.html">Barcode templates</a></li><li><a href="backups.html">Backups and recovery</a></li><li><a href="terminology.html">Terminology glossary</a></li><li><a href="calculator.html">Calculator</a></li><li><a href="faq.html">FAQ</a></li></ul></nav>
+<footer>Part of Purl, a knitting and crochet companion. <a href="../">purl-site home</a></footer>
+</div>
+</body>
+</html>

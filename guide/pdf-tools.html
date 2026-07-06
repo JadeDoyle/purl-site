@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>PDF tools | Purl guide</title>
+<style>
+  :root{--bg:#FBF8F5;--surface:#FFFFFF;--primary:#7C5E9B;--primary-dark:#5E4478;--text:#2C2630;--muted:#6f6676;--border:#ECE6E1;}
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{margin:0;background:var(--bg);color:var(--text);line-height:1.6;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+  .wrap{max-width:720px;margin:0 auto;padding:28px 22px 72px}
+  .top{display:flex;align-items:center;gap:11px;text-decoration:none;margin-bottom:26px}
+  .top img{width:34px;height:34px;object-fit:contain;flex:none}
+  .top .name{font-weight:700;font-size:15px;color:var(--muted);letter-spacing:.02em}
+  .content h1{font-size:29px;line-height:1.2;margin:10px 0 14px}
+  .content h2{font-size:20px;margin:30px 0 8px;color:var(--primary-dark)}
+  .content h3{font-size:16px;margin:22px 0 6px;color:var(--primary-dark)}
+  .content p{margin:0 0 14px}
+  .content ul,.content ol{margin:0 0 14px;padding-left:22px}
+  .content li{margin:0 0 7px}
+  .content a{color:var(--primary)}
+  .content code{background:var(--surface);border:1px solid var(--border);border-radius:5px;padding:1px 5px;font-size:.92em}
+  .content hr{border:none;border-top:1px solid var(--border);margin:28px 0}
+  .content blockquote{margin:0 0 14px;padding:2px 16px;border-left:3px solid var(--border);color:var(--muted)}
+  .content strong{color:var(--text)}
+  .pages{margin-top:44px;padding-top:18px;border-top:1px solid var(--border)}
+  .pages h2{font-size:13px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);margin:0 0 10px}
+  .pages ul{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:8px}
+  .pages a{display:inline-block;background:var(--surface);border:1px solid var(--border);border-radius:999px;
+    padding:6px 13px;color:var(--primary);text-decoration:none;font-size:14px;font-weight:600}
+  .pages a:hover{border-color:var(--primary)}
+  .pages a[aria-current=page]{background:var(--primary);color:#fff;border-color:var(--primary)}
+  footer{margin-top:34px;color:var(--muted);font-size:13px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<a class="top" href="index.html"><img src="../logo.png" alt="Purl logo" /><span class="name">PURL GUIDE</span></a>
+<div class="content">
+<h1>PDF tools</h1>
+<p>The floating dial in the PDF viewer. The most-featured screen in
+Purl by a long margin.</p>
+<h2>Opening the tools</h2>
+<p><strong>Hold</strong> the floating button for half a second to open the tool
+settings: how far the dial fans out, how transparent the overlays
+are, the counter-pill size, and which tools appear in the dial.
+(The order of the buttons is changed in Settings.)</p>
+<p>Tap the floating button on the PDF viewer to open the dial. Tap a
+tool to use it; tap <strong>Done</strong> when you&#39;re finished with a tool to
+hide the dial.</p>
+<p>The dial is <strong>draggable</strong>: drag the FAB to wherever it&#39;s out of
+your way. It&#39;s <strong>side-flippable</strong>: you can pin it to the left edge
+or the right edge depending on whether you&#39;re a left- or
+right-hander. Settings → PDF &amp; counters → <strong>Tool order +
+visibility</strong> lets you reorder the tools or hide ones you don&#39;t
+use.</p>
+<h2>The tools</h2>
+<h3>Row tracker</h3>
+<p>A movable highlight band that follows where you are in the pattern.
+Tap <strong>+ Row</strong> in the bar that appears to add one; drag the row up
+or down to position it; the up / down buttons in the bar nudge it
+one row&#39;s height at a time.</p>
+<p>Multi-row support: add as many trackers as you want. The selected
+row is the one the navigation acts on; tap a row to select it.
+<strong>Lock</strong> a row to freeze its position. <strong>Del</strong> removes the
+selected row.</p>
+<p>The arrow keys: ▲ ▼ scroll the row, − + adjust its height.</p>
+<h3>Counters</h3>
+<p>Two flavours:</p>
+<ul>
+<li><strong>Counter inside the PDF tools</strong>: a single counter for the
+pattern, with + / − buttons.</li>
+<li><strong>Pinnable counters overlay</strong>: open the counter panel via the
+counters icon. Add a counter, name it (e.g. &quot;Sleeve&quot;,
+&quot;Decrease row&quot;), drag the pill above the PDF wherever it&#39;s out
+of your way. Each counter persists per pattern.</li>
+</ul>
+<p>Pinned counters survive page reloads, scrolling, exiting and
+reopening the PDF.</p>
+<h3>Ruler</h3>
+<p>A draggable, rotatable rule. Toggle it on; drag it to where you
+want it; rotate via the corner handle. When the ruler is on,
+drawing strokes snap to its line for quick straight marks.</p>
+<h3>The drawing toolbar</h3>
+<p>Drawing mode shows one row of icon buttons: marker, pen,
+highlighter, eraser and ruler on the left; undo, redo and a check
+mark (done) on the right. A small coloured bar under the active
+tool shows its current colour. While you&#39;re drawing, the app&#39;s
+back and undo buttons step aside so the toolbar has the full row.
+Tap the check mark when you&#39;re finished.</p>
+<p><strong>Tool options.</strong> Tap a tool once to use it. Tap it <strong>again</strong> to
+open its options: colours, size, and, for the marker, opacity.</p>
+<ul>
+<li><strong>Pen</strong>: opaque line, narrow default. For writing and precise
+marks.</li>
+<li><strong>Marker</strong>: translucent line, wider default, with adjustable
+transparency in its options. At low transparency it IS a
+highlighter, and the first preset chip comes set up exactly
+that way (wide, yellow, 35%).</li>
+</ul>
+<p><strong>Hold for a perfect shape.</strong> Draw, then hold your finger still
+for a moment: the stroke snaps clean. A line becomes perfectly
+straight (and locks level when you&#39;re close to horizontal or
+vertical). A rough ring (say, around your size in the size list)
+becomes a smooth oval. A stroke drawn around a section with
+corners becomes a neat box. Keep moving while holding to adjust
+the shape; lift your finger to keep it. Works with all three pens;
+quick scribbles are never affected.</p>
+<p><strong>Pen presets.</strong> The three round chips at the top of a pen&#39;s
+options each hold a saved pen: tool, colour, size and
+transparency together. Tap a chip to switch to that pen. Hold a
+chip for half a second to save your current pen into it (the chip
+flashes when saved). They come pre-filled with a yellow
+highlighter, a pink marker and a red pen.</p>
+<h3>Eraser</h3>
+<p>Two modes, switchable in the eraser&#39;s options (tap the eraser
+twice):</p>
+<ul>
+<li><strong>Whole stroke</strong>: tap any mark to remove all of it. One tap,
+one mark gone.</li>
+<li><strong>Part of stroke</strong>: erase through a line and only the part
+under your finger disappears; the rest stays.</li>
+</ul>
+<h3>Select (lasso)</h3>
+<p>Draw a loose loop around some drawings and they select together
+inside a dashed box. <strong>Drag</strong> the box to move them all at once,
+or use <strong>Delete</strong> to remove them. <strong>Done</strong> (or switching tools)
+keeps the result. One undo step covers the whole move or delete.</p>
+<p>Tap the select tool again for its options: <strong>Freehand</strong> (draw any
+loop, precise, follows your finger) or <strong>Box</strong> (drag a rectangle,
+quick for tidy areas).</p>
+<h3>Undo / Redo</h3>
+<p>Standard undo and redo for drawings: each stroke or eraser pass
+is one history step.</p>
+<h3>Clear</h3>
+<p>Lives in the <strong>eraser&#39;s options</strong> (tap the eraser twice). Because
+Clear can wipe a lot of work, it asks first: <strong>This page only</strong> or
+<strong>All pages</strong>. &quot;This page&quot; filters strokes by the visible page&#39;s
+vertical range: anything that touches the page goes; strokes on
+other pages stay.</p>
+<h3>Find &amp; navigate</h3>
+<p>For big patterns. Open it from the floating dial and a navigation
+bar appears with three things:</p>
+<ul>
+<li><strong>Page thumbnails</strong>: a filmstrip of every page. Your current
+page is outlined; tap any page to jump there.</li>
+<li><strong>The page counter</strong>: tap &quot;Page 3 / 12&quot; to type a page number
+and go straight to it.</li>
+<li><strong>Search</strong>: find any text in the pattern: &quot;sleeve&quot;, &quot;size M&quot;,
+a stitch count. Every match is listed with a bit of surrounding
+text; tap one and the viewer scrolls there and pulses a marker
+where the match sits. Accents don&#39;t matter: &quot;Jarbo&quot; finds
+&quot;Järbo&quot;.</li>
+<li><strong>Night reading</strong>: the moon button inverts the pattern: dark
+pages, light print, easy on the eyes for evening knitting. Your
+drawings and highlights keep their normal colours. The app
+remembers the choice across patterns.</li>
+</ul>
+<h3>Pin a snippet</h3>
+<p>The chart key never has to leave your screen again. Open <strong>Pin a
+snippet</strong> from the floating dial, frame the part you want (the
+key, a size table, a decrease sequence) and tap <strong>Looks good</strong>.
+That region floats in a little window that stays put while you
+scroll anywhere in the pattern.</p>
+<p>Drag the window by its header. Resize it from the bottom-right
+corner. The arrow in the header collapses it to a slim pill when
+it&#39;s in the way; the cross closes it. You can pin up to four at
+once, and they&#39;re still there next time you open the pattern.</p>
+<p><strong>Tap</strong> the header (without dragging) to jump back to the spot the
+snippet was framed from. The app asks first so a stray tap can&#39;t
+lose your reading position.</p>
+<p>While framing, the page underneath still pans and pinches: only
+the corner handles and the centre grip grab your finger, exactly
+like placing a chart box.</p>
+<h3>Sticky notes</h3>
+<p>Tap the sticky-note tool, then tap on the PDF where you want a
+note. Type the note, save. The note shows as a small marker on the
+PDF; tap the marker to edit. <strong>Drag</strong> any note to reposition.</p>
+<p>A note can also show its text <strong>directly on the page</strong> instead of
+as a marker: open the note and choose <strong>Text on the page</strong>. The
+text scales with zoom like ink, with a soft white backing so it
+stays readable over charts. Choose <strong>Pin</strong> to switch back.</p>
+<p>A sticky note with empty text is treated as a <strong>bookmark</strong>: a
+position marker you might come back to without needing text.</p>
+<p>The <strong>bookmarks + notes</strong> sheet (also under the tools dial) lists
+every note for the PDF; tap any entry to jump to it. Edit text
+inline.</p>
+<h3>Terminology</h3>
+<p>Opens the glossary in the PDF&#39;s craft. Useful for &quot;what does
+&#39;sl1, k2tog, psso&#39; mean&quot; mid-row.</p>
+<h3>Calculator</h3>
+<p>Opens the inline four-function calculator. Quick arithmetic without
+leaving the PDF.</p>
+<h3>Done</h3>
+<p>Closes the drawing tools; the dial collapses.</p>
+<h2>Drawings persistence</h2>
+<p>Your drawings, sticky notes, bookmarks, row trackers, counters, and
+scroll position are all saved automatically. Close the PDF and
+reopen it: everything is back exactly where you left it.</p>
+<h2>Page navigation</h2>
+<ul>
+<li><strong>Scroll</strong> with your finger.</li>
+<li><strong>Pinch</strong> to zoom.</li>
+<li><strong>Pages strip</strong> at the bottom (if enabled in the tools): tap a
+page thumbnail to jump.</li>
+</ul>
+<h2>Customising</h2>
+<p><strong>Settings → PDF &amp; counters</strong> controls:</p>
+<ul>
+<li><strong>Tool order + visibility</strong>: drag tools to reorder; toggle off
+the ones you don&#39;t use.</li>
+<li><strong>FAB position memory</strong>: where you parked the floating button
+is remembered.</li>
+<li><strong>Pen colour palette</strong>: pick the colours that show in the
+swatch row.</li>
+<li><strong>Default pen + marker sizes</strong>.</li>
+<li><strong>Counter defaults</strong>: pre-set names for new counters.</li>
+<li><strong>Row tracker default on</strong>: start every PDF with one row
+tracker pre-placed.</li>
+<li><strong>Ruler default on</strong>: start with the ruler showing.</li>
+</ul>
+<h2>Tips</h2>
+<ul>
+<li>The PDF viewer was deliberately kept inside a single screen:
+no separate &quot;drawing mode&quot; / &quot;reading mode&quot;. The tools dial
+toggles drawing vs reading state without scrolling away from
+the page.</li>
+<li>For longer-term annotation, the sticky notes are better than
+drawings: they&#39;re searchable (via global search), they have a
+list view, they&#39;re editable.</li>
+<li>The pinch-zoom is independent of the row tracker: you can
+zoom in and the tracker stays at the same Y position.</li>
+</ul>
+<h2>See also</h2>
+<ul>
+<li><a href="patterns.html">Patterns</a>: how PDFs get into the library.</li>
+<li><a href="backups.html">Backups + recovery</a>: your annotations travel
+with a backup.</li>
+<li><a href="terminology.html">Terminology glossary</a>: the in-PDF terminology
+button.</li>
+</ul>
+
+</div>
+<nav class="pages"><h2>All pages</h2><ul><li><a href="index.html">User guide</a></li><li><a href="getting-started.html">Getting started</a></li><li><a href="yarn-stash.html">Yarn stash</a></li><li><a href="patterns.html">Patterns</a></li><li><a href="projects.html">Projects</a></li><li><a href="pdf-tools.html" aria-current="page">PDF tools</a></li><li><a href="barcode-templates.html">Barcode templates</a></li><li><a href="backups.html">Backups and recovery</a></li><li><a href="terminology.html">Terminology glossary</a></li><li><a href="calculator.html">Calculator</a></li><li><a href="faq.html">FAQ</a></li></ul></nav>
+<footer>Part of Purl, a knitting and crochet companion. <a href="../">purl-site home</a></footer>
+</div>
+</body>
+</html>

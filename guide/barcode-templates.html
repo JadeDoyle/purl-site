@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Barcode templates | Purl guide</title>
+<style>
+  :root{--bg:#FBF8F5;--surface:#FFFFFF;--primary:#7C5E9B;--primary-dark:#5E4478;--text:#2C2630;--muted:#6f6676;--border:#ECE6E1;}
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{margin:0;background:var(--bg);color:var(--text);line-height:1.6;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+  .wrap{max-width:720px;margin:0 auto;padding:28px 22px 72px}
+  .top{display:flex;align-items:center;gap:11px;text-decoration:none;margin-bottom:26px}
+  .top img{width:34px;height:34px;object-fit:contain;flex:none}
+  .top .name{font-weight:700;font-size:15px;color:var(--muted);letter-spacing:.02em}
+  .content h1{font-size:29px;line-height:1.2;margin:10px 0 14px}
+  .content h2{font-size:20px;margin:30px 0 8px;color:var(--primary-dark)}
+  .content h3{font-size:16px;margin:22px 0 6px;color:var(--primary-dark)}
+  .content p{margin:0 0 14px}
+  .content ul,.content ol{margin:0 0 14px;padding-left:22px}
+  .content li{margin:0 0 7px}
+  .content a{color:var(--primary)}
+  .content code{background:var(--surface);border:1px solid var(--border);border-radius:5px;padding:1px 5px;font-size:.92em}
+  .content hr{border:none;border-top:1px solid var(--border);margin:28px 0}
+  .content blockquote{margin:0 0 14px;padding:2px 16px;border-left:3px solid var(--border);color:var(--muted)}
+  .content strong{color:var(--text)}
+  .pages{margin-top:44px;padding-top:18px;border-top:1px solid var(--border)}
+  .pages h2{font-size:13px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);margin:0 0 10px}
+  .pages ul{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:8px}
+  .pages a{display:inline-block;background:var(--surface);border:1px solid var(--border);border-radius:999px;
+    padding:6px 13px;color:var(--primary);text-decoration:none;font-size:14px;font-weight:600}
+  .pages a:hover{border-color:var(--primary)}
+  .pages a[aria-current=page]{background:var(--primary);color:#fff;border-color:var(--primary)}
+  footer{margin-top:34px;color:var(--muted);font-size:13px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<a class="top" href="index.html"><img src="../logo.png" alt="Purl logo" /><span class="name">PURL GUIDE</span></a>
+<div class="content">
+<h1>Barcode templates</h1>
+<p>Scanning a yarn ball-band shouldn&#39;t be just a one-shot prefill.
+It should <em>teach the app</em> what that product is, so the next time
+anyone scans it (you, a friend, a new install) the answer is there.</p>
+<p>That&#39;s what barcode templates are for.</p>
+<h2>The basic flow</h2>
+<p>You&#39;re at the yarn store. You buy two skeins of a Sandnes yarn
+you&#39;ve never logged before. At home:</p>
+<ol>
+<li><strong>Stash → barcode icon</strong> (next to Add yarn).</li>
+<li>Camera opens, scan the ball-band.</li>
+<li>Purl recognises Sandnes Sunday, opens the Add-yarn form
+prefilled with the brand, name, weight, fibre, gauge,
+recommended needle. You just type the colour name and the
+dye lot.</li>
+<li>Save.</li>
+</ol>
+<p>That recognition happens because Sandnes Sunday is in the bundled
+<strong>catalogue</strong> that ships with Purl.</p>
+<p>If the yarn isn&#39;t recognised:</p>
+<ol start="3">
+<li><em>(unknown code)</em>: the form opens blank with the barcode
+attached. You fill in brand / name / weight / etc.</li>
+<li>Save.</li>
+</ol>
+<p>That <strong>save</strong> quietly creates a barcode template. The next time
+you (or a friend with the same template) scan the same code,
+it&#39;ll be recognised.</p>
+<h2>The catalogue</h2>
+<p>Purl ships with a curated catalogue of ~20 Nordic yarn producers
+and their lines: DROPS, Sandnes Garn, Ístex, Knitting for Olive,
+Drops, Du Store Alpakka, Hillesvåg, Filcolana, Rauma, Dale, Camilla
+Pihl, Viking of Norway, Järbo, Svarta Fåret, CaMaRose, Hjertegarn,
+Isager, Novita, and more.</p>
+<p>For most of them: brand, yarn names, weight, fibre, meterage,
+populated. For some of them: colourways too (full DROPS range,
+Ístex Lopi numbers, the entire Knitting for Olive named ranges).</p>
+<p>The catalogue is <strong>read-only at the source</strong> but you can edit any
+entry: your edit forks into your own template store. App
+updates ship new catalogue entries without overwriting what
+you&#39;ve changed.</p>
+<h2>Barcode templates view</h2>
+<p><strong>More → Barcode templates</strong> opens the management surface.</p>
+<p>At the top: a live camera for scanning. Below it: the list of
+templates you own + everything in the catalogue (which surfaces
+only when you search, so the day-one list isn&#39;t ~150 items long).</p>
+<p>Each row: brand · name + a subtitle showing barcode count, weight,
+fibre. Tap a row to open it.</p>
+<p>Inside a template:</p>
+<ul>
+<li><strong>Barcodes</strong>: a chip list. Add one via the text input;
+remove via the × on each chip. Multiple barcodes per template
+is the whole point: manufacturers cycle EAN codes between
+packaging runs, and an old skein + a fresh one can have
+different codes for the same product.</li>
+<li>Brand / name / weight / fibre / gauge / needle / meters / grams
+fields.</li>
+</ul>
+<p>The <strong>search field</strong> above the list searches everything (brand,
+name, weight, fibre, barcodes). Diacritic-folded: &quot;jarbo&quot; finds
+Järbo.</p>
+<h2>Duplicates</h2>
+<p>If you end up with two templates for the same yarn (a blank
+weight one time, &quot;DK&quot; another time, or a slight name typo), Purl
+notices: a <strong>Possible duplicates</strong> card appears at the top of the
+list. Tap <strong>Merge</strong> on a group and they fold together: barcodes
+unioned, blank fields filled from the others, the most-complete
+entry kept as the primary.</p>
+<p>You can also avoid creating duplicates in the first place:
+v0.1.96+ uses brand + name as the identity for save-time matching,
+falling back from brand + name + weight, so a blank weight won&#39;t
+fork.</p>
+<h2>Linking a scanned code to an existing template</h2>
+<p>If you scan an unknown code but you can see the matching product
+in your library (or in the catalogue), tap <strong>Or attach this
+barcode to an existing template</strong> in the form. A picker opens
+(searchable across user + catalogue) to find the right product.
+Tap it, the barcode gets attached, and you don&#39;t end up with two
+templates for the same yarn.</p>
+<h2>Sharing templates with a friend</h2>
+<p><strong>More → Barcode templates → share icon</strong> in the header. Purl
+writes a <code>.purlt</code> file with your whole template library and opens
+the system share sheet. Email it / Drive it / AirDrop it.</p>
+<p>Your friend receives the file, taps it (on Android with Purl
+installed), Purl opens straight to the import screen and merges:</p>
+<ul>
+<li>Templates that match by brand + name + weight get their barcodes
+combined.</li>
+<li>New products land as fresh entries.</li>
+</ul>
+<p>No yarn / projects / photos cross over. Just the template
+catalogue.</p>
+<h2>The flywheel</h2>
+<p>Over time:</p>
+<ol>
+<li>You scan yarn → templates accrue in your library.</li>
+<li>You share <code>.purlt</code> with your tester contact (or it rides in
+your regular <code>.purl</code> backups).</li>
+<li>The new templates get folded into the bundled catalogue in a
+future Purl release.</li>
+<li>The next user installing Purl gets your templates as part of
+the catalogue, ready to recognise on day one.</li>
+</ol>
+<p>The whole catalogue is built this way. Online sync would automate
+the last step; until then it&#39;s manual.</p>
+<h2>See also</h2>
+<ul>
+<li><a href="yarn-stash.html">Yarn stash</a>: the scan-into-stash flow
+from the user&#39;s side.</li>
+<li><a href="backups.html">Backups + recovery</a>: <code>.purlt</code> is one of the
+three share formats; the other two are <code>.purl</code> (whole backup)
+and <code>.purlp</code> (single pattern).</li>
+</ul>
+
+</div>
+<nav class="pages"><h2>All pages</h2><ul><li><a href="index.html">User guide</a></li><li><a href="getting-started.html">Getting started</a></li><li><a href="yarn-stash.html">Yarn stash</a></li><li><a href="patterns.html">Patterns</a></li><li><a href="projects.html">Projects</a></li><li><a href="pdf-tools.html">PDF tools</a></li><li><a href="barcode-templates.html" aria-current="page">Barcode templates</a></li><li><a href="backups.html">Backups and recovery</a></li><li><a href="terminology.html">Terminology glossary</a></li><li><a href="calculator.html">Calculator</a></li><li><a href="faq.html">FAQ</a></li></ul></nav>
+<footer>Part of Purl, a knitting and crochet companion. <a href="../">purl-site home</a></footer>
+</div>
+</body>
+</html>

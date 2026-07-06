@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Backups and recovery | Purl guide</title>
+<style>
+  :root{--bg:#FBF8F5;--surface:#FFFFFF;--primary:#7C5E9B;--primary-dark:#5E4478;--text:#2C2630;--muted:#6f6676;--border:#ECE6E1;}
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{margin:0;background:var(--bg);color:var(--text);line-height:1.6;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+  .wrap{max-width:720px;margin:0 auto;padding:28px 22px 72px}
+  .top{display:flex;align-items:center;gap:11px;text-decoration:none;margin-bottom:26px}
+  .top img{width:34px;height:34px;object-fit:contain;flex:none}
+  .top .name{font-weight:700;font-size:15px;color:var(--muted);letter-spacing:.02em}
+  .content h1{font-size:29px;line-height:1.2;margin:10px 0 14px}
+  .content h2{font-size:20px;margin:30px 0 8px;color:var(--primary-dark)}
+  .content h3{font-size:16px;margin:22px 0 6px;color:var(--primary-dark)}
+  .content p{margin:0 0 14px}
+  .content ul,.content ol{margin:0 0 14px;padding-left:22px}
+  .content li{margin:0 0 7px}
+  .content a{color:var(--primary)}
+  .content code{background:var(--surface);border:1px solid var(--border);border-radius:5px;padding:1px 5px;font-size:.92em}
+  .content hr{border:none;border-top:1px solid var(--border);margin:28px 0}
+  .content blockquote{margin:0 0 14px;padding:2px 16px;border-left:3px solid var(--border);color:var(--muted)}
+  .content strong{color:var(--text)}
+  .pages{margin-top:44px;padding-top:18px;border-top:1px solid var(--border)}
+  .pages h2{font-size:13px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);margin:0 0 10px}
+  .pages ul{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:8px}
+  .pages a{display:inline-block;background:var(--surface);border:1px solid var(--border);border-radius:999px;
+    padding:6px 13px;color:var(--primary);text-decoration:none;font-size:14px;font-weight:600}
+  .pages a:hover{border-color:var(--primary)}
+  .pages a[aria-current=page]{background:var(--primary);color:#fff;border-color:var(--primary)}
+  footer{margin-top:34px;color:var(--muted);font-size:13px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<a class="top" href="index.html"><img src="../logo.png" alt="Purl logo" /><span class="name">PURL GUIDE</span></a>
+<div class="content">
+<h1>Backups + recovery</h1>
+<p>Three layers of protection against losing your data.</p>
+<h2>The short version</h2>
+<ul>
+<li><strong>Recently Deleted</strong>: anything you delete sits in trash for
+30 days. One tap to restore.</li>
+<li><strong>Snapshots</strong>: the app auto-snapshots its entire state every
+day or so, keeping 7 days of history. Restore from a snapshot
+if something went badly wrong.</li>
+<li><strong>Backup files</strong>: you can export a single <code>.purl</code> file with
+everything in it, save it to Drive / email it to yourself /
+share it however. The path for moving to a new device or
+keeping an off-device safety copy.</li>
+</ul>
+<p>All three live under <strong>More → Data</strong>: Recover (the first two),
+Backup (the third).</p>
+<h2>Recently Deleted</h2>
+<p>When you delete a yarn, equipment item, project, or pattern, it
+doesn&#39;t actually go away. It goes into trash for 30 days. During
+that window you can restore it with a tap.</p>
+<p><strong>More → Data → Recover</strong> shows everything in the trash, newest
+first, alongside a timeline of what you&#39;ve recently <em>added</em> or
+<em>imported</em> (so you can see both directions of what you&#39;ve done
+lately).</p>
+<p>Tap <strong>Restore</strong> on a trash entry → the record comes back, files
+and all. The action is logged in the timeline so you can see when
+you restored.</p>
+<p>After 30 days, trash entries are purged automatically; the files
+they referenced get unlinked at the same time.</p>
+<h2>Snapshots</h2>
+<p>Periodically (automatically, in the background, no setup) Purl
+saves a snapshot of its entire state. Every yarn, every pattern,
+every project, every photo reference, every preference.</p>
+<p>7 days of snapshots are kept; older ones are pruned. They live
+inside Purl&#39;s own storage, not anywhere you have to manage.</p>
+<p>To use one: <strong>More → Data → Recover</strong> → scroll to <strong>Snapshots</strong>
+at the bottom → tap a date. The diff view shows what&#39;s in the
+snapshot that <em>isn&#39;t</em> in your current state. Pick what to
+restore (per category, or per item).</p>
+<p>Useful for the &quot;I imported a bad backup over my data&quot; or &quot;I
+deleted ten yarns thinking they were duplicates&quot; cases, where the
+per-item trash isn&#39;t enough.</p>
+<p>The catch: snapshots are local-only. A factory reset of your phone
+wipes them too. For off-device safety, use Backup files.</p>
+<h2>Backup files (.purl)</h2>
+<p><strong>More → Data → Backup</strong> opens the picker. Tick the categories you
+want to include (Projects / Yarn / Patterns / Equipment / etc.).
+Small things like settings, the colour palette, your fibre list,
+your barcode templates, and your activity log always come along
+automatically (they&#39;re shared across the app and you&#39;d always
+want them).</p>
+<p>Tap <strong>Export</strong> → the system share sheet opens → save to Drive /
+email to yourself / save to Files / send via WhatsApp / wherever.</p>
+<p>The output is a single <code>.purl</code> file. The file size is roughly your
+total stored data. For a year of active use, expect tens or
+hundreds of MB depending on how many PDFs you&#39;ve imported.</p>
+<h3>Importing a backup</h3>
+<p>Two paths:</p>
+<ul>
+<li><strong>From inside the app</strong>: More → Data → Backup → Import tab. Pick
+the <code>.purl</code> file.</li>
+<li><strong>From your file manager</strong>: tap a <code>.purl</code> file directly. Purl
+opens straight to the import screen with the file pre-loaded.</li>
+</ul>
+<p>The import shows a preview (what&#39;s inside, how old, what app
+version produced it). Pick the merge strategy per category:</p>
+<ul>
+<li><strong>Add</strong>: merges (keep yours + theirs).</li>
+<li><strong>Replace</strong>: overwrites (only the imported records remain
+for that category).</li>
+<li><strong>Skip</strong>: leaves that category alone.</li>
+</ul>
+<h2>Sharing patterns + templates separately</h2>
+<p>Two smaller file formats for sharing <em>just</em> one thing:</p>
+<ul>
+<li><strong>.purlp</strong>: a single hand-written pattern. Useful for &quot;I made
+this beanie pattern, here you go.&quot; Share from the pattern&#39;s
+detail screen. Tapping a <code>.purlp</code> in a file manager opens Purl
+with the pattern added.</li>
+<li><strong>.purlt</strong>: your barcode template library. Useful for
+bootstrapping a friend&#39;s stash. They don&#39;t have to scan every
+yarn themselves. Share from Barcode templates → the share icon
+in the header. Tapping a <code>.purlt</code> in a file manager opens Purl
+with the merge preview.</li>
+</ul>
+<p>These are tiny JSON files (typically KB, not MB) and don&#39;t include
+your yarn, projects, or photos. Just the named thing.</p>
+<h2>Moving to a new device</h2>
+<ol>
+<li>On the old device: <strong>More → Data → Backup → Export</strong>. Tick
+everything. Save the <code>.purl</code> file somewhere accessible
+(Drive, email, USB transfer).</li>
+<li>Install Purl on the new device.</li>
+<li>Open the <code>.purl</code> file from the new device&#39;s file manager (or
+import via the Backup screen). Use <strong>Replace</strong> for every
+category: the new device is empty.</li>
+</ol>
+<p>That&#39;s it. PDFs, photos, drawings, sticky notes, dye lots,
+counters: everything travels.</p>
+<h2>See also</h2>
+<ul>
+<li><a href="yarn-stash.html">Yarn stash</a>: the stash that&#39;s being backed
+up.</li>
+<li><a href="barcode-templates.html">Barcode templates</a>: the <code>.purlt</code>
+format for sharing template libraries.</li>
+<li><a href="patterns.html">Patterns</a>: the <code>.purlp</code> format for sharing
+patterns.</li>
+</ul>
+
+</div>
+<nav class="pages"><h2>All pages</h2><ul><li><a href="index.html">User guide</a></li><li><a href="getting-started.html">Getting started</a></li><li><a href="yarn-stash.html">Yarn stash</a></li><li><a href="patterns.html">Patterns</a></li><li><a href="projects.html">Projects</a></li><li><a href="pdf-tools.html">PDF tools</a></li><li><a href="barcode-templates.html">Barcode templates</a></li><li><a href="backups.html" aria-current="page">Backups and recovery</a></li><li><a href="terminology.html">Terminology glossary</a></li><li><a href="calculator.html">Calculator</a></li><li><a href="faq.html">FAQ</a></li></ul></nav>
+<footer>Part of Purl, a knitting and crochet companion. <a href="../">purl-site home</a></footer>
+</div>
+</body>
+</html>
