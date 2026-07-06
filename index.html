@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Purl — knitting &amp; crochet companion</title>
+  <meta name="description" content="Purl is a free knitting and crochet companion app. Your projects, yarn stash, patterns and progress in one place — kept on your device." />
+  <style>
+    :root {
+      --bg: #FBF8F5;
+      --surface: #FFFFFF;
+      --primary: #7C5E9B;
+      --primary-dark: #5E4478;
+      --text: #2C2630;
+      --muted: #6f6676;
+      --border: #ECE6E1;
+    }
+    * { box-sizing: border-box; }
+    html { -webkit-text-size-adjust: 100%; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+    .wrap { max-width: 640px; margin: 0 auto; padding: 72px 22px 72px; }
+    header { display: flex; align-items: center; gap: 14px; margin-bottom: 28px; }
+    .mark {
+      width: 52px; height: 52px; border-radius: 13px; flex: none;
+      background: var(--primary); color: #fff;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 28px;
+    }
+    h1 { font-size: 34px; line-height: 1.15; margin: 0; }
+    .tag { color: var(--muted); font-size: 16px; margin: 2px 0 0; }
+    .intro { font-size: 17px; margin: 0 0 30px; }
+    .links { list-style: none; padding: 0; margin: 0; }
+    .links li { margin: 0 0 12px; }
+    .links a {
+      display: block;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px 18px;
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .links a span { display: block; color: var(--muted); font-weight: 400; font-size: 14px; margin-top: 2px; }
+    .links a:hover { border-color: var(--primary); }
+    footer { margin-top: 40px; color: var(--muted); font-size: 13px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="mark">P</div>
+      <div>
+        <h1>Purl</h1>
+        <p class="tag">Knitting &amp; crochet companion</p>
+      </div>
+    </header>
+
+    <p class="intro">
+      Purl keeps your projects, yarn stash, patterns and progress in one place —
+      free, offline, and stored on your own device. This page collects Purl's
+      public documents.
+    </p>
+
+    <ul class="links">
+      <li>
+        <a href="privacy/">Privacy policy
+          <span>What Purl does and does not do with your information.</span>
+        </a>
+      </li>
+    </ul>
+
+    <footer>© 2026 Purl</footer>
+  </div>
+</body>
+</html>
