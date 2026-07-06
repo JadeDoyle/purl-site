@@ -3,11 +3,12 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "description": "Public site for Purl: landing, privacy policy, and user guide.",
+  "description": "Public site for Purl: landing, guide, privacy, terms, support, changelog, roadmap, press and feedback.",
   "scripts": {
-    "build:guide": "node build-guide.mjs"
+    "build": "node build-site.mjs"
   },
   "devDependencies": {
+    "@resvg/resvg-js": "^2.6.2",
     "marked": "^18.0.5"
   }
 }
