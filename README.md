@@ -1,30 +1,36 @@
 # purl-site
 
-The public website for **Purl**, a knitting and crochet companion app. Served
-by GitHub Pages at **https://purl-app.github.io/** (root-served, no path).
+The public website for **Purl**, a knitting and crochet companion app. Served by
+GitHub Pages at **https://jadedoyle.github.io/purl-site/**.
 
 Everything public lives here and links to everything else: a landing page, the
 user guide, support, privacy, terms, changelog, roadmap, a press kit, and a
-feedback redirect. Only the feedback form itself lives off-site (it is a Google
-Form, by design anonymous).
+feedback redirect. The site is bilingual: English at the root, Norwegian under
+`/no/`. Only the feedback form itself lives off-site (it is a Google Form, by
+design anonymous).
 
 ## How it is built
 
 One generator, `build-site.mjs`, produces every page from a single shared shell
-(header nav + full-sitemap footer + favicon + Open Graph card), so nothing
-drifts:
+(header nav + language toggle + full-sitemap footer + favicon + Open Graph
+card), so nothing drifts:
 
-| Page | URL | Source |
-| --- | --- | --- |
-| Landing | `/` | `build-site.mjs` |
-| User guide | `/guide/` | `../Purl/user-guide/*.md` |
-| Support | `/support/` | `build-site.mjs` |
-| Privacy policy | `/privacy/` | `../Purl/docs/legal/privacy-policy.md` |
-| Terms of use | `/terms/` | `../Purl/docs/legal/terms.md` |
-| What's new (changelog) | `/changelog/` | app data: `ChangelogScreen.tsx` `RELEASES` |
-| Roadmap | `/roadmap/` | app data: `RoadmapScreen.tsx` `DONE`/`NEXT`/`LATER` |
-| Press kit | `/press/` | `build-site.mjs` + `../Purl/docs/release/screenshots` |
-| Send feedback | `/feedback/` | redirect to the Google Form |
+| Page | English | Norwegian | Source |
+| --- | --- | --- | --- |
+| Landing | `/` | `/no/` | `build-site.mjs` |
+| User guide | `/guide/` | (English) | `../Purl/user-guide/*.md` |
+| Support | `/support/` | `/no/support/` | `build-site.mjs` |
+| Privacy | `/privacy/` | `/no/privacy/` | `../Purl/docs/legal/privacy-policy(.no).md` |
+| Terms | `/terms/` | `/no/terms/` | `../Purl/docs/legal/terms(.no).md` |
+| What's new | `/changelog/` | (English) | app data: `ChangelogScreen.tsx` `RELEASES` |
+| Roadmap | `/roadmap/` | (English) | app data: `RoadmapScreen.tsx` `DONE`/`NEXT`/`LATER` |
+| Press kit | `/press/` | `/no/press/` | `build-site.mjs` + `../Purl/docs/release/screenshots` |
+| Send feedback | `/feedback/` | `/no/feedback/` | redirect to the Google Form |
+
+The guide, changelog and roadmap are English only, matching the app (the app's
+changelog and roadmap data are English strings, and the written guide is English
+for now with a Norwegian version queued). Both languages link to those shared
+pages.
 
 The changelog and roadmap are read straight out of the app's own source, so the
 website is always in step with the app with no copy to keep in sync. The favicon
@@ -44,28 +50,26 @@ Generated HTML and images are committed; `node_modules` is not. Re-run
 `npm run build` and commit whenever any source changes (guide, legal text, or a
 new app release), then push so GitHub Pages redeploys.
 
-Style rules, matching the app: no em dashes and no emojis anywhere in the output.
+Style rules, matching the app: no em dashes and no emojis in any output. The
+Norwegian legal text (`*.no.md`) is a first pass, pending a review by Helene.
 
-## Hosting: the purl-app org
+## The base URL is one knob
 
-The site is served from the `purl-app` GitHub org so public links carry no
-personal handle. To stand it up (a one-time move the maintainer performs):
+The site currently lives under a `/purl-site/` subpath. Everything is generated
+relative to two constants at the top of `build-site.mjs`:
 
-1. Create a free GitHub organisation named **`purl-app`**
-   (github.com/organizations/new).
-2. Transfer this repo into the org (repo Settings, Transfer ownership) to keep
-   its history, or push it up fresh.
-3. Rename the repo to **`purl-app.github.io`** so Pages serves it at the root
-   (repo Settings, rename).
-4. Repo Settings, Pages: deploy from branch `main`, folder `/` (root).
-5. Confirm https://purl-app.github.io/ loads.
+```
+const ORIGIN = 'https://jadedoyle.github.io';
+const BASE   = '/purl-site';   // set to '' when root-served under an org
+```
 
-Then, around the same time:
-
-- Publish an app OTA so installed builds pick up the new guide URL
-  (`GUIDE_URL` in `../Purl/src/screens/MoreScreen.tsx` already points at
-  `https://purl-app.github.io/guide/`). The old
-  `jadedoyle.github.io/purl-site/` Pages URL stops resolving once the repo is
-  transferred, so installs on the old URL need the OTA.
-- Update the **privacy policy URL** in the Google Play Console to
-  `https://purl-app.github.io/privacy/`.
+If the site later moves to its own `purl-app` GitHub org (a repo named
+`purl-app.github.io`, served at the root), the move is: create the org, transfer
+this repo in, rename it to `purl-app.github.io`, point Pages at `main`/root, then
+set `ORIGIN = 'https://purl-app.github.io'` and `BASE = ''`, rebuild, and commit.
+Also update, at that point: the app's `GUIDE_URL` in
+`../Purl/src/screens/MoreScreen.tsx`, the URLs in
+`../Purl/docs/release/play-store-listing.md`, the maintainer-note and cross-link
+URLs in the four legal Markdown files, and the Play Console privacy URL. The old
+`jadedoyle.github.io/purl-site/` Pages URL stops resolving on transfer, so ship
+an app OTA carrying the new guide URL around the same time.

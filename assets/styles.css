@@ -65,6 +65,8 @@ a { color: var(--primary); }
 }
 .site-nav a:hover { color: var(--primary); background: var(--surface); }
 .site-nav a[aria-current="page"] { color: var(--primary); background: var(--surface); }
+.site-nav a.lang { border: 1px solid var(--border); font-size: 13px; text-transform: uppercase; letter-spacing: .03em; margin-left: 4px; }
+.site-nav a.lang:hover { border-color: var(--primary); }
 
 /* Main column ------------------------------------------------------------- */
 .wrap { width: 100%; max-width: var(--maxw); margin: 0 auto; padding: 40px 22px 64px; flex: 1; }
@@ -163,7 +165,7 @@ a { color: var(--primary); }
 /* Changelog --------------------------------------------------------------- */
 .release { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px 20px; margin: 0 0 14px; }
 .release-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 8px; }
-.release h3 { margin: 0; font-size: 18px; }
+.release h2 { margin: 0; font-size: 18px; }
 .release .ver { color: var(--muted); font-weight: 600; font-size: 13px; }
 .release .date { color: var(--muted); font-size: 13px; }
 .release ul { margin: 0; padding-left: 20px; }
@@ -172,7 +174,7 @@ a { color: var(--primary); }
 
 /* Roadmap ----------------------------------------------------------------- */
 .road { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px 20px; margin: 0 0 14px; }
-.road > h3 { margin: 0 0 6px; font-size: 18px; }
+.road > h2 { margin: 0 0 6px; font-size: 18px; }
 .road .road-sub { color: var(--muted); font-size: 14px; margin: 0 0 12px; }
 .road-item { display: flex; gap: 10px; padding: 7px 0; align-items: flex-start; border-top: 1px solid var(--border); }
 .road-item:first-of-type { border-top: none; }
@@ -199,7 +201,7 @@ a { color: var(--primary); }
 .site-footer { border-top: 1px solid var(--border); background: var(--surface); padding: 32px 22px; margin-top: 24px; }
 .footer-inner { max-width: var(--maxw); margin: 0 auto; }
 .footer-cols { display: flex; flex-wrap: wrap; gap: 28px 40px; }
-.footer-col h3 { font-size: 12px; letter-spacing: .05em; text-transform: uppercase; color: var(--muted); margin: 0 0 10px; }
+.footer-col h2 { font-size: 12px; letter-spacing: .05em; text-transform: uppercase; color: var(--muted); margin: 0 0 10px; }
 .footer-col ul { list-style: none; margin: 0; padding: 0; }
 .footer-col li { margin: 0 0 7px; }
 .footer-col a { color: var(--text); text-decoration: none; font-size: 15px; }
