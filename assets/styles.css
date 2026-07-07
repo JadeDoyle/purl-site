@@ -120,6 +120,11 @@ a { color: var(--primary); }
 .cards a span { display: block; color: var(--muted); font-weight: 400; font-size: 14px; margin-top: 3px; }
 .cards a:hover { border-color: var(--primary); }
 
+/* Landing feature grid ---------------------------------------------------- */
+.features { display: grid; grid-template-columns: 1fr 1fr; gap: 20px 30px; margin: 6px 0 22px; }
+.feature h3 { margin: 0 0 4px; font-size: 16px; color: var(--primary-dark); }
+.feature p { margin: 0; color: var(--muted); font-size: 15px; line-height: 1.55; }
+
 /* Section headings on rich pages ------------------------------------------ */
 .section-title { font-size: 13px; letter-spacing: .05em; text-transform: uppercase; color: var(--muted); margin: 40px 0 12px; }
 
@@ -210,6 +215,7 @@ a { color: var(--primary); }
 
 @media (max-width: 560px) {
   .cards { grid-template-columns: 1fr; }
+  .features { grid-template-columns: 1fr; }
   .hero h1 { font-size: 33px; }
   .site-header { gap: 10px; padding: 12px 16px; }
   .wrap { padding: 30px 18px 52px; }

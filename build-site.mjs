@@ -259,8 +259,18 @@ function mdPage({ lang, pageKey, path, srcMd, title, description }) {
 const LANDING = {
   en: {
     tagline: 'Knitting &amp; crochet companion',
-    lead: "Purl keeps your projects, yarn stash, patterns and progress in one place: free, offline, and stored on your own device. No account, no sign-up, no ads. This is Purl's home on the web, with everything public in one spot.",
+    lead: 'Purl keeps your projects, yarn stash, patterns and progress in one place: free, offline, and stored on your own device. No account, no sign-up, no ads.',
     desc: 'Purl is a free knitting and crochet companion app. Your projects, yarn stash, patterns and progress in one place, kept on your device.',
+    featuresTitle: 'What Purl does',
+    features: [
+      ['Projects', 'Track every make from planned to finished, with a visual timeline, progress photos and the gauge you actually got.'],
+      ['Yarn stash', 'Log your yarn with colour, dye lot and fibre, see your totals, and scan a ball-band barcode to fill in the details.'],
+      ['Patterns and PDFs', 'Keep written patterns and PDFs in one library. Open big PDFs offline, draw, highlight, add notes, and follow along with counters and a chart tracker.'],
+      ['Handy tools', 'A craft calculator, quick counters, and a knitting and crochet glossary in Norwegian and English.'],
+      ['Made to feel right', 'Norwegian and English, light and dark mode, a two-pane layout on iPad, and one-file backup and restore.'],
+      ['Private by default', 'Everything lives on your device. No account, no sign-up, no ads, and nothing sold or shared.'],
+    ],
+    exploreTitle: 'Explore Purl',
     cards: [
       ['guide', 'User guide', 'Learn every part of Purl, in plain language.'],
       ['support', 'Support', 'Get help, get in touch, or support development.'],
@@ -274,8 +284,18 @@ const LANDING = {
   },
   no: {
     tagline: 'Følgesvenn for strikking og hekling',
-    lead: 'Purl samler prosjektene dine, garnlageret, oppskriftene og fremgangen på ett sted: gratis, uten nett, og lagret på din egen enhet. Ingen konto, ingen innlogging, ingen reklame. Dette er Purls hjem på nettet, med alt offentlig samlet på ett sted.',
+    lead: 'Purl samler prosjektene dine, garnlageret, oppskriftene og fremgangen på ett sted: gratis, uten nett, og lagret på din egen enhet. Ingen konto, ingen innlogging, ingen reklame.',
     desc: 'Purl er en gratis følgesvenn-app for strikking og hekling. Prosjekter, garnlager, oppskrifter og fremgang på ett sted, lagret på enheten din.',
+    featuresTitle: 'Hva Purl gjør',
+    features: [
+      ['Prosjekter', 'Følg alt du lager, fra planlagt til ferdig, med en visuell tidslinje, fremdriftsbilder og strikkefastheten du faktisk fikk.'],
+      ['Garnlager', 'Registrer garnet med farge, fargeparti og fiber, se totalene dine, og skann strekkoden på banderolen for å fylle inn detaljene.'],
+      ['Oppskrifter og PDF', 'Ha egne oppskrifter og PDF-er i ett bibliotek. Åpne store PDF-er uten nett, tegn, marker, legg til notater, og følg med ved hjelp av tellere og en diagramsporer.'],
+      ['Nyttige verktøy', 'En kalkulator for håndarbeid, raske tellere, og en strikke- og hekleordliste på norsk og engelsk.'],
+      ['Laget for å føles riktig', 'Norsk og engelsk, lyst og mørkt tema, tospaltet visning på iPad, og sikkerhetskopiering og gjenoppretting i én fil.'],
+      ['Privat som standard', 'Alt ligger på enheten din. Ingen konto, ingen innlogging, ingen reklame, og ingenting selges eller deles.'],
+    ],
+    exploreTitle: 'Utforsk Purl',
     cards: [
       ['guide', 'Brukerveiledning (engelsk)', 'Lær hver del av Purl, forklart enkelt.'],
       ['support', 'Støtte', 'Få hjelp, ta kontakt, eller støtt utviklingen.'],
@@ -298,6 +318,9 @@ function downloadRow(lang) {
 function landing(lang) {
   const c = LANDING[lang];
   const cards = c.cards.map(([key, title, sub]) => `  <li><a href="${link(lang, key)}">${title}<span>${sub}</span></a></li>`).join('\n');
+  const features = c.features.map(([t, d]) => `  <div class="feature"><h3>${esc(t)}</h3><p>${d}</p></div>`).join('\n');
+  const shotCap = lang === 'no' ? 2 : 1;
+  const shots = SHOTS.map((row) => `  <figure style="margin:0"><img src="${u('/assets/press/' + row[0])}" alt="Purl: ${escAttr(row[shotCap])}" loading="lazy" /></figure>`).join('\n');
   const body = `<section class="hero">
   <img src="${u('/logo.png')}" alt="Purl logo" width="84" height="84" />
   <h1>Purl</h1>
@@ -305,6 +328,17 @@ function landing(lang) {
 </section>
 <p class="lead">${c.lead}</p>
 ${downloadRow(lang)}
+
+<h2 class="section-title">${c.featuresTitle}</h2>
+<div class="features">
+${features}
+</div>
+
+<div class="shots">
+${shots}
+</div>
+
+<h2 class="section-title">${c.exploreTitle}</h2>
 <ul class="cards">
 ${cards}
 </ul>`;
