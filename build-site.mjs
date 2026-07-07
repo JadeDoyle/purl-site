@@ -111,47 +111,32 @@ function link(lang, key) {
   return u(dir + SLUGS[key]);
 }
 
-const T = {
-  en: {
-    htmlLang: 'en',
-    nav: { home: 'Home', guide: 'Guide', support: 'Support', privacy: 'Privacy' },
-    footerCols: [
-      ['Purl', ['home', 'guide', 'support', 'feedback']],
-      ['Updates', ['changelog', 'roadmap']],
-      ['Legal', ['privacy', 'terms']],
-      ['More', ['press', 'play']],
-    ],
-    footerLabel: {
-      home: 'Home', guide: 'User guide', support: 'Support', feedback: 'Send feedback',
-      changelog: "What's new", roadmap: 'Roadmap', privacy: 'Privacy policy',
-      terms: 'Terms of use', press: 'Press kit', play: 'Get it on Google Play',
-    },
-    footerNote: `Purl, a free knitting and crochet companion. Your data stays on your device. &copy; ${SITE.year} Purl.`,
-    store: { get: 'Get it on', soon: 'Coming soon' },
-  },
-  no: {
-    htmlLang: 'no',
-    nav: { home: 'Hjem', guide: 'Veiledning', support: 'Støtte', privacy: 'Personvern' },
-    footerCols: [
-      ['Purl', ['home', 'guide', 'support', 'feedback']],
-      ['Oppdateringer', ['changelog', 'roadmap']],
-      ['Juridisk', ['privacy', 'terms']],
-      ['Mer', ['press', 'play']],
-    ],
-    footerLabel: {
-      home: 'Hjem', guide: 'Brukerveiledning', support: 'Støtte', feedback: 'Send tilbakemelding',
-      changelog: 'Nyheter (engelsk)', roadmap: 'Veikart (engelsk)', privacy: 'Personvern',
-      terms: 'Vilkår for bruk', press: 'Pressemateriell', play: 'Last ned på Google Play',
-    },
-    footerNote: `Purl, en gratis følgesvenn for strikking og hekling. Dataene dine blir på enheten din. &copy; ${SITE.year} Purl.`,
-    store: { get: 'Last ned på', soon: 'Kommer snart' },
-  },
-};
+// Authored site copy lives in the app repo (docs/site/copy.json) so it can be
+// edited in the online editor and reviewed like the rest of our content. The
+// generator resolves link/asset/constant tokens at build time. Structural bits
+// (which resource keys go in which footer column) stay in code, not copy.
+const COPY = JSON.parse(readFileSync(join(PURL, 'docs', 'site', 'copy.json'), 'utf8'));
+const FOOTER_GROUPS = [
+  ['home', 'guide', 'support', 'feedback'],
+  ['changelog', 'roadmap'],
+  ['privacy', 'terms'],
+  ['press', 'play'],
+];
+function resolveTokens(str, lang) {
+  if (str == null) return str;
+  return String(str)
+    .replace(/\{\{link:(\w+)\}\}/g, (_, k) => link(lang, k))
+    .replace(/\{\{u:([^}]+)\}\}/g, (_, p) => u(p))
+    .replace(/\{\{email\}\}/g, SITE.email)
+    .replace(/\{\{playUrl\}\}/g, SITE.playUrl)
+    .replace(/\{\{form\}\}/g, SITE.feedbackForm)
+    .replace(/\{\{year\}\}/g, String(SITE.year));
+}
 
 function header(lang, activeKey, altHref) {
   const nav = NAVKEYS.map((key) => {
     const cur = key === activeKey ? ' aria-current="page"' : '';
-    return `<a href="${link(lang, key)}"${cur}>${T[lang].nav[key]}</a>`;
+    return `<a href="${link(lang, key)}"${cur}>${COPY[lang].nav[key]}</a>`;
   }).join('');
   const otherLang = lang === 'en' ? 'no' : 'en';
   const toggleAria = lang === 'en' ? 'Bytt til norsk / Switch to Norwegian' : 'Switch to English / Bytt til engelsk';
@@ -167,13 +152,13 @@ function header(lang, activeKey, altHref) {
 }
 
 function footer(lang) {
-  const t = T[lang];
-  const cols = t.footerCols.map(([h, keys]) => `<div class="footer-col"><h2>${h}</h2><ul>${
+  const t = COPY[lang];
+  const cols = FOOTER_GROUPS.map((keys, i) => `<div class="footer-col"><h2>${t.footerTitles[i]}</h2><ul>${
     keys.map((k) => `<li><a href="${link(lang, k)}">${t.footerLabel[k]}</a></li>`).join('')
   }</ul></div>`).join('');
   return `<footer class="site-footer"><div class="footer-inner">
   <div class="footer-cols">${cols}</div>
-  <p class="footer-note">${t.footerNote}</p>
+  <p class="footer-note">${resolveTokens(t.footerNote, lang)}</p>
 </div></footer>`;
 }
 
@@ -195,7 +180,7 @@ function shell({ lang, pageKey, activeKey, path, title, description, body, wide 
   const ogLocale = lang === 'no' ? 'nb_NO' : 'en_GB';
   const ogAlt = lang === 'no' ? 'en_GB' : 'nb_NO';
   return `<!doctype html>
-<html lang="${T[lang].htmlLang}">
+<html lang="${COPY[lang].htmlLang}">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -260,69 +245,17 @@ function mdPage({ lang, pageKey, path, srcMd, title, description }) {
 }
 
 // --- landing -------------------------------------------------------------
-const LANDING = {
-  en: {
-    tagline: 'Knitting &amp; crochet companion',
-    lead: 'Purl keeps your projects, yarn stash, patterns and progress in one place: free, offline, and stored on your own device. No account, no sign-up, no ads.',
-    desc: 'Purl is a free knitting and crochet companion app. Your projects, yarn stash, patterns and progress in one place, kept on your device.',
-    featuresTitle: 'What Purl does',
-    features: [
-      ['Projects', 'Track every make from planned to finished, with a visual timeline, progress photos and the gauge you actually got.'],
-      ['Yarn stash', 'Log your yarn with colour, dye lot and fibre, see your totals, and scan a ball-band barcode to fill in the details.'],
-      ['Patterns and PDFs', 'Keep written patterns and PDFs in one library. Open big PDFs offline, draw, highlight, add notes, and follow along with counters and a chart tracker.'],
-      ['Handy tools', 'A craft calculator, quick counters, and a knitting and crochet glossary in Norwegian and English.'],
-      ['Made to feel right', 'Norwegian and English, light and dark mode, a two-pane layout on iPad, and one-file backup and restore.'],
-      ['Private by default', 'Everything lives on your device. No account, no sign-up, no ads, and nothing sold or shared.'],
-    ],
-    exploreTitle: 'Explore Purl',
-    cards: [
-      ['guide', 'User guide', 'Learn every part of Purl, in plain language.'],
-      ['support', 'Support', 'Get help, get in touch, or support development.'],
-      ['feedback', 'Send feedback', 'A short anonymous form for bugs and ideas.'],
-      ['roadmap', 'Roadmap', 'What Purl does today and what is coming next.'],
-      ['changelog', "What's new", 'Every update, newest first.'],
-      ['privacy', 'Privacy policy', 'Your data stays on your device. Here is the detail.'],
-      ['terms', 'Terms of use', 'The plain-language terms for using Purl.'],
-      ['press', 'Press kit', 'Logo, screenshots, colours and a fact sheet.'],
-    ],
-  },
-  no: {
-    tagline: 'Følgesvenn for strikking og hekling',
-    lead: 'Purl samler prosjektene dine, garnlageret, oppskriftene og fremgangen på ett sted: gratis, uten nett, og lagret på din egen enhet. Ingen konto, ingen innlogging, ingen reklame.',
-    desc: 'Purl er en gratis følgesvenn-app for strikking og hekling. Prosjekter, garnlager, oppskrifter og fremgang på ett sted, lagret på enheten din.',
-    featuresTitle: 'Hva Purl gjør',
-    features: [
-      ['Prosjekter', 'Følg alt du lager, fra planlagt til ferdig, med en visuell tidslinje, fremdriftsbilder og strikkefastheten du faktisk fikk.'],
-      ['Garnlager', 'Registrer garnet med farge, fargeparti og fiber, se totalene dine, og skann strekkoden på banderolen for å fylle inn detaljene.'],
-      ['Oppskrifter og PDF', 'Ha egne oppskrifter og PDF-er i ett bibliotek. Åpne store PDF-er uten nett, tegn, marker, legg til notater, og følg med ved hjelp av tellere og en diagramsporer.'],
-      ['Nyttige verktøy', 'En kalkulator for håndarbeid, raske tellere, og en strikke- og hekleordliste på norsk og engelsk.'],
-      ['Laget for å føles riktig', 'Norsk og engelsk, lyst og mørkt tema, tospaltet visning på iPad, og sikkerhetskopiering og gjenoppretting i én fil.'],
-      ['Privat som standard', 'Alt ligger på enheten din. Ingen konto, ingen innlogging, ingen reklame, og ingenting selges eller deles.'],
-    ],
-    exploreTitle: 'Utforsk Purl',
-    cards: [
-      ['guide', 'Brukerveiledning', 'Lær hver del av Purl, forklart enkelt.'],
-      ['support', 'Støtte', 'Få hjelp, ta kontakt, eller støtt utviklingen.'],
-      ['feedback', 'Send tilbakemelding', 'Et kort, anonymt skjema for feil og ideer.'],
-      ['roadmap', 'Veikart (engelsk)', 'Hva Purl gjør i dag, og hva som kommer.'],
-      ['changelog', 'Nyheter (engelsk)', 'Alle oppdateringer, nyeste først.'],
-      ['privacy', 'Personvern', 'Dataene dine blir på enheten din. Her er detaljene.'],
-      ['terms', 'Vilkår for bruk', 'Vilkårene for å bruke Purl, i klarspråk.'],
-      ['press', 'Pressemateriell', 'Logo, skjermbilder, farger og et faktaark.'],
-    ],
-  },
-};
 function downloadRow(lang) {
-  const s = T[lang].store;
+  const s = COPY[lang].store;
   return `<div class="btn-row">
   <a class="btn btn-primary btn-store" href="${SITE.playUrl}"><span class="store-line"><span class="store-top">${s.get}</span>Google Play</span></a>
   <span class="btn btn-store btn-disabled"><span class="store-line"><span class="store-top">${s.soon}</span>App Store</span></span>
 </div>`;
 }
 function landing(lang) {
-  const c = LANDING[lang];
-  const cards = c.cards.map(([key, title, sub]) => `  <li><a href="${link(lang, key)}">${title}<span>${sub}</span></a></li>`).join('\n');
-  const features = c.features.map(([t, d]) => `  <div class="feature"><h3>${esc(t)}</h3><p>${d}</p></div>`).join('\n');
+  const c = COPY[lang].landing;
+  const cards = c.cards.map((card) => `  <li><a href="${link(lang, card.key)}">${card.title}<span>${card.sub}</span></a></li>`).join('\n');
+  const features = c.features.map((ft) => `  <div class="feature"><h3>${esc(ft.title)}</h3><p>${ft.desc}</p></div>`).join('\n');
   const shotCap = lang === 'no' ? 2 : 1;
   const shots = SHOTS.map((row) => `  <figure style="margin:0"><img src="${u('/assets/press/' + row[0])}" alt="Purl: ${escAttr(row[shotCap])}" loading="lazy" /></figure>`).join('\n');
   const body = `<section class="hero">
@@ -350,38 +283,9 @@ ${cards}
 }
 
 // --- support -------------------------------------------------------------
-const SUPPORT = {
-  en: {
-    desc: 'Get help with Purl, read the guide and FAQ, send anonymous feedback, or get in touch.',
-    h1: 'Support',
-    intro: 'Need a hand with Purl, or want to get in touch? Everything is on this page.',
-    getApp: 'Get the app',
-    learn: 'Learn how it works',
-    learnBody: `The <a href="${link('en', 'guide')}">user guide</a> covers every part of Purl in plain language, from your first project to the PDF pattern tools. The <a href="${u('/guide/faq.html')}">FAQ</a> answers the common questions and the things that look like bugs but are not.`,
-    fb: 'Send feedback',
-    fbBody: `Found a bug or have an idea? Inside the app, the Send feedback button fills in your note and the app version for you. You can also open the <a href="${link('en', 'feedback')}">anonymous feedback form</a> here in your browser. It never asks for your name or email.`,
-    contact: 'Contact',
-    contactBody: `For anything else, email <a href="mailto:${SITE.email}">${SITE.email}</a>.`,
-    dev: 'Support development',
-    devBody: 'Purl is free and stays free, with every feature unlocked for everyone. If it has helped you, there is an optional tip on the Support Purl screen inside the app. A tip unlocks nothing; it is just a thank-you that helps development continue. You can also share Purl with a knitting or crochet friend from the same screen.',
-  },
-  no: {
-    desc: 'Få hjelp med Purl, les veiledningen og FAQ, send anonym tilbakemelding, eller ta kontakt.',
-    h1: 'Støtte',
-    intro: 'Trenger du hjelp med Purl, eller vil du ta kontakt? Alt finner du på denne siden.',
-    getApp: 'Last ned appen',
-    learn: 'Lær hvordan det fungerer',
-    learnBody: `<a href="${link('no', 'guide')}">Brukerveiledningen</a> dekker hver del av Purl i klarspråk, fra det første prosjektet til PDF-verktøyene. <a href="${u('/no/guide/faq.html')}">FAQ-en</a> svarer på de vanligste spørsmålene og på det som ser ut som feil, men ikke er det.`,
-    fb: 'Send tilbakemelding',
-    fbBody: `Fant du en feil eller har du en idé? Inne i appen fyller Send tilbakemelding-knappen inn notatet ditt og appversjonen for deg. Du kan også åpne det <a href="${link('no', 'feedback')}">anonyme tilbakemeldingsskjemaet</a> her i nettleseren. Det spør aldri om navn eller e-post.`,
-    contact: 'Kontakt',
-    contactBody: `For alt annet, send e-post til <a href="mailto:${SITE.email}">${SITE.email}</a>.`,
-    dev: 'Støtt utviklingen',
-    devBody: 'Purl er gratis og forblir gratis, med alle funksjoner åpne for alle. Har appen hjulpet deg, kan du gi en valgfri liten takk på Støtt Purl-skjermen inne i appen. En takk låser ikke opp noe; den bare hjelper utviklingen videre. Fra samme skjerm kan du også dele Purl med en strikke- eller heklevenn.',
-  },
-};
 function support(lang) {
-  const s = SUPPORT[lang];
+  const s = COPY[lang].support;
+  const rt = (k) => resolveTokens(s[k], lang);
   const body = `<article class="prose">
   <h1>${s.h1}</h1>
   <p>${s.intro}</p>
@@ -391,36 +295,24 @@ function support(lang) {
 ${downloadRow(lang)}
 
 <h2 class="section-title">${s.learn}</h2>
-<article class="prose"><p>${s.learnBody}</p></article>
+<article class="prose"><p>${rt('learnBody')}</p></article>
 
 <h2 class="section-title">${s.fb}</h2>
-<article class="prose"><p>${s.fbBody}</p></article>
+<article class="prose"><p>${rt('fbBody')}</p></article>
 
 <h2 class="section-title">${s.contact}</h2>
-<article class="prose"><p>${s.contactBody}</p></article>
+<article class="prose"><p>${rt('contactBody')}</p></article>
 
 <h2 class="section-title">${s.dev}</h2>
-<article class="prose"><p>${s.devBody}</p></article>`;
+<article class="prose"><p>${rt('devBody')}</p></article>`;
   return shell({ lang, pageKey: 'support', path: link(lang, 'support').slice(BASE.length), title: s.h1, description: s.desc, body });
 }
 
 // --- feedback redirect ---------------------------------------------------
-const FEEDBACK = {
-  en: {
-    title: 'Send feedback', h1: 'Opening the feedback form',
-    p1: `Taking you to Purl's anonymous feedback form. If it does not open on its own, <a href="${SITE.feedbackForm}">open the form here</a>.`,
-    p2: `The form is a Google Form. It never asks for your name or email. You can also go back to the <a href="${link('en', 'support')}">support page</a> or the <a href="${link('en', 'home')}">home page</a>.`,
-  },
-  no: {
-    title: 'Send tilbakemelding', h1: 'Åpner tilbakemeldingsskjemaet',
-    p1: `Tar deg til Purls anonyme tilbakemeldingsskjema. Hvis det ikke åpner seg selv, <a href="${SITE.feedbackForm}">åpne skjemaet her</a>.`,
-    p2: `Skjemaet er et Google-skjema. Det spør aldri om navn eller e-post. Du kan også gå tilbake til <a href="${link('no', 'support')}">støttesiden</a> eller <a href="${link('no', 'home')}">hjem</a>.`,
-  },
-};
 function feedbackRedirect(lang) {
-  const f = FEEDBACK[lang];
+  const f = COPY[lang].feedback;
   return `<!doctype html>
-<html lang="${T[lang].htmlLang}">
+<html lang="${COPY[lang].htmlLang}">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -435,8 +327,8 @@ ${header(lang, null, link(lang === 'en' ? 'no' : 'en', 'feedback'))}
 <main class="wrap">
   <article class="prose">
     <h1>${f.h1}</h1>
-    <p>${f.p1}</p>
-    <p>${f.p2}</p>
+    <p>${resolveTokens(f.p1, lang)}</p>
+    <p>${resolveTokens(f.p2, lang)}</p>
   </article>
 </main>
 ${footer(lang)}
@@ -532,51 +424,13 @@ function copyShots() {
     if (existsSync(src)) copyFileSync(src, join(to, file));
   }
 }
-const PRESS = {
-  en: {
-    desc: 'Press kit for Purl: logo, screenshots, brand colours and a fact sheet.',
-    h1: 'Press kit',
-    about1: "Purl is a calm, private companion for knitters and crocheters. Projects, yarn stash, patterns and progress live in one place, free, offline, and stored on the user's own device, with no account and no ads. Purl speaks Norwegian and English, and is built to feel right on iPad as well as phones.",
-    about2: "You are welcome to use the material below when writing about Purl. Please keep the logo's colours and proportions as they are.",
-    fact: 'Fact sheet', logo: 'Logo', colours: 'Brand colours', shots: 'Screenshots',
-    facts: [
-      ['Name', 'Purl'],
-      ['What it is', 'A knitting and crochet companion app'],
-      ['Price', 'Free, with an optional in-app tip. Nothing is locked.'],
-      ['Platforms', 'Android (Google Play). iPhone and iPad coming.'],
-      ['Languages', 'Norwegian, English'],
-      ['Privacy', 'Data stays on the device. No accounts, no tracking, nothing sold or shared.'],
-    ],
-    websiteLabel: 'Website', contactLabel: 'Contact',
-    logoBody: `<a href="${u('/logo.png')}">Download the logo (PNG)</a>. The mark is a single plum line on a transparent background.`,
-    swatchNames: ['Plum', 'Plum dark', 'Cream', 'Ink'],
-  },
-  no: {
-    desc: 'Pressemateriell for Purl: logo, skjermbilder, merkefarger og et faktaark.',
-    h1: 'Pressemateriell',
-    about1: 'Purl er en rolig, privat følgesvenn for alle som strikker og hekler. Prosjekter, garnlager, oppskrifter og fremgang samles på ett sted: gratis, uten nett, og lagret på brukerens egen enhet, uten konto og uten reklame. Purl snakker norsk og engelsk, og er laget for å føles riktig både på iPad og telefon.',
-    about2: 'Du står fritt til å bruke materialet nedenfor når du skriver om Purl. Behold logoens farger og proporsjoner som de er.',
-    fact: 'Faktaark', logo: 'Logo', colours: 'Merkefarger', shots: 'Skjermbilder',
-    facts: [
-      ['Navn', 'Purl'],
-      ['Hva det er', 'En følgesvenn-app for strikking og hekling'],
-      ['Pris', 'Gratis, med en valgfri takk i appen. Ingenting er låst.'],
-      ['Plattformer', 'Android (Google Play). iPhone og iPad kommer.'],
-      ['Språk', 'Norsk, engelsk'],
-      ['Personvern', 'Dataene blir på enheten. Ingen konto, ingen sporing, ingenting selges eller deles.'],
-    ],
-    websiteLabel: 'Nettsted', contactLabel: 'Kontakt',
-    logoBody: `<a href="${u('/logo.png')}">Last ned logoen (PNG)</a>. Merket er en enkelt plommefarget strek på gjennomsiktig bakgrunn.`,
-    swatchNames: ['Plomme', 'Mørk plomme', 'Krem', 'Blekk'],
-  },
-};
 function press(lang) {
-  const p = PRESS[lang];
+  const p = COPY[lang].press;
   const shotCap = lang === 'no' ? 2 : 1; // index into SHOTS tuple for the caption
   const hexes = [COLORS.primary, COLORS.primaryDark, COLORS.bg, COLORS.text];
-  const swatches = p.swatchNames.map((name, i) => `    <div class="swatch"><div class="chip" style="background:${hexes[i]}"></div><div class="meta"><b>${name}</b><span>${hexes[i]}</span></div></div>`).join('\n');
+  const swatches = p.swatches.map((name, i) => `    <div class="swatch"><div class="chip" style="background:${hexes[i]}"></div><div class="meta"><b>${name}</b><span>${hexes[i]}</span></div></div>`).join('\n');
   const shots = SHOTS.map((row) => `    <figure style="margin:0"><img src="${u('/assets/press/' + row[0])}" alt="Purl: ${escAttr(row[shotCap])}" loading="lazy" /></figure>`).join('\n');
-  const factRows = p.facts.map(([k, v]) => `  <tr><th>${esc(k)}</th><td>${esc(v)}</td></tr>`).join('\n');
+  const factRows = p.facts.map((f) => `  <tr><th>${esc(f.label)}</th><td>${esc(f.value)}</td></tr>`).join('\n');
   const body = `<article class="prose">
   <h1>${p.h1}</h1>
   <p>${p.about1}</p>
@@ -591,7 +445,7 @@ ${factRows}
 </table>
 
 <h2 class="section-title">${p.logo}</h2>
-<article class="prose"><p>${p.logoBody}</p></article>
+<article class="prose"><p>${resolveTokens(p.logoBody, lang)}</p></article>
 
 <h2 class="section-title">${p.colours}</h2>
 <div class="swatches">
