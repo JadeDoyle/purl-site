@@ -65,21 +65,22 @@ a { color: var(--primary); }
 }
 .site-nav a:hover { color: var(--primary); background: var(--surface); }
 .site-nav a[aria-current="page"] { color: var(--primary); background: var(--surface); }
-/* Language toggle: a sibling of the nav (not inside it) so it can sit on the
-   header's top row on mobile while the page links drop to a second row. */
+/* Language toggle: both codes always show (EN/NO) so the pill keeps a constant
+   width; the current language is bold, the link switches to the other one. */
 .lang {
   text-decoration: none;
   color: var(--muted);
-  font-weight: 600;
+  font-weight: 500;
   font-size: 13px;
-  text-transform: uppercase;
   letter-spacing: .03em;
-  padding: 6px 11px;
+  padding: 6px 10px;
   border: 1px solid var(--border);
   border-radius: 999px;
   white-space: nowrap;
 }
-.lang:hover { color: var(--primary); border-color: var(--primary); }
+.lang b { color: var(--primary); font-weight: 700; }
+.lang span { padding: 0 2px; }
+.lang:hover { border-color: var(--primary); }
 
 /* Main column ------------------------------------------------------------- */
 .wrap { width: 100%; max-width: var(--maxw); margin: 0 auto; padding: 40px 22px 64px; flex: 1; }
@@ -241,13 +242,19 @@ a { color: var(--primary); }
   .cards { grid-template-columns: 1fr; }
   .features { grid-template-columns: 1fr; }
   .hero h1 { font-size: 33px; }
-  /* Two-row header: logo (icon only) and the language toggle on top, the page
-     links centered on their own full-width row below. Nothing wraps oddly. */
-  .site-header { flex-wrap: wrap; gap: 8px; padding: 10px 14px; }
-  .brand { margin-right: 0; order: 1; }
+  /* Single-row header: logo only (no wordmark), page links, then the EN/NO
+     pill, all on one line. The pill's constant width makes this predictable. */
+  .site-header { flex-wrap: nowrap; gap: 4px; padding: 10px 12px; }
+  .brand { margin-right: 0; flex: none; }
   .brand span { display: none; }
-  .lang { order: 2; margin-left: auto; }
-  .site-nav { order: 3; width: 100%; justify-content: center; gap: 4px; }
-  .site-nav a { padding: 6px 10px; font-size: 14px; }
+  .site-nav { flex-wrap: nowrap; gap: 0; margin-left: auto; }
+  .site-nav a { padding: 6px 7px; font-size: 14px; }
+  .lang { flex: none; margin-left: 3px; padding: 5px 8px; font-size: 12px; }
   .wrap { padding: 30px 18px 52px; }
+}
+
+@media (max-width: 374px) {
+  .site-header { padding: 10px 8px; }
+  .site-nav a { padding: 6px 5px; font-size: 13px; }
+  .lang { padding: 5px 6px; font-size: 11px; }
 }

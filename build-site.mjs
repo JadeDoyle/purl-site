@@ -113,7 +113,6 @@ function link(lang, key) {
 const T = {
   en: {
     htmlLang: 'en',
-    toggle: 'Norsk',
     nav: { home: 'Home', guide: 'Guide', support: 'Support', privacy: 'Privacy' },
     footerCols: [
       ['Purl', ['home', 'guide', 'support', 'feedback']],
@@ -131,7 +130,6 @@ const T = {
   },
   no: {
     htmlLang: 'no',
-    toggle: 'English',
     nav: { home: 'Hjem', guide: 'Veiledning', support: 'Støtte', privacy: 'Personvern' },
     footerCols: [
       ['Purl', ['home', 'guide', 'support', 'feedback']],
@@ -156,7 +154,10 @@ function header(lang, activeKey, altHref) {
   }).join('');
   const otherLang = lang === 'en' ? 'no' : 'en';
   const toggleAria = lang === 'en' ? 'Bytt til norsk / Switch to Norwegian' : 'Switch to English / Bytt til engelsk';
-  const toggle = altHref ? `<a class="lang" href="${altHref}" lang="${otherLang}" hreflang="${otherLang}" aria-label="${toggleAria}">${T[lang].toggle}</a>` : '';
+  // Both language codes always show (constant width), the current one bold;
+  // the link goes to the other language.
+  const codes = lang === 'en' ? '<b>EN</b><span aria-hidden="true">/</span>NO' : 'EN<span aria-hidden="true">/</span><b>NO</b>';
+  const toggle = altHref ? `<a class="lang" href="${altHref}" hreflang="${otherLang}" aria-label="${toggleAria}">${codes}</a>` : '';
   return `<header class="site-header">
   <a class="brand" href="${link(lang, 'home')}"><img src="${u('/logo.png')}" alt="" width="30" height="30" /><span>Purl</span></a>
   <nav class="site-nav">${nav}</nav>
