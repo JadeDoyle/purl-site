@@ -450,8 +450,12 @@ function isMilestone(v) {
 }
 function changelog() {
   const releases = readArray('src/screens/ChangelogScreen.tsx', 'RELEASES');
-  const items = releases.map((r) => {
-    const notes = r.notes.map((n) => `      <li>${esc(n)}</li>`).join('\n');
+  // The full history is long (170+ releases). Show the most recent ones in
+  // full and fold everything older behind a tap, so the page stays scannable
+  // without hiding anything.
+  const RECENT = 8;
+  const notesList = (r) => r.notes.map((n) => `      <li>${esc(n)}</li>`).join('\n');
+  const recent = releases.slice(0, RECENT).map((r) => {
     const date = r.date ? `<span class="date">${esc(r.date)}</span>` : '';
     return `  <section class="release${isMilestone(r.version) ? ' milestone' : ''}" id="v${escAttr(r.version)}">
     <div class="release-head">
@@ -459,38 +463,52 @@ function changelog() {
       ${date}
     </div>
     <ul>
-${notes}
+${notesList(r)}
     </ul>
   </section>`;
   }).join('\n');
+  const older = releases.slice(RECENT).map((r) => {
+    const date = r.date ? `<span class="date">${esc(r.date)}</span>` : '';
+    return `  <details class="release-fold${isMilestone(r.version) ? ' milestone' : ''}" id="v${escAttr(r.version)}">
+    <summary>${esc(r.title)} <span class="ver">v${esc(r.version)}</span>${date}</summary>
+    <ul>
+${notesList(r)}
+    </ul>
+  </details>`;
+  }).join('\n');
   const body = `<article class="prose"><h1>What's new</h1>
-  <p>Every Purl update, newest first. You are on the same list the app shows under More, "What's new".</p></article>
-${items}`;
+  <p>The latest Purl updates, newest first, straight from the app's own "What's new" list. Earlier releases are folded below; tap one to open it.</p></article>
+${recent}
+<h2 class="section-title">Earlier releases</h2>
+${older}`;
   return shell({ lang: 'en', pageKey: 'changelog', path: SLUGS.changelog, title: "What's new", description: 'The full Purl changelog: every update and what changed, newest first.', body, wide: true });
 }
 
 // --- roadmap (English, as in the app) ------------------------------------
 function roadmap() {
-  const done = readArray('src/screens/RoadmapScreen.tsx', 'DONE');
+  const groups = readArray('src/screens/RoadmapScreen.tsx', 'DONE_GROUPS');
   const next = readArray('src/screens/RoadmapScreen.tsx', 'NEXT');
   const later = readArray('src/screens/RoadmapScreen.tsx', 'LATER');
   const v = appVersion();
-  const section = (title, sub, items, cls) => {
-    const rows = items.map((it) => `    <div class="road-item">
+  const rows = (items) => items.map((it) => `    <div class="road-item">
       <span class="road-dot"></span>
       <div><div class="label">${esc(it.label)}</div>${it.sub ? `<div class="sub">${esc(it.sub)}</div>` : ''}</div>
     </div>`).join('\n');
-    return `  <section class="road ${cls}">
+  const groupCards = groups.map((g) => `  <section class="road road-done">
+    <h3>${esc(g.title)}</h3>
+${rows(g.items)}
+  </section>`).join('\n');
+  const section = (title, sub, items, cls) => `  <section class="road ${cls}">
     <h2>${esc(title)}</h2>
     <p class="road-sub">${esc(sub)}</p>
-${rows}
+${rows(items)}
   </section>`;
-  };
   const body = `<article class="prose"><h1>Roadmap</h1>
-  <p>What Purl does today, what is coming next, and the bigger ideas for later. This mirrors the Roadmap screen inside the app.</p></article>
-${section('In the app', 'Everything Purl already does.', done, 'road-done')}
+  <p>What Purl does today, grouped by area, and what is coming. This mirrors the Roadmap screen inside the app. One promise shapes it all: your data stays on your device, so nothing here will ever need an account.</p></article>
+<h2 class="section-title">In the app</h2>
+${groupCards}
 ${section('Up next', 'The next things being worked on.', next, 'road-next')}
-${section('Later', 'Bigger ideas, not yet scheduled.', later, 'road-later')}
+${section('Later', 'Further out, not yet scheduled.', later, 'road-later')}
 <article class="prose"><p class="updated">Purl v${esc(v)}, early development.</p></article>`;
   return shell({ lang: 'en', pageKey: 'roadmap', path: SLUGS.roadmap, title: 'Roadmap', description: 'What Purl does today and what is coming next, mirroring the in-app roadmap.', body, wide: true });
 }
