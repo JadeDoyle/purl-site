@@ -48,10 +48,42 @@ npm run build
 
 Generated HTML and images are committed; `node_modules` is not. Re-run
 `npm run build` and commit whenever any source changes (guide, legal text, or a
-new app release), then push so GitHub Pages redeploys.
+new app release), then push so GitHub Pages redeploys. Or let CI do it (below).
 
 Style rules, matching the app: no em dashes and no emojis in any output. The
 Norwegian legal text (`*.no.md`) is a first pass, pending a review by Helene.
+
+## Automatic deploy (GitHub Actions)
+
+`.github/workflows/deploy.yml` rebuilds the site and commits the regenerated
+pages to `main`, which Pages then serves. It runs on a manual button
+(Actions -> Build and deploy site -> Run workflow), on pushes that touch the
+generator/stylesheet/logo here, on an **hourly** backstop, and on a
+`content-updated` dispatch from the Purl repo (for instant publishing). It sets
+`SKIP_ICONS=1` so it only rebuilds HTML and keeps the committed raster icons
+(the OG image is font-rendered and would otherwise churn on a Linux runner).
+
+**One-time setup (required, because the content repo is private):**
+
+1. Create a **fine-grained PAT** on github.com (Settings -> Developer settings
+   -> Fine-grained tokens) scoped to **only `JadeDoyle/Purl`**, permission
+   **Contents: Read-only**. Give it an expiry.
+2. In this repo: Settings -> Secrets and variables -> Actions -> New repository
+   secret, name **`PURL_READ_TOKEN`**, paste the PAT. This lets the public site
+   build read the private app repo.
+
+That alone gives hourly auto-deploy plus the manual button. To make merges
+publish **instantly** instead of within the hour, also set up the dispatch from
+the Purl repo (its `.github/workflows/deploy-site.yml`): create a second
+fine-grained PAT scoped to **only `JadeDoyle/purl-site`** with **Contents:
+Read and write**, and add it in the **Purl** repo as the secret
+**`SITE_DISPATCH_TOKEN`**. Then a content merge on Purl's `main` pings this
+workflow immediately. (Until that secret exists, Purl's workflow runs green and
+skips; you can drop the hourly `schedule:` line here once the dispatch is live.)
+
+The app is never deployed by CI: app content (strings, glossary, catalogue)
+reaches devices by OTA, which stays manual (`npm run ota:publish` on the dev
+box). See `../Purl/BUILD.md`.
 
 ## The base URL is one knob
 

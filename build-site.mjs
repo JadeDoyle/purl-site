@@ -547,6 +547,12 @@ async function buildIcons() {
   mkdirSync(dir, { recursive: true });
   const favSvg = faviconSvg();
   writeFileSync(join(dir, 'favicon.svg'), favSvg, 'utf8');
+  // In CI (SKIP_ICONS=1) keep the committed raster icons: text in the OG image
+  // is font-rendered, and a Linux runner's fonts differ from the machine that
+  // generated the committed PNGs, so regenerating them would churn on every run.
+  // Regenerate icons locally (npm run build without SKIP_ICONS) when the logo or
+  // OG design changes, and commit the new PNGs.
+  if (process.env.SKIP_ICONS) { console.warn('SKIP_ICONS set: keeping committed favicon/og PNGs.'); return; }
   let Resvg;
   try { ({ Resvg } = await import('@resvg/resvg-js')); }
   catch { console.warn('resvg not installed: keeping committed PNGs (favicon-*.png, apple-touch-icon.png, og.png)'); return; }

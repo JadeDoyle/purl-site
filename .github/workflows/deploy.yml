@@ -1,0 +1,83 @@
+name: Build and deploy site
+
+# Rebuilds the public site and commits the regenerated pages to main, which
+# GitHub Pages ("deploy from a branch") then serves. This is exactly what a
+# person does by hand (npm run build && git push), automated.
+#
+# The site's content comes from the sibling private Purl repo (user-guide/,
+# docs/legal/, docs/site/copy.json, and the changelog/roadmap screens), so the
+# job checks that repo out too, using the PURL_READ_TOKEN secret.
+#
+# Triggers:
+#   - repository_dispatch (content-updated): fired by the Purl repo when
+#     website content merges to its main, for instant publishing.
+#   - workflow_dispatch: the manual "Run workflow" button.
+#   - push to source files here (the generator, the stylesheet, the logo).
+#   - schedule: an hourly backstop, so content still goes live within the hour
+#     even if the Purl dispatch is not set up. Comment it out if you set up the
+#     dispatch and prefer a quiet Actions history.
+
+on:
+  repository_dispatch:
+    types: [content-updated]
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - build-site.mjs
+      - assets/styles.css
+      - logo.png
+      - package.json
+      - .github/workflows/deploy.yml
+  schedule:
+    - cron: '17 * * * *'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: deploy-site
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out purl-site
+        uses: actions/checkout@v4
+        with:
+          path: purl-site
+
+      - name: Check out the Purl content repo (sibling, private)
+        uses: actions/checkout@v4
+        with:
+          repository: JadeDoyle/Purl
+          ref: main
+          token: ${{ secrets.PURL_READ_TOKEN }}
+          path: Purl
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Build the site
+        working-directory: purl-site
+        env:
+          SKIP_ICONS: '1'   # keep the committed raster icons; only HTML is rebuilt
+        run: |
+          npm install --no-audit --no-fund
+          node build-site.mjs
+
+      - name: Commit and publish if anything changed
+        working-directory: purl-site
+        run: |
+          git config user.name 'purl-site deploy bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No changes to publish."
+          else
+            git commit -m "site: rebuild from Purl content [skip ci]"
+            git push
+          fi
