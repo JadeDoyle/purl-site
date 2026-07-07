@@ -7,6 +7,7 @@
 <meta name="description" content="PDF tools: part of the Purl user guide." />
 <link rel="canonical" href="https://jadedoyle.github.io/purl-site/guide/pdf-tools.html" />
 <link rel="alternate" hreflang="en" href="https://jadedoyle.github.io/purl-site/guide/pdf-tools.html" />
+<link rel="alternate" hreflang="no" href="https://jadedoyle.github.io/purl-site/no/guide/pdf-tools.html" />
 <link rel="alternate" hreflang="x-default" href="https://jadedoyle.github.io/purl-site/guide/pdf-tools.html" />
 <link rel="icon" href="/purl-site/assets/favicon.svg" type="image/svg+xml" />
 <link rel="icon" href="/purl-site/assets/favicon-32.png" sizes="32x32" type="image/png" />
@@ -28,7 +29,7 @@
 <header class="site-header">
   <a class="brand" href="/purl-site/"><img src="/purl-site/logo.png" alt="" width="30" height="30" /><span>Purl</span></a>
   <nav class="site-nav"><a href="/purl-site/">Home</a><a href="/purl-site/guide/" aria-current="page">Guide</a><a href="/purl-site/support/">Support</a><a href="/purl-site/privacy/">Privacy</a></nav>
-  <a class="lang" href="/purl-site/no/" hreflang="no" aria-label="Bytt til norsk / Switch to Norwegian"><b>EN</b><span aria-hidden="true">/</span>NO</a>
+  <a class="lang" href="/purl-site/no/guide/pdf-tools.html" hreflang="no" aria-label="Bytt til norsk / Switch to Norwegian"><b>EN</b><span aria-hidden="true">/</span>NO</a>
 </header>
 <main class="wrap">
 <article class="prose"><h1>PDF tools</h1>
@@ -42,43 +43,55 @@ are, the counter-pill size, and which tools appear in the dial.
 <p>Tap the floating button on the PDF viewer to open the dial. Tap a
 tool to use it; tap <strong>Done</strong> when you&#39;re finished with a tool to
 hide the dial.</p>
-<p>The dial is <strong>draggable</strong>: drag the FAB to wherever it&#39;s out of
-your way. It&#39;s <strong>side-flippable</strong>: you can pin it to the left edge
-or the right edge depending on whether you&#39;re a left- or
-right-hander. Settings → PDF &amp; counters → <strong>Tool order +
-visibility</strong> lets you reorder the tools or hide ones you don&#39;t
-use.</p>
+<p>The dial is <strong>draggable</strong>: drag the floating button to wherever
+it&#39;s out of your way (any corner, any edge) and it remembers the
+spot. Settings → <strong>Tool configuration</strong> lets you reorder the tools
+or hide ones you don&#39;t use.</p>
 <h2>The tools</h2>
 <h3>Row tracker</h3>
 <p>A movable highlight band that follows where you are in the pattern.
 Tap <strong>+ Row</strong> in the bar that appears to add one; drag the row up
-or down to position it; the up / down buttons in the bar nudge it
-one row&#39;s height at a time.</p>
+or down to position it. Each band shows the row it&#39;s parked on:
+the down arrow moves it to the next row and ticks the number up,
+the up arrow steps back, and tapping the row number lets you jump
+straight to any row.</p>
 <p>Multi-row support: add as many trackers as you want. The selected
 row is the one the navigation acts on; tap a row to select it.
-<strong>Lock</strong> a row to freeze its position. <strong>Del</strong> removes the
-selected row.</p>
-<p>The arrow keys: ▲ ▼ scroll the row, − + adjust its height.</p>
-<h3>Counters</h3>
-<p>Two flavours:</p>
-<ul>
-<li><strong>Counter inside the PDF tools</strong>: a single counter for the
-pattern, with + / − buttons.</li>
-<li><strong>Pinnable counters overlay</strong>: open the counter panel via the
-counters icon. Add a counter, name it (e.g. &quot;Sleeve&quot;,
-&quot;Decrease row&quot;), drag the pill above the PDF wherever it&#39;s out
-of your way. Each counter persists per pattern.</li>
-</ul>
-<p>Pinned counters survive page reloads, scrolling, exiting and
-reopening the PDF.</p>
+<strong>Lock</strong> a row so you can&#39;t knock it out of place by accident (the
+arrows still advance it). <strong>Del</strong> removes the selected row. While
+a band is unlocked, faint guide rows above and below help you line
+it up with the pattern&#39;s rows; − + adjust its height.</p>
+<h3>Row counters</h3>
+<p>The tracker bar at the bottom holds your row counters. Name
+several (&quot;Body&quot;, &quot;Sleeve&quot;) and switch between them from the menu
+on the left. Tap the row number to jump to any row, set a name, or
+set a target (&quot;of 60&quot; shows progress as &quot;24 / 60&quot;). A counter can
+count by 2 (or any step), count down to show rows remaining, tick
+another counter automatically (&quot;every 6 rows, advance the decrease
+counter&quot;), and carry reminders that pop up as a banner at a chosen
+row (&quot;row 24: dec 1 st each end&quot;), one-off or repeating.</p>
+<p>Counters persist per pattern: exit and reopen the PDF and they&#39;re
+exactly where you left them.</p>
+<h3>Chart stitch tracker</h3>
+<p>For colourwork and lace charts. Turn on the tracker and tap
+<strong>Chart</strong>: a box appears over the page. Drag its corners to line it
+up exactly with the printed chart, tell it how many stitches across
+and rows tall, and pick which corner is row 1, stitch 1. It then
+highlights the exact cell you&#39;re on; the arrows step stitch by
+stitch and row by row, with the current row lit across the chart.</p>
+<p>Charts can alternate reading direction every row (for flat
+knitting), show a faint alignment grid, and a pattern can hold
+several named charts; switch between them from the tracker menu.
+Tap the row/stitch readout to jump straight to any spot. Reach the
+last cell and the readout says &quot;Complete&quot;.</p>
 <h3>Ruler</h3>
 <p>A draggable, rotatable rule. Toggle it on; drag it to where you
 want it; rotate via the corner handle. When the ruler is on,
 drawing strokes snap to its line for quick straight marks.</p>
 <h3>The drawing toolbar</h3>
-<p>Drawing mode shows one row of icon buttons: marker, pen,
-highlighter, eraser and ruler on the left; undo, redo and a check
-mark (done) on the right. A small coloured bar under the active
+<p>Drawing mode shows one row of icon buttons: pen, marker, eraser,
+select and ruler on the left; undo, redo and a check mark (done)
+on the right. A small coloured bar under the active
 tool shows its current colour. While you&#39;re drawing, the app&#39;s
 back and undo buttons step aside so the toolbar has the full row.
 Tap the check mark when you&#39;re finished.</p>
@@ -98,7 +111,7 @@ straight (and locks level when you&#39;re close to horizontal or
 vertical). A rough ring (say, around your size in the size list)
 becomes a smooth oval. A stroke drawn around a section with
 corners becomes a neat box. Keep moving while holding to adjust
-the shape; lift your finger to keep it. Works with all three pens;
+the shape; lift your finger to keep it. Works with both pens;
 quick scribbles are never affected.</p>
 <p><strong>Pen presets.</strong> The three round chips at the top of a pen&#39;s
 options each hold a saved pen: tool, colour, size and
@@ -194,12 +207,14 @@ reopen it: everything is back exactly where you left it.</p>
 <h2>Page navigation</h2>
 <ul>
 <li><strong>Scroll</strong> with your finger.</li>
-<li><strong>Pinch</strong> to zoom.</li>
-<li><strong>Pages strip</strong> at the bottom (if enabled in the tools): tap a
-page thumbnail to jump.</li>
+<li><strong>Pinch</strong> to zoom; pinch out for an overview of several pages
+and tap the one you want.</li>
+<li><strong>Triple-tap</strong> anywhere to reset the zoom back to fit-width.</li>
+<li><strong>Find &amp; navigate</strong> (in the dial) for thumbnails, go-to-page,
+and text search.</li>
 </ul>
 <h2>Customising</h2>
-<p><strong>Settings → PDF &amp; counters</strong> controls:</p>
+<p><strong>Settings → Tool configuration</strong> controls:</p>
 <ul>
 <li><strong>Tool order + visibility</strong>: drag tools to reorder; toggle off
 the ones you don&#39;t use.</li>

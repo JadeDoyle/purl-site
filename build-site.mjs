@@ -100,9 +100,10 @@ const SLUGS = {
   privacy: '/privacy/', terms: '/terms/', press: '/press/',
   changelog: '/changelog/', roadmap: '/roadmap/',
 };
-// Shared pages exist in English only (no /no/ variant): the app's guide,
-// changelog and roadmap are English, so both languages link to the same pages.
-const SHARED = new Set(['guide', 'changelog', 'roadmap']);
+// Shared pages exist in English only (no /no/ variant): the app's changelog
+// and roadmap data are English strings, so both languages link to the same
+// pages. The guide is fully bilingual (user-guide/ + user-guide/no/).
+const SHARED = new Set(['changelog', 'roadmap']);
 
 function link(lang, key) {
   if (key === 'play') return SITE.playUrl;
@@ -138,7 +139,7 @@ const T = {
       ['Mer', ['press', 'play']],
     ],
     footerLabel: {
-      home: 'Hjem', guide: 'Brukerveiledning (engelsk)', support: 'Støtte', feedback: 'Send tilbakemelding',
+      home: 'Hjem', guide: 'Brukerveiledning', support: 'Støtte', feedback: 'Send tilbakemelding',
       changelog: 'Nyheter (engelsk)', roadmap: 'Veikart (engelsk)', privacy: 'Personvern',
       terms: 'Vilkår for bruk', press: 'Pressemateriell', play: 'Last ned på Google Play',
     },
@@ -182,11 +183,12 @@ function shell({ lang, pageKey, activeKey, path, title, description, body, wide 
   const canonical = abs(path);
   const pageTitle = pageKey === 'home' ? `${SITE.name}, ${title}` : `${title} | ${SITE.name}`;
   const d = escAttr(description);
-  // Shared pages (guide/changelog/roadmap) are English only; offer a path to the
+  // Shared pages (changelog/roadmap) are English only; offer a path to the
   // Norwegian home rather than a same-page counterpart that does not exist.
-  const altHref = SHARED.has(pageKey) ? link('no', 'home') : link(lang === 'en' ? 'no' : 'en', pageKey);
+  // Everything else toggles to the SAME page in the other language.
   const enPath = path.startsWith('/no/') ? path.slice(3) : path;
   const noPath = '/no' + (enPath === '/' ? '/' : enPath);
+  const altHref = SHARED.has(pageKey) ? link('no', 'home') : u(lang === 'en' ? noPath : enPath);
   const hreflang = SHARED.has(pageKey)
     ? `<link rel="alternate" hreflang="en" href="${canonical}" />\n<link rel="alternate" hreflang="x-default" href="${canonical}" />`
     : `<link rel="alternate" hreflang="en" href="${abs(enPath)}" />\n<link rel="alternate" hreflang="no" href="${abs(noPath)}" />\n<link rel="alternate" hreflang="x-default" href="${abs(enPath)}" />`;
@@ -299,7 +301,7 @@ const LANDING = {
     ],
     exploreTitle: 'Utforsk Purl',
     cards: [
-      ['guide', 'Brukerveiledning (engelsk)', 'Lær hver del av Purl, forklart enkelt.'],
+      ['guide', 'Brukerveiledning', 'Lær hver del av Purl, forklart enkelt.'],
       ['support', 'Støtte', 'Få hjelp, ta kontakt, eller støtt utviklingen.'],
       ['feedback', 'Send tilbakemelding', 'Et kort, anonymt skjema for feil og ideer.'],
       ['roadmap', 'Veikart (engelsk)', 'Hva Purl gjør i dag, og hva som kommer.'],
@@ -369,7 +371,7 @@ const SUPPORT = {
     intro: 'Trenger du hjelp med Purl, eller vil du ta kontakt? Alt finner du på denne siden.',
     getApp: 'Last ned appen',
     learn: 'Lær hvordan det fungerer',
-    learnBody: `<a href="${link('no', 'guide')}">Brukerveiledningen</a> (foreløpig på engelsk) dekker hver del av Purl i klarspråk, fra det første prosjektet til PDF-verktøyene. <a href="${u('/guide/faq.html')}">FAQ-en</a> (foreløpig på engelsk) svarer på de vanligste spørsmålene og på det som ser ut som feil, men ikke er det.`,
+    learnBody: `<a href="${link('no', 'guide')}">Brukerveiledningen</a> dekker hver del av Purl i klarspråk, fra det første prosjektet til PDF-verktøyene. <a href="${u('/no/guide/faq.html')}">FAQ-en</a> svarer på de vanligste spørsmålene og på det som ser ut som feil, men ikke er det.`,
     fb: 'Send tilbakemelding',
     fbBody: `Fant du en feil eller har du en idé? Inne i appen fyller Send tilbakemelding-knappen inn notatet ditt og appversjonen for deg. Du kan også åpne det <a href="${link('no', 'feedback')}">anonyme tilbakemeldingsskjemaet</a> her i nettleseren. Det spør aldri om navn eller e-post.`,
     contact: 'Kontakt',
@@ -603,56 +605,63 @@ ${shots}
   return shell({ lang, pageKey: 'press', path: link(lang, 'press').slice(BASE.length), title: p.h1, description: p.desc, body, wide: true });
 }
 
-// --- user guide (English) ------------------------------------------------
+// --- user guide (bilingual: user-guide/ + user-guide/no/) -----------------
+// [basename, EN title, NO title, isIndex]
 const GUIDE_PAGES = [
-  ['README', 'User guide', true],
-  ['getting-started', 'Getting started', false],
-  ['yarn-stash', 'Yarn stash', false],
-  ['patterns', 'Patterns', false],
-  ['projects', 'Projects', false],
-  ['pdf-tools', 'PDF tools', false],
-  ['barcode-templates', 'Barcode templates', false],
-  ['backups', 'Backups and recovery', false],
-  ['terminology', 'Terminology glossary', false],
-  ['calculator', 'Calculator', false],
-  ['faq', 'FAQ', false],
+  ['README', 'User guide', 'Brukerveiledning', true],
+  ['getting-started', 'Getting started', 'Kom i gang', false],
+  ['yarn-stash', 'Yarn stash', 'Stash', false],
+  ['patterns', 'Patterns', 'Mønstre', false],
+  ['projects', 'Projects', 'Prosjekter', false],
+  ['pdf-tools', 'PDF tools', 'PDF-verktøy', false],
+  ['barcode-templates', 'Barcode templates', 'Strekkode-maler', false],
+  ['backups', 'Backups and recovery', 'Sikkerhetskopier og gjenoppretting', false],
+  ['terminology', 'Terminology glossary', 'Terminologiordlisten', false],
+  ['calculator', 'Calculator', 'Strikkekalkulator', false],
+  ['faq', 'FAQ', 'FAQ', false],
 ];
-function guideLinkRewrite(md) {
+function guideLinkRewrite(md, dir) {
   return md.replace(/\]\(\.?\/?([A-Za-z0-9_-]+)\.md(#[^)]*)?\)/g, (_, name, hash = '') => {
     const slug = name === 'README' ? 'index' : name;
-    return `](${u('/guide/' + slug + '.html' + hash)})`;
+    return `](${u(dir + '/guide/' + slug + '.html' + hash)})`;
   });
 }
-function guideNav(currentSlug) {
-  const items = GUIDE_PAGES.map(([base, title]) => {
+function guideNav(lang, currentSlug) {
+  const dir = lang === 'no' ? '/no' : '';
+  const items = GUIDE_PAGES.map(([base, en, no]) => {
     const slug = base === 'README' ? 'index' : base;
     const cur = slug === currentSlug ? ' aria-current="page"' : '';
-    return `<li><a href="${u('/guide/' + slug + '.html')}"${cur}>${title}</a></li>`;
+    return `<li><a href="${u(dir + '/guide/' + slug + '.html')}"${cur}>${lang === 'no' ? no : en}</a></li>`;
   }).join('');
-  return `<nav class="pagenav"><h2>All guide pages</h2><ul>${items}</ul></nav>`;
+  const heading = lang === 'no' ? 'Alle sider i veiledningen' : 'All guide pages';
+  return `<nav class="pagenav"><h2>${heading}</h2><ul>${items}</ul></nav>`;
 }
-function buildGuide() {
-  const src = join(PURL, 'user-guide');
-  mkdirSync(join(HERE, 'guide'), { recursive: true });
+function buildGuide(lang) {
+  const dir = lang === 'no' ? '/no' : '';
+  const src = join(PURL, 'user-guide', lang === 'no' ? 'no' : '');
+  mkdirSync(join(HERE, `${dir}/guide`.replace(/^\//, '')), { recursive: true });
   let count = 0;
-  for (const [base, title, isIndex] of GUIDE_PAGES) {
+  for (const [base, enTitle, noTitle, isIndex] of GUIDE_PAGES) {
     const srcFile = join(src, `${base}.md`);
-    if (!existsSync(srcFile)) { console.warn(`skip (missing): ${base}.md`); continue; }
-    const md = guideLinkRewrite(readFileSync(srcFile, 'utf8'));
+    if (!existsSync(srcFile)) { console.warn(`skip (missing ${lang}): ${base}.md`); continue; }
+    const title = lang === 'no' ? noTitle : enTitle;
+    const md = guideLinkRewrite(readFileSync(srcFile, 'utf8'), dir);
     const bodyHtml = marked.parse(md);
     const slug = isIndex ? 'index' : base;
     const html = shell({
-      lang: 'en',
+      lang,
       pageKey: 'guide',
       activeKey: 'guide',
-      path: isIndex ? SLUGS.guide : `/guide/${slug}.html`,
-      title: isIndex ? 'User guide' : title,
+      path: isIndex ? `${dir}/guide/` : `${dir}/guide/${slug}.html`,
+      title,
       description: isIndex
-        ? 'How to use Purl, in plain language: projects, patterns, yarn stash, the PDF tools and more.'
-        : `${title}: part of the Purl user guide.`,
-      body: `<article class="prose">${bodyHtml}</article>\n${guideNav(slug)}`,
+        ? (lang === 'no'
+          ? 'Hvordan du bruker Purl, i klarspråk: prosjekter, mønstre, stash, PDF-verktøyene og mer.'
+          : 'How to use Purl, in plain language: projects, patterns, yarn stash, the PDF tools and more.')
+        : (lang === 'no' ? `${title}: en del av Purls brukerveiledning.` : `${title}: part of the Purl user guide.`),
+      body: `<article class="prose">${bodyHtml}</article>\n${guideNav(lang, slug)}`,
     });
-    writeFileSync(join(HERE, 'guide', `${slug}.html`), html, 'utf8');
+    writeFileSync(join(HERE, `${dir}/guide`.replace(/^\//, ''), `${slug}.html`), html, 'utf8');
     count++;
   }
   return count;
@@ -739,16 +748,17 @@ async function main() {
   // Shared English pages
   writePage('/changelog/', changelog());
   writePage('/roadmap/', roadmap());
-  const guideCount = buildGuide();
+  const guideCount = buildGuide('en') + buildGuide('no');
 
-  // sitemap + robots (English pages, Norwegian pages, guide pages)
-  const guidePaths = GUIDE_PAGES.filter(([, , isIndex]) => !isIndex).map(([base]) => `/guide/${base}.html`);
+  // sitemap + robots (English + Norwegian pages, guide pages in both languages)
+  const guidePaths = GUIDE_PAGES.filter(([, , , isIndex]) => !isIndex).map(([base]) => `/guide/${base}.html`);
   robotsAndSitemap([
     '/', '/support/', '/privacy/', '/terms/', '/press/', '/changelog/', '/roadmap/', '/guide/', ...guidePaths,
-    '/no/', '/no/support/', '/no/privacy/', '/no/terms/', '/no/press/',
+    '/no/', '/no/support/', '/no/privacy/', '/no/terms/', '/no/press/', '/no/guide/',
+    ...guidePaths.map((p) => '/no' + p),
   ]);
   await buildIcons();
-  console.log(`Built bilingual site (en + no) + ${guideCount} guide pages, icons, sitemap.`);
+  console.log(`Built bilingual site (en + no) + ${guideCount} guide pages across both languages, icons, sitemap.`);
 }
 
 main();
