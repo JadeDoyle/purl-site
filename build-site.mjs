@@ -159,7 +159,8 @@ function header(lang, activeKey, altHref) {
   const toggle = altHref ? `<a class="lang" href="${altHref}" lang="${otherLang}" hreflang="${otherLang}" aria-label="${toggleAria}">${T[lang].toggle}</a>` : '';
   return `<header class="site-header">
   <a class="brand" href="${link(lang, 'home')}"><img src="${u('/logo.png')}" alt="" width="30" height="30" /><span>Purl</span></a>
-  <nav class="site-nav">${nav}${toggle}</nav>
+  <nav class="site-nav">${nav}</nav>
+  ${toggle}
 </header>`;
 }
 
