@@ -1,11 +1,11 @@
 // Build the whole public Purl site into this repo. Run with `npm run build`.
 //
-// Served by GitHub Pages. Today that is https://jadedoyle.github.io/purl-site/
-// (a project page under a /purl-site/ subpath). The subpath is the single knob
-// BASE below: when the site later moves to a `purl-app` org repo named
-// `purl-app.github.io` (root-served), set BASE = '' and ORIGIN to the new host,
-// rebuild, and every link updates. FILE paths never include BASE (the repo root
-// is what Pages serves); only URLs do.
+// Served by GitHub Pages on the custom domain https://purl.no/ (root-served),
+// so BASE is '' and every link is site-root-relative. The old project-page host
+// jadedoyle.github.io/purl-site still works: GitHub redirects it to purl.no once
+// the custom domain (the CNAME file this script writes) is set. ORIGIN + BASE
+// below are the single knob if the host ever changes again. FILE paths never
+// include BASE (the repo root is what Pages serves); only URLs do.
 //
 // The site is bilingual: English at the root, Norwegian under /no/. One shared
 // shell (header nav + language toggle + full-sitemap footer + favicon + Open
@@ -27,8 +27,8 @@ import { marked } from 'marked';
 const HERE = dirname(fileURLToPath(import.meta.url));
 const PURL = join(HERE, '..', 'Purl');
 
-const ORIGIN = 'https://jadedoyle.github.io';
-const BASE = '/purl-site';                 // '' once root-served under an org
+const ORIGIN = 'https://purl.no';
+const BASE = '';                           // root-served on the purl.no custom domain
 const u = (p) => BASE + p;                 // site-relative path -> href
 const abs = (p) => ORIGIN + BASE + p;      // site-relative path -> absolute URL
 
@@ -440,7 +440,7 @@ function press(lang) {
 <h2 class="section-title">${p.fact}</h2>
 <table class="facts">
 ${factRows}
-  <tr><th>${p.websiteLabel}</th><td><a href="${link('en', 'home')}">jadedoyle.github.io/purl-site</a></td></tr>
+  <tr><th>${p.websiteLabel}</th><td><a href="${link('en', 'home')}">purl.no</a></td></tr>
   <tr><th>${p.contactLabel}</th><td><a href="mailto:${SITE.email}">${SITE.email}</a></td></tr>
 </table>
 
@@ -539,7 +539,7 @@ function ogSvg() {
   <text x="398" y="285" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="118" fill="${COLORS.primaryDark}">Purl</text>
   <text x="404" y="345" font-family="Arial, Helvetica, sans-serif" font-size="37" fill="${COLORS.muted}">Knitting &amp; crochet companion</text>
   <text x="404" y="410" font-family="Arial, Helvetica, sans-serif" font-size="29" fill="${COLORS.primary}">Free, private, and on your device</text>
-  <text x="404" y="455" font-family="Arial, Helvetica, sans-serif" font-size="25" fill="${COLORS.muted}">jadedoyle.github.io/purl-site</text>
+  <text x="404" y="455" font-family="Arial, Helvetica, sans-serif" font-size="25" fill="${COLORS.muted}">purl.no</text>
 </svg>`;
 }
 async function buildIcons() {
@@ -573,6 +573,9 @@ function robotsAndSitemap(paths) {
     `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>\n`, 'utf8');
   writeFileSync(join(HERE, 'robots.txt'),
     `User-agent: *\nAllow: /\nSitemap: ${abs('/sitemap.xml')}\n`, 'utf8');
+  // GitHub Pages reads this to serve the site on the custom domain. Written on
+  // every build so a rebuild can never drop it.
+  writeFileSync(join(HERE, 'CNAME'), 'purl.no\n', 'utf8');
 }
 
 // --- run -----------------------------------------------------------------
