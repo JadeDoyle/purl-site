@@ -35,6 +35,7 @@ const abs = (p) => ORIGIN + BASE + p;      // site-relative path -> absolute URL
 const SITE = {
   name: 'Purl',
   playUrl: 'https://play.google.com/store/apps/details?id=no.purl.app',
+  appStoreUrl: 'https://apps.apple.com/no/app/purl/id6788513793',
   feedbackForm: 'https://docs.google.com/forms/d/e/1FAIpQLSdXgzhbJAsj0Zkr3Qrj4zyk_lO9kETwUbGvxIWLFSstn9p4lw/viewform',
   email: 'pierre.boniface90@gmail.com',
   year: 2026,
@@ -120,7 +121,7 @@ const FOOTER_GROUPS = [
   ['home', 'guide', 'support', 'feedback'],
   ['changelog', 'roadmap'],
   ['privacy', 'terms'],
-  ['press', 'play'],
+  ['press'],
 ];
 function resolveTokens(str, lang) {
   if (str == null) return str;
@@ -248,8 +249,8 @@ function mdPage({ lang, pageKey, path, srcMd, title, description }) {
 function downloadRow(lang) {
   const s = COPY[lang].store;
   return `<div class="btn-row">
-  <a class="btn btn-primary btn-store" href="${SITE.playUrl}"><span class="store-line"><span class="store-top">${s.get}</span>Google Play</span></a>
-  <span class="btn btn-store btn-disabled"><span class="store-line"><span class="store-top">${s.soon}</span>App Store</span></span>
+  <a class="btn btn-primary btn-store" href="${SITE.appStoreUrl}"><span class="store-line"><span class="store-top">${s.get}</span>App Store</span></a>
+  <span class="btn btn-store btn-disabled"><span class="store-line"><span class="store-top">${s.soon}</span>Google Play</span></span>
 </div>`;
 }
 function landing(lang) {
