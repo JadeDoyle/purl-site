@@ -304,6 +304,9 @@ function shotPair(file, darkFile, alt) {
 // Stash goes LAST: the hero already shows the stash screen, so the feature
 // tour runs patterns, projects, then closes on the stash + no-paywall punch.
 const FEAT_IMGS = ['patterns', 'projects', 'stash'];
+// The compact tools grid after the features, same idea: images by index,
+// text in copy.json's landing.tools.items.
+const TOOL_IMGS = ['chartmaker', 'terminology', 'timeline', 'calculator'];
 
 function landing(lang) {
   const c = COPY[lang].landing;
@@ -313,7 +316,9 @@ function landing(lang) {
   const features = c.feat.map((ft, i) => {
     const img = FEAT_IMGS[i] || 'stash';
     const points = ft.points.map((p) => `      <li>${esc(p)}</li>`).join('\n');
-    return `<section class="lfeature${i % 2 === 1 ? ' lfeature-rev' : ''}">
+    // The hero puts its phone on the RIGHT, so the first feature reverses
+    // (phone LEFT) and the tour alternates right, left, right, left.
+    return `<section class="lfeature${i % 2 === 0 ? ' lfeature-rev' : ''}">
   <div class="lfeature-text">
     <p class="eyebrow">${esc(ft.eyebrow)}</p>
     <h2>${esc(ft.h2)}</h2>
@@ -340,6 +345,19 @@ ${pillars}
 </div>
 
 ${features}
+
+<section class="toolsband">
+  <h2>${esc(c.tools.title)}</h2>
+  <div class="toolsgrid">
+${c.tools.items.map((it, i) => {
+    const img = TOOL_IMGS[i] || 'calculator';
+    return `    <figure class="toolcard">
+      <div class="phoneframe">${shotPair(`${lang}_${img}.png`, `${lang}_${img}_dark.png`, it.title)}</div>
+      <figcaption><b>${esc(it.title)}</b><span>${esc(it.desc)}</span></figcaption>
+    </figure>`;
+  }).join('\n')}
+  </div>
+</section>
 
 <section class="ipadband">
   <p class="eyebrow">${esc(c.ipad.eyebrow)}</p>
