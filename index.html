@@ -13,6 +13,8 @@
 <link rel="icon" href="/assets/favicon-32.png" sizes="32x32" type="image/png" />
 <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png" />
 <link rel="stylesheet" href="/assets/styles.css" />
+<meta name="color-scheme" content="light dark" />
+<script>try{var t=localStorage.getItem('purl-theme');if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t);}catch(e){}</script>
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content="Purl" />
 <meta property="og:locale" content="en_GB" />
@@ -27,38 +29,87 @@
 </head>
 <body>
 <header class="site-header">
-  <a class="brand" href="/"><img src="/logo.png" alt="" width="30" height="30" /><span>Purl</span></a>
+  <a class="brand" href="/"><img src="/logo.png" alt="" width="30" height="30" /><span>Purl.</span></a>
   <nav class="site-nav"><a href="/" aria-current="page">Home</a><a href="/guide/">Guide</a><a href="/support/">Support</a><a href="/privacy/">Privacy</a></nav>
+  <div class="theme-seg" role="group" aria-label="Theme">
+    <button type="button" data-mode="">Auto</button>
+    <button type="button" data-mode="light">Light</button>
+    <button type="button" data-mode="dark">Dark</button>
+  </div>
   <a class="lang" href="/no/" hreflang="no" aria-label="Bytt til norsk / Switch to Norwegian"><b>EN</b><span aria-hidden="true">/</span>NO</a>
 </header>
-<main class="wrap">
-<section class="hero">
-  <img src="/logo.png" alt="Purl logo" width="84" height="84" />
-  <h1>Purl</h1>
-  <p class="tagline">Knitting &amp; crochet companion</p>
+<main class="wrap wrap-wide">
+<section class="lhero">
+  <div class="lhero-text">
+    <p class="eyebrow">For knitters and crocheters</p>
+    <h1>Never forget what you have.</h1>
+    <p class="lsub">Purl keeps your whole yarn stash in your pocket, with your patterns and projects right next to it. Free, offline, and yours.</p>
+    <div class="btn-row">
+  <a class="btn btn-primary btn-store" href="https://apps.apple.com/no/app/purl/id6788513793"><span class="store-line"><span class="store-top">Get it on</span>App Store</span></a>
+  <span class="btn btn-store btn-disabled"><span class="store-line"><span class="store-top">Coming soon</span>Google Play</span></span>
+</div>
+    <p class="hero-note">For iPhone and iPad. No account needed.</p>
+  </div>
+  <div class="lhero-shot"><div class="phoneframe"><span class="shot"><img class="img-light" src="/assets/landing/en_stash.png" alt="Never forget what you have." loading="lazy" /><img class="img-dark" src="/assets/landing/en_stash_dark.png" alt="" loading="lazy" aria-hidden="true" /></span></div></div>
 </section>
-<p class="lead">Purl keeps your projects, yarn stash, patterns and progress in one place: free, offline, and stored on your own device. No account, no sign-up, no ads.</p>
-<div class="btn-row">
-  <a class="btn btn-primary btn-store" href="https://play.google.com/store/apps/details?id=no.purl.app"><span class="store-line"><span class="store-top">Get it on</span>Google Play</span></a>
-  <span class="btn btn-store btn-disabled"><span class="store-line"><span class="store-top">Coming soon</span>App Store</span></span>
+
+<div class="pillars">
+  <div class="pillar"><h3>Knitting and crochet as equals</h3><p>Every feature works for both crafts. Neither is an afterthought.</p></div>
+  <div class="pillar"><h3>Free, nothing locked</h3><p>Every feature is open for everyone, including full stash tracking. An optional tip supports development.</p></div>
+  <div class="pillar"><h3>Offline and private</h3><p>Everything lives on your device. No account, no ads, no tracking.</p></div>
 </div>
 
-<h2 class="section-title">What Purl does</h2>
-<div class="features">
-  <div class="feature"><h3>Projects</h3><p>Track every make from planned to finished, with a visual timeline, progress photos and the gauge you actually got.</p></div>
-  <div class="feature"><h3>Yarn stash</h3><p>Log your yarn with colour, dye lot and fibre, see your totals, and scan a ball-band barcode to fill in the details.</p></div>
-  <div class="feature"><h3>Patterns and PDFs</h3><p>Keep written patterns and PDFs in one library. Open big PDFs offline, draw, highlight, add notes, and follow along with counters and a chart tracker.</p></div>
-  <div class="feature"><h3>Handy tools</h3><p>A craft calculator, quick counters, and a knitting and crochet glossary in Norwegian and English.</p></div>
-  <div class="feature"><h3>Made to feel right</h3><p>Norwegian and English, light and dark mode, a two-pane layout on iPad, and one-file backup and restore.</p></div>
-  <div class="feature"><h3>Private by default</h3><p>Everything lives on your device. No account, no sign-up, no ads, and nothing sold or shared.</p></div>
-</div>
+<section class="lfeature">
+  <div class="lfeature-text">
+    <p class="eyebrow">Yarn stash</p>
+    <h2>Every skein, accounted for</h2>
+    <ul class="points">
+      <li>Colour, dye lot and fibre on every yarn</li>
+      <li>Scan the ball-band barcode and the details fill themselves in</li>
+      <li>Totals in grams and meters, at a glance</li>
+      <li>Often a paid extra in other apps. In Purl the stash is free, forever</li>
+    </ul>
+  </div>
+  <div class="lfeature-shot"><div class="phoneframe"><span class="shot"><img class="img-light" src="/assets/landing/en_stash.png" alt="Every skein, accounted for" loading="lazy" /><img class="img-dark" src="/assets/landing/en_stash_dark.png" alt="" loading="lazy" aria-hidden="true" /></span></div></div>
+</section>
+<section class="lfeature lfeature-rev">
+  <div class="lfeature-text">
+    <p class="eyebrow">Patterns and PDFs</p>
+    <h2>Follow along, row by row</h2>
+    <ul class="points">
+      <li>Import pattern PDFs and open them offline, even the big ones</li>
+      <li>Draw, highlight and add sticky notes right on the page</li>
+      <li>Counters and a chart tracker follow you while you work</li>
+    </ul>
+  </div>
+  <div class="lfeature-shot"><div class="phoneframe"><span class="shot"><img class="img-light" src="/assets/landing/en_patterns.png" alt="Follow along, row by row" loading="lazy" /><img class="img-dark" src="/assets/landing/en_patterns_dark.png" alt="" loading="lazy" aria-hidden="true" /></span></div></div>
+</section>
+<section class="lfeature">
+  <div class="lfeature-text">
+    <p class="eyebrow">Projects</p>
+    <h2>From cast-on to finished</h2>
+    <ul class="points">
+      <li>A visual timeline of everything you are making</li>
+      <li>Progress photos and the gauge you actually got</li>
+      <li>Pick yarn for a project straight from your stash</li>
+    </ul>
+  </div>
+  <div class="lfeature-shot"><div class="phoneframe"><span class="shot"><img class="img-light" src="/assets/landing/en_projects.png" alt="From cast-on to finished" loading="lazy" /><img class="img-dark" src="/assets/landing/en_projects_dark.png" alt="" loading="lazy" aria-hidden="true" /></span></div></div>
+</section>
 
-<div class="shots">
-  <figure style="margin:0"><img src="/assets/press/01-projects.png" alt="Purl: Projects" loading="lazy" /></figure>
-  <figure style="margin:0"><img src="/assets/press/02-stash.png" alt="Purl: Yarn stash" loading="lazy" /></figure>
-  <figure style="margin:0"><img src="/assets/press/03-patterns.png" alt="Purl: A PDF pattern" loading="lazy" /></figure>
-  <figure style="margin:0"><img src="/assets/press/04-calculator.png" alt="Purl: Craft calculator" loading="lazy" /></figure>
-</div>
+<section class="ipadband">
+  <p class="eyebrow">On iPad</p>
+  <h2>Made to feel right on iPad</h2>
+  <p class="lsub">A two-pane layout puts your library and your pattern side by side. Light and dark mode, Norwegian and English.</p>
+  <div class="ipadframe"><span class="shot"><img class="img-light" src="/assets/landing/ipad.jpg" alt="Made to feel right on iPad" loading="lazy" /><img class="img-dark" src="/assets/landing/ipad_dark.jpg" alt="" loading="lazy" aria-hidden="true" /></span></div>
+</section>
+
+<section class="plumband">
+  <h2>Free. Offline. Private.</h2>
+  <p>No account. No ads. Nothing to unlock.</p>
+  <p>Your projects and your yarn stay on your own device.</p>
+  <a class="btn plumband-btn" href="https://apps.apple.com/no/app/purl/id6788513793">Download Purl on the App Store</a>
+</section>
 
 <h2 class="section-title">Explore Purl</h2>
 <ul class="cards">
@@ -73,8 +124,34 @@
 </ul>
 </main>
 <footer class="site-footer"><div class="footer-inner">
-  <div class="footer-cols"><div class="footer-col"><h2>Purl</h2><ul><li><a href="/">Home</a></li><li><a href="/guide/">User guide</a></li><li><a href="/support/">Support</a></li><li><a href="/feedback/">Send feedback</a></li></ul></div><div class="footer-col"><h2>Updates</h2><ul><li><a href="/changelog/">What's new</a></li><li><a href="/roadmap/">Roadmap</a></li></ul></div><div class="footer-col"><h2>Legal</h2><ul><li><a href="/privacy/">Privacy policy</a></li><li><a href="/terms/">Terms of use</a></li></ul></div><div class="footer-col"><h2>More</h2><ul><li><a href="/press/">Press kit</a></li><li><a href="https://play.google.com/store/apps/details?id=no.purl.app">Get it on Google Play</a></li></ul></div></div>
+  <div class="footer-cols"><div class="footer-col"><h2>Purl</h2><ul><li><a href="/">Home</a></li><li><a href="/guide/">User guide</a></li><li><a href="/support/">Support</a></li><li><a href="/feedback/">Send feedback</a></li></ul></div><div class="footer-col"><h2>Updates</h2><ul><li><a href="/changelog/">What's new</a></li><li><a href="/roadmap/">Roadmap</a></li></ul></div><div class="footer-col"><h2>Legal</h2><ul><li><a href="/privacy/">Privacy policy</a></li><li><a href="/terms/">Terms of use</a></li></ul></div><div class="footer-col"><h2>More</h2><ul><li><a href="/press/">Press kit</a></li></ul></div></div>
+  <div class="footer-theme"><div class="theme-seg" role="group" aria-label="Theme">
+    <button type="button" data-mode="">Auto</button>
+    <button type="button" data-mode="light">Light</button>
+    <button type="button" data-mode="dark">Dark</button>
+  </div></div>
   <p class="footer-note">Purl, a free knitting and crochet companion. Your data stays on your device. &copy; 2026 Purl.</p>
 </div></footer>
+<script>
+(function () {
+  var KEY = 'purl-theme';
+  var root = document.documentElement;
+  function store(v) { try { if (v) localStorage.setItem(KEY, v); else localStorage.removeItem(KEY); } catch (e) {} }
+  function apply(mode) {
+    if (mode === 'light' || mode === 'dark') root.setAttribute('data-theme', mode);
+    else root.removeAttribute('data-theme');
+    root.style.colorScheme = mode || '';
+    var btns = document.querySelectorAll('.theme-seg button');
+    for (var i = 0; i < btns.length; i++) {
+      btns[i].classList.toggle('active', (btns[i].getAttribute('data-mode') || '') === (mode || ''));
+    }
+  }
+  var btns = document.querySelectorAll('.theme-seg button');
+  for (var i = 0; i < btns.length; i++) {
+    btns[i].addEventListener('click', function () { var m = this.getAttribute('data-mode') || ''; store(m); apply(m); });
+  }
+  apply(root.getAttribute('data-theme') || '');
+})();
+</script>
 </body>
 </html>

@@ -146,11 +146,48 @@ function header(lang, activeKey, altHref) {
   const codes = lang === 'en' ? '<b>EN</b><span aria-hidden="true">/</span>NO' : 'EN<span aria-hidden="true">/</span><b>NO</b>';
   const toggle = altHref ? `<a class="lang" href="${altHref}" hreflang="${otherLang}" aria-label="${toggleAria}">${codes}</a>` : '';
   return `<header class="site-header">
-  <a class="brand" href="${link(lang, 'home')}"><img src="${u('/logo.png')}" alt="" width="30" height="30" /><span>Purl</span></a>
+  <a class="brand" href="${link(lang, 'home')}"><img src="${u('/logo.png')}" alt="" width="30" height="30" /><span>Purl.</span></a>
   <nav class="site-nav">${nav}</nav>
+  ${themeSeg(lang)}
   ${toggle}
 </header>`;
 }
+
+// Theme switch: Auto follows the system (like the app's own setting, with
+// Auto first); a manual pick sets data-theme on <html> and is remembered.
+function themeSeg(lang) {
+  const t = COPY[lang].theme;
+  return `<div class="theme-seg" role="group" aria-label="${escAttr(t.label)}">
+    <button type="button" data-mode="">${t.auto}</button>
+    <button type="button" data-mode="light">${t.light}</button>
+    <button type="button" data-mode="dark">${t.dark}</button>
+  </div>`;
+}
+// Head snippet: applies a stored manual theme before first paint (no flash).
+const THEME_HEAD = `<meta name="color-scheme" content="light dark" />
+<script>try{var t=localStorage.getItem('purl-theme');if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t);}catch(e){}</script>`;
+// Body-end snippet: wires the switch buttons and persists the choice.
+const THEME_SCRIPT = `<script>
+(function () {
+  var KEY = 'purl-theme';
+  var root = document.documentElement;
+  function store(v) { try { if (v) localStorage.setItem(KEY, v); else localStorage.removeItem(KEY); } catch (e) {} }
+  function apply(mode) {
+    if (mode === 'light' || mode === 'dark') root.setAttribute('data-theme', mode);
+    else root.removeAttribute('data-theme');
+    root.style.colorScheme = mode || '';
+    var btns = document.querySelectorAll('.theme-seg button');
+    for (var i = 0; i < btns.length; i++) {
+      btns[i].classList.toggle('active', (btns[i].getAttribute('data-mode') || '') === (mode || ''));
+    }
+  }
+  var btns = document.querySelectorAll('.theme-seg button');
+  for (var i = 0; i < btns.length; i++) {
+    btns[i].addEventListener('click', function () { var m = this.getAttribute('data-mode') || ''; store(m); apply(m); });
+  }
+  apply(root.getAttribute('data-theme') || '');
+})();
+</script>`;
 
 function footer(lang) {
   const t = COPY[lang];
@@ -159,6 +196,7 @@ function footer(lang) {
   }</ul></div>`).join('');
   return `<footer class="site-footer"><div class="footer-inner">
   <div class="footer-cols">${cols}</div>
+  <div class="footer-theme">${themeSeg(lang)}</div>
   <p class="footer-note">${resolveTokens(t.footerNote, lang)}</p>
 </div></footer>`;
 }
@@ -193,6 +231,7 @@ ${hreflang}
 <link rel="icon" href="${u('/assets/favicon-32.png')}" sizes="32x32" type="image/png" />
 <link rel="apple-touch-icon" href="${u('/assets/apple-touch-icon.png')}" />
 <link rel="stylesheet" href="${u('/assets/styles.css')}" />
+${THEME_HEAD}
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content="Purl" />
 <meta property="og:locale" content="${ogLocale}" />
@@ -211,6 +250,7 @@ ${header(lang, activeKey || pageKey, altHref)}
 ${body}
 </main>
 ${footer(lang)}
+${THEME_SCRIPT}
 </body>
 </html>
 `;
@@ -253,34 +293,71 @@ function downloadRow(lang) {
   <span class="btn btn-store btn-disabled"><span class="store-line"><span class="store-top">${s.soon}</span>Google Play</span></span>
 </div>`;
 }
+// A screenshot pair: the light image shows by default, CSS flips to the dark
+// one together with the palette. Files live in assets/landing/ (committed
+// static assets, regenerated from the current App Store screenshots).
+function shotPair(file, darkFile, alt) {
+  return `<span class="shot"><img class="img-light" src="${u('/assets/landing/' + file)}" alt="${escAttr(alt)}" loading="lazy" /><img class="img-dark" src="${u('/assets/landing/' + darkFile)}" alt="" loading="lazy" aria-hidden="true" /></span>`;
+}
+// Which screenshot illustrates each landing feature, by index (structure
+// stays in code; the editable text lives in copy.json's landing.feat).
+const FEAT_IMGS = ['stash', 'patterns', 'projects'];
+
 function landing(lang) {
   const c = COPY[lang].landing;
+  const h = c.hero;
   const cards = c.cards.map((card) => `  <li><a href="${link(lang, card.key)}">${card.title}<span>${card.sub}</span></a></li>`).join('\n');
-  const features = c.features.map((ft) => `  <div class="feature"><h3>${esc(ft.title)}</h3><p>${ft.desc}</p></div>`).join('\n');
-  const shotCap = lang === 'no' ? 2 : 1;
-  const shots = SHOTS.map((row) => `  <figure style="margin:0"><img src="${u('/assets/press/' + row[0])}" alt="Purl: ${escAttr(row[shotCap])}" loading="lazy" /></figure>`).join('\n');
-  const body = `<section class="hero">
-  <img src="${u('/logo.png')}" alt="Purl logo" width="84" height="84" />
-  <h1>Purl</h1>
-  <p class="tagline">${c.tagline}</p>
+  const pillars = c.pillars.map((p) => `  <div class="pillar"><h3>${esc(p.title)}</h3><p>${esc(p.desc)}</p></div>`).join('\n');
+  const features = c.feat.map((ft, i) => {
+    const img = FEAT_IMGS[i] || 'stash';
+    const points = ft.points.map((p) => `      <li>${esc(p)}</li>`).join('\n');
+    return `<section class="lfeature${i % 2 === 1 ? ' lfeature-rev' : ''}">
+  <div class="lfeature-text">
+    <p class="eyebrow">${esc(ft.eyebrow)}</p>
+    <h2>${esc(ft.h2)}</h2>
+    <ul class="points">
+${points}
+    </ul>
+  </div>
+  <div class="lfeature-shot"><div class="phoneframe">${shotPair(`${lang}_${img}.png`, `${lang}_${img}_dark.png`, ft.h2)}</div></div>
+</section>`;
+  }).join('\n');
+  const body = `<section class="lhero">
+  <div class="lhero-text">
+    <p class="eyebrow">${esc(h.eyebrow)}</p>
+    <h1>${esc(h.h1)}</h1>
+    <p class="lsub">${esc(h.sub)}</p>
+    ${downloadRow(lang)}
+    <p class="hero-note">${esc(h.note)}</p>
+  </div>
+  <div class="lhero-shot"><div class="phoneframe">${shotPair(`${lang}_stash.png`, `${lang}_stash_dark.png`, h.h1)}</div></div>
 </section>
-<p class="lead">${c.lead}</p>
-${downloadRow(lang)}
 
-<h2 class="section-title">${c.featuresTitle}</h2>
-<div class="features">
+<div class="pillars">
+${pillars}
+</div>
+
 ${features}
-</div>
 
-<div class="shots">
-${shots}
-</div>
+<section class="ipadband">
+  <p class="eyebrow">${esc(c.ipad.eyebrow)}</p>
+  <h2>${esc(c.ipad.h2)}</h2>
+  <p class="lsub">${esc(c.ipad.sub)}</p>
+  <div class="ipadframe"><span class="shot"><img class="img-light" src="${u('/assets/landing/ipad.jpg')}" alt="${escAttr(c.ipad.h2)}" loading="lazy" /><img class="img-dark" src="${u('/assets/landing/ipad_dark.jpg')}" alt="" loading="lazy" aria-hidden="true" /></span></div>
+</section>
+
+<section class="plumband">
+  <h2>${esc(c.band.h2)}</h2>
+  <p>${esc(c.band.p1)}</p>
+  <p>${esc(c.band.p2)}</p>
+  <a class="btn plumband-btn" href="${SITE.appStoreUrl}">${esc(c.band.cta)}</a>
+</section>
 
 <h2 class="section-title">${c.exploreTitle}</h2>
 <ul class="cards">
 ${cards}
 </ul>`;
-  return shell({ lang, pageKey: 'home', path: link(lang, 'home').slice(BASE.length), title: c.tagline.replace('&amp;', '&'), description: c.desc, body });
+  return shell({ lang, pageKey: 'home', path: link(lang, 'home').slice(BASE.length), title: c.tagline.replace('&amp;', '&'), description: c.desc, body, wide: true });
 }
 
 // --- support -------------------------------------------------------------
@@ -322,6 +399,7 @@ function feedbackRedirect(lang) {
 <meta http-equiv="refresh" content="0; url=${SITE.feedbackForm}" />
 <link rel="icon" href="${u('/assets/favicon.svg')}" type="image/svg+xml" />
 <link rel="stylesheet" href="${u('/assets/styles.css')}" />
+${THEME_HEAD}
 </head>
 <body>
 ${header(lang, null, link(lang === 'en' ? 'no' : 'en', 'feedback'))}
@@ -333,6 +411,7 @@ ${header(lang, null, link(lang === 'en' ? 'no' : 'en', 'feedback'))}
   </article>
 </main>
 ${footer(lang)}
+${THEME_SCRIPT}
 <script>location.replace(${JSON.stringify(SITE.feedbackForm)});</script>
 </body>
 </html>
@@ -537,7 +616,7 @@ function ogSvg() {
   <rect width="1200" height="630" fill="${COLORS.bg}"/>
   <g fill="none" stroke="${COLORS.primary}" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" opacity="0.22">${stitches}</g>
   <image href="${logoDataUri()}" x="110" y="150" width="250" height="250"/>
-  <text x="398" y="285" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="118" fill="${COLORS.primaryDark}">Purl</text>
+  <text x="398" y="285" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="118" fill="${COLORS.primaryDark}">Purl.</text>
   <text x="404" y="345" font-family="Arial, Helvetica, sans-serif" font-size="37" fill="${COLORS.muted}">Knitting &amp; crochet companion</text>
   <text x="404" y="410" font-family="Arial, Helvetica, sans-serif" font-size="29" fill="${COLORS.primary}">Free, private, and on your device</text>
   <text x="404" y="455" font-family="Arial, Helvetica, sans-serif" font-size="25" fill="${COLORS.muted}">purl.no</text>

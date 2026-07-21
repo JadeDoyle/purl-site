@@ -13,6 +13,8 @@
 <link rel="icon" href="/assets/favicon-32.png" sizes="32x32" type="image/png" />
 <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png" />
 <link rel="stylesheet" href="/assets/styles.css" />
+<meta name="color-scheme" content="light dark" />
+<script>try{var t=localStorage.getItem('purl-theme');if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t);}catch(e){}</script>
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content="Purl" />
 <meta property="og:locale" content="en_GB" />
@@ -27,8 +29,13 @@
 </head>
 <body>
 <header class="site-header">
-  <a class="brand" href="/"><img src="/logo.png" alt="" width="30" height="30" /><span>Purl</span></a>
+  <a class="brand" href="/"><img src="/logo.png" alt="" width="30" height="30" /><span>Purl.</span></a>
   <nav class="site-nav"><a href="/">Home</a><a href="/guide/" aria-current="page">Guide</a><a href="/support/">Support</a><a href="/privacy/">Privacy</a></nav>
+  <div class="theme-seg" role="group" aria-label="Theme">
+    <button type="button" data-mode="">Auto</button>
+    <button type="button" data-mode="light">Light</button>
+    <button type="button" data-mode="dark">Dark</button>
+  </div>
   <a class="lang" href="/no/guide/patterns.html" hreflang="no" aria-label="Bytt til norsk / Switch to Norwegian"><b>EN</b><span aria-hidden="true">/</span>NO</a>
 </header>
 <main class="wrap">
@@ -154,8 +161,34 @@ what travels in a <code>.purl</code> backup.</li>
 <nav class="pagenav"><h2>All guide pages</h2><ul><li><a href="/guide/index.html">User guide</a></li><li><a href="/guide/getting-started.html">Getting started</a></li><li><a href="/guide/yarn-stash.html">Yarn stash</a></li><li><a href="/guide/patterns.html" aria-current="page">Patterns</a></li><li><a href="/guide/projects.html">Projects</a></li><li><a href="/guide/pdf-tools.html">PDF tools</a></li><li><a href="/guide/barcode-templates.html">Barcode templates</a></li><li><a href="/guide/backups.html">Backups and recovery</a></li><li><a href="/guide/terminology.html">Terminology glossary</a></li><li><a href="/guide/calculator.html">Calculator</a></li><li><a href="/guide/faq.html">FAQ</a></li></ul></nav>
 </main>
 <footer class="site-footer"><div class="footer-inner">
-  <div class="footer-cols"><div class="footer-col"><h2>Purl</h2><ul><li><a href="/">Home</a></li><li><a href="/guide/">User guide</a></li><li><a href="/support/">Support</a></li><li><a href="/feedback/">Send feedback</a></li></ul></div><div class="footer-col"><h2>Updates</h2><ul><li><a href="/changelog/">What's new</a></li><li><a href="/roadmap/">Roadmap</a></li></ul></div><div class="footer-col"><h2>Legal</h2><ul><li><a href="/privacy/">Privacy policy</a></li><li><a href="/terms/">Terms of use</a></li></ul></div><div class="footer-col"><h2>More</h2><ul><li><a href="/press/">Press kit</a></li><li><a href="https://play.google.com/store/apps/details?id=no.purl.app">Get it on Google Play</a></li></ul></div></div>
+  <div class="footer-cols"><div class="footer-col"><h2>Purl</h2><ul><li><a href="/">Home</a></li><li><a href="/guide/">User guide</a></li><li><a href="/support/">Support</a></li><li><a href="/feedback/">Send feedback</a></li></ul></div><div class="footer-col"><h2>Updates</h2><ul><li><a href="/changelog/">What's new</a></li><li><a href="/roadmap/">Roadmap</a></li></ul></div><div class="footer-col"><h2>Legal</h2><ul><li><a href="/privacy/">Privacy policy</a></li><li><a href="/terms/">Terms of use</a></li></ul></div><div class="footer-col"><h2>More</h2><ul><li><a href="/press/">Press kit</a></li></ul></div></div>
+  <div class="footer-theme"><div class="theme-seg" role="group" aria-label="Theme">
+    <button type="button" data-mode="">Auto</button>
+    <button type="button" data-mode="light">Light</button>
+    <button type="button" data-mode="dark">Dark</button>
+  </div></div>
   <p class="footer-note">Purl, a free knitting and crochet companion. Your data stays on your device. &copy; 2026 Purl.</p>
 </div></footer>
+<script>
+(function () {
+  var KEY = 'purl-theme';
+  var root = document.documentElement;
+  function store(v) { try { if (v) localStorage.setItem(KEY, v); else localStorage.removeItem(KEY); } catch (e) {} }
+  function apply(mode) {
+    if (mode === 'light' || mode === 'dark') root.setAttribute('data-theme', mode);
+    else root.removeAttribute('data-theme');
+    root.style.colorScheme = mode || '';
+    var btns = document.querySelectorAll('.theme-seg button');
+    for (var i = 0; i < btns.length; i++) {
+      btns[i].classList.toggle('active', (btns[i].getAttribute('data-mode') || '') === (mode || ''));
+    }
+  }
+  var btns = document.querySelectorAll('.theme-seg button');
+  for (var i = 0; i < btns.length; i++) {
+    btns[i].addEventListener('click', function () { var m = this.getAttribute('data-mode') || ''; store(m); apply(m); });
+  }
+  apply(root.getAttribute('data-theme') || '');
+})();
+</script>
 </body>
 </html>

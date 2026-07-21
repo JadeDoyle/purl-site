@@ -13,6 +13,8 @@
 <link rel="icon" href="/assets/favicon-32.png" sizes="32x32" type="image/png" />
 <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png" />
 <link rel="stylesheet" href="/assets/styles.css" />
+<meta name="color-scheme" content="light dark" />
+<script>try{var t=localStorage.getItem('purl-theme');if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t);}catch(e){}</script>
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content="Purl" />
 <meta property="og:locale" content="nb_NO" />
@@ -27,8 +29,13 @@
 </head>
 <body>
 <header class="site-header">
-  <a class="brand" href="/no/"><img src="/logo.png" alt="" width="30" height="30" /><span>Purl</span></a>
+  <a class="brand" href="/no/"><img src="/logo.png" alt="" width="30" height="30" /><span>Purl.</span></a>
   <nav class="site-nav"><a href="/no/">Hjem</a><a href="/no/guide/">Veiledning</a><a href="/no/support/" aria-current="page">Støtte</a><a href="/no/privacy/">Personvern</a></nav>
+  <div class="theme-seg" role="group" aria-label="Tema">
+    <button type="button" data-mode="">Auto</button>
+    <button type="button" data-mode="light">Lys</button>
+    <button type="button" data-mode="dark">Mørk</button>
+  </div>
   <a class="lang" href="/support/" hreflang="en" aria-label="Switch to English / Bytt til engelsk">EN<span aria-hidden="true">/</span><b>NO</b></a>
 </header>
 <main class="wrap">
@@ -39,8 +46,8 @@
 
 <h2 class="section-title">Last ned appen</h2>
 <div class="btn-row">
-  <a class="btn btn-primary btn-store" href="https://play.google.com/store/apps/details?id=no.purl.app"><span class="store-line"><span class="store-top">Last ned på</span>Google Play</span></a>
-  <span class="btn btn-store btn-disabled"><span class="store-line"><span class="store-top">Kommer snart</span>App Store</span></span>
+  <a class="btn btn-primary btn-store" href="https://apps.apple.com/no/app/purl/id6788513793"><span class="store-line"><span class="store-top">Last ned på</span>App Store</span></a>
+  <span class="btn btn-store btn-disabled"><span class="store-line"><span class="store-top">Kommer snart</span>Google Play</span></span>
 </div>
 
 <h2 class="section-title">Lær hvordan det fungerer</h2>
@@ -56,8 +63,34 @@
 <article class="prose"><p>Purl er gratis og forblir gratis, med alle funksjoner åpne for alle. Har appen hjulpet deg, kan du gi en valgfri liten takk på Støtt Purl-skjermen inne i appen. En takk låser ikke opp noe; den bare hjelper utviklingen videre. Fra samme skjerm kan du også dele Purl med en strikke- eller heklevenn.</p></article>
 </main>
 <footer class="site-footer"><div class="footer-inner">
-  <div class="footer-cols"><div class="footer-col"><h2>Purl</h2><ul><li><a href="/no/">Hjem</a></li><li><a href="/no/guide/">Brukerveiledning</a></li><li><a href="/no/support/">Støtte</a></li><li><a href="/no/feedback/">Send tilbakemelding</a></li></ul></div><div class="footer-col"><h2>Oppdateringer</h2><ul><li><a href="/changelog/">Nyheter (engelsk)</a></li><li><a href="/roadmap/">Veikart (engelsk)</a></li></ul></div><div class="footer-col"><h2>Juridisk</h2><ul><li><a href="/no/privacy/">Personvern</a></li><li><a href="/no/terms/">Vilkår for bruk</a></li></ul></div><div class="footer-col"><h2>Mer</h2><ul><li><a href="/no/press/">Pressemateriell</a></li><li><a href="https://play.google.com/store/apps/details?id=no.purl.app">Last ned på Google Play</a></li></ul></div></div>
+  <div class="footer-cols"><div class="footer-col"><h2>Purl</h2><ul><li><a href="/no/">Hjem</a></li><li><a href="/no/guide/">Brukerveiledning</a></li><li><a href="/no/support/">Støtte</a></li><li><a href="/no/feedback/">Send tilbakemelding</a></li></ul></div><div class="footer-col"><h2>Oppdateringer</h2><ul><li><a href="/changelog/">Nyheter (engelsk)</a></li><li><a href="/roadmap/">Veikart (engelsk)</a></li></ul></div><div class="footer-col"><h2>Juridisk</h2><ul><li><a href="/no/privacy/">Personvern</a></li><li><a href="/no/terms/">Vilkår for bruk</a></li></ul></div><div class="footer-col"><h2>Mer</h2><ul><li><a href="/no/press/">Pressemateriell</a></li></ul></div></div>
+  <div class="footer-theme"><div class="theme-seg" role="group" aria-label="Tema">
+    <button type="button" data-mode="">Auto</button>
+    <button type="button" data-mode="light">Lys</button>
+    <button type="button" data-mode="dark">Mørk</button>
+  </div></div>
   <p class="footer-note">Purl, en gratis følgesvenn for strikking og hekling. Dataene dine blir på enheten din. &copy; 2026 Purl.</p>
 </div></footer>
+<script>
+(function () {
+  var KEY = 'purl-theme';
+  var root = document.documentElement;
+  function store(v) { try { if (v) localStorage.setItem(KEY, v); else localStorage.removeItem(KEY); } catch (e) {} }
+  function apply(mode) {
+    if (mode === 'light' || mode === 'dark') root.setAttribute('data-theme', mode);
+    else root.removeAttribute('data-theme');
+    root.style.colorScheme = mode || '';
+    var btns = document.querySelectorAll('.theme-seg button');
+    for (var i = 0; i < btns.length; i++) {
+      btns[i].classList.toggle('active', (btns[i].getAttribute('data-mode') || '') === (mode || ''));
+    }
+  }
+  var btns = document.querySelectorAll('.theme-seg button');
+  for (var i = 0; i < btns.length; i++) {
+    btns[i].addEventListener('click', function () { var m = this.getAttribute('data-mode') || ''; store(m); apply(m); });
+  }
+  apply(root.getAttribute('data-theme') || '');
+})();
+</script>
 </body>
 </html>

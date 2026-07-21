@@ -238,10 +238,117 @@ a { color: var(--primary); }
 .footer-col a:hover { color: var(--primary); }
 .footer-note { color: var(--muted); font-size: 13px; margin: 26px 0 0; }
 
+/* Landing (campaign front page) ------------------------------------------- */
+.eyebrow { font-size: 13px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--primary); margin: 0 0 6px; }
+.lhero { display: flex; align-items: center; gap: 44px; padding: 26px 0 20px; }
+.lhero-text { flex: 1.15; }
+.lhero-text h1 { font-size: clamp(34px, 5vw, 52px); line-height: 1.08; margin: 6px 0 14px; }
+.lsub { color: var(--muted); font-size: 18px; line-height: 1.55; margin: 0 0 20px; max-width: 460px; }
+.lhero .btn-row { justify-content: flex-start; margin: 0 0 6px; }
+.hero-note { color: var(--muted); font-size: 14px; margin: 8px 0 0; }
+.lhero-shot { flex: 0.85; display: flex; justify-content: center; }
+.phoneframe {
+  background: var(--text); border-radius: 40px; padding: 10px; width: min(290px, 76vw);
+  box-shadow: 0 26px 60px rgba(44, 38, 48, .22);
+}
+.phoneframe img { display: block; width: 100%; border-radius: 31px; }
+.shot { display: block; }
+.shot .img-dark { display: none; }
+.pillars { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin: 26px 0 8px; }
+.pillar { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px 20px; }
+.pillar h3 { margin: 0 0 5px; font-size: 16px; color: var(--primary-dark); }
+.pillar p { margin: 0; color: var(--muted); font-size: 14px; line-height: 1.55; }
+.lfeature { display: flex; align-items: center; gap: 44px; padding: 34px 0; }
+.lfeature-rev { flex-direction: row-reverse; }
+.lfeature-text { flex: 1.2; }
+.lfeature-text h2 { font-size: clamp(26px, 3.4vw, 34px); line-height: 1.15; margin: 4px 0 14px; }
+.points { list-style: none; margin: 0; padding: 0; }
+.points li { position: relative; padding-left: 26px; margin: 0 0 10px; color: var(--muted); font-size: 16px; line-height: 1.5; }
+.points li::before { content: ''; position: absolute; left: 0; top: 8px; width: 10px; height: 10px; border-radius: 50%; background: var(--primary); }
+.lfeature-shot { flex: 0.8; display: flex; justify-content: center; }
+.lfeature-shot .phoneframe { width: min(250px, 70vw); }
+.ipadband { text-align: center; padding: 34px 0 8px; }
+.ipadband h2 { font-size: clamp(26px, 3.4vw, 34px); margin: 4px 0 10px; }
+.ipadband .lsub { margin: 0 auto 24px; }
+.ipadframe {
+  background: var(--text); border-radius: 26px; padding: 10px; max-width: 720px; margin: 0 auto;
+  box-shadow: 0 26px 60px rgba(44, 38, 48, .2);
+}
+.ipadframe img { display: block; width: 100%; border-radius: 17px; }
+/* The plum band keeps its own fixed colours in both themes. */
+.plumband {
+  background: linear-gradient(160deg, #5E4478, #7C5E9B); color: #FBF8F5;
+  border-radius: var(--radius); text-align: center; padding: 44px 26px; margin: 40px 0 8px;
+}
+.plumband h2 { font-size: clamp(28px, 4vw, 38px); margin: 0 0 10px; }
+.plumband p { margin: 0 0 4px; opacity: .92; }
+.plumband .plumband-btn {
+  display: inline-block; background: #FBF8F5; border-color: #FBF8F5; color: #5E4478;
+  margin-top: 20px; font-weight: 700;
+}
+.plumband .plumband-btn:hover { background: #fff; }
+/* Theme switch (Auto follows the system, like the app). */
+.theme-seg { display: inline-flex; border: 1px solid var(--border); border-radius: 999px; padding: 2px; gap: 1px; }
+.theme-seg button {
+  border: none; background: none; font: inherit; font-size: 12px; font-weight: 600;
+  padding: 4px 10px; border-radius: 999px; color: var(--muted); cursor: pointer;
+}
+.theme-seg button.active { background: var(--primary); color: #fff; }
+/* On small screens the header is a tight single row, so the switch lives in
+   the footer instead (hidden there on wider screens). */
+.footer-theme { display: none; margin-top: 20px; }
+@media (max-width: 560px) { .footer-theme { display: block; } }
+
+/* Dark theme tokens: chosen explicitly (data-theme="dark"), or system-dark
+   while on Auto (no data-theme). Most of the site follows via the variables;
+   the few solid-fill rules that need a fixed plum are pinned below. The dark
+   background matches the app's dark theme so the dark screenshots sit
+   naturally. NOTE: keep both copies of this block identical. */
+:root[data-theme="dark"] {
+  --bg: #1A1620; --surface: #241E2D; --surface-alt: #2B2436;
+  --primary: #A98FC9; --primary-dark: #C7B3DE;
+  --text: #F4EFF2; --muted: #B5ABC0; --border: #3A3244; --success: #5FA986;
+}
+:root[data-theme="dark"] .btn-primary { background: #7C5E9B; border-color: #7C5E9B; color: #fff; }
+:root[data-theme="dark"] .btn-primary:hover { background: #8D6FAE; }
+:root[data-theme="dark"] .btn-primary small { color: rgba(255,255,255,0.8); }
+:root[data-theme="dark"] .pagenav a[aria-current="page"] { background: #7C5E9B; border-color: #7C5E9B; color: #fff; }
+:root[data-theme="dark"] .phoneframe, :root[data-theme="dark"] .ipadframe { background: #0E0B12; border: 1px solid rgba(255,255,255,.08); box-shadow: 0 26px 60px rgba(0,0,0,.5); }
+:root[data-theme="dark"] .shot .img-light { display: none; }
+:root[data-theme="dark"] .shot .img-dark { display: block; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #1A1620; --surface: #241E2D; --surface-alt: #2B2436;
+    --primary: #A98FC9; --primary-dark: #C7B3DE;
+    --text: #F4EFF2; --muted: #B5ABC0; --border: #3A3244; --success: #5FA986;
+  }
+  :root:not([data-theme="light"]) .btn-primary { background: #7C5E9B; border-color: #7C5E9B; color: #fff; }
+  :root:not([data-theme="light"]) .btn-primary:hover { background: #8D6FAE; }
+  :root:not([data-theme="light"]) .btn-primary small { color: rgba(255,255,255,0.8); }
+  :root:not([data-theme="light"]) .pagenav a[aria-current="page"] { background: #7C5E9B; border-color: #7C5E9B; color: #fff; }
+  :root:not([data-theme="light"]) .phoneframe, :root:not([data-theme="light"]) .ipadframe { background: #0E0B12; border: 1px solid rgba(255,255,255,.08); box-shadow: 0 26px 60px rgba(0,0,0,.5); }
+  :root:not([data-theme="light"]) .shot .img-light { display: none; }
+  :root:not([data-theme="light"]) .shot .img-dark { display: block; }
+}
+
+@media (max-width: 760px) {
+  .lhero { flex-direction: column; padding-top: 12px; }
+  .lhero-text h1 { font-size: 32px; }
+  .lhero .btn-row { justify-content: center; }
+  .lhero-text { text-align: center; }
+  .lhero-text .eyebrow { margin-top: 4px; }
+  .lsub { margin-left: auto; margin-right: auto; }
+  .pillars { grid-template-columns: 1fr; }
+  .lfeature, .lfeature-rev { flex-direction: column; padding: 24px 0; gap: 26px; }
+  .lfeature-text { text-align: center; }
+  .points li { text-align: left; }
+}
+
 @media (max-width: 560px) {
   .cards { grid-template-columns: 1fr; }
   .features { grid-template-columns: 1fr; }
   .hero h1 { font-size: 33px; }
+  .theme-seg { display: none; }
   /* Single-row header: logo only (no wordmark), page links, then the EN/NO
      pill, all on one line. The pill's constant width makes this predictable. */
   .site-header { flex-wrap: nowrap; gap: 4px; padding: 10px 12px; }

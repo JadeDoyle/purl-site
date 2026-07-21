@@ -12,6 +12,8 @@
 <link rel="icon" href="/assets/favicon-32.png" sizes="32x32" type="image/png" />
 <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png" />
 <link rel="stylesheet" href="/assets/styles.css" />
+<meta name="color-scheme" content="light dark" />
+<script>try{var t=localStorage.getItem('purl-theme');if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t);}catch(e){}</script>
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content="Purl" />
 <meta property="og:locale" content="en_GB" />
@@ -26,88 +28,163 @@
 </head>
 <body>
 <header class="site-header">
-  <a class="brand" href="/"><img src="/logo.png" alt="" width="30" height="30" /><span>Purl</span></a>
+  <a class="brand" href="/"><img src="/logo.png" alt="" width="30" height="30" /><span>Purl.</span></a>
   <nav class="site-nav"><a href="/">Home</a><a href="/guide/">Guide</a><a href="/support/">Support</a><a href="/privacy/">Privacy</a></nav>
+  <div class="theme-seg" role="group" aria-label="Theme">
+    <button type="button" data-mode="">Auto</button>
+    <button type="button" data-mode="light">Light</button>
+    <button type="button" data-mode="dark">Dark</button>
+  </div>
   <a class="lang" href="/no/" hreflang="no" aria-label="Bytt til norsk / Switch to Norwegian"><b>EN</b><span aria-hidden="true">/</span>NO</a>
 </header>
 <main class="wrap wrap-wide">
 <article class="prose"><h1>What's new</h1>
   <p>The latest Purl updates, newest first, straight from the app's own "What's new" list. Earlier releases are folded below; tap one to open it.</p></article>
-  <section class="release" id="v0.2.131">
+  <section class="release" id="v0.2.142">
     <div class="release-head">
-      <h2>The name gets its dot <span class="ver">v0.2.131</span></h2>
-      <span class="date">2026-07-14</span>
+      <h2>Fairer pace and more stats <span class="ver">v0.2.142</span></h2>
+      <span class="date">2026-07-20</span>
     </div>
+    <ul>
+      <li>Time a project spends on hold no longer counts against its pace: put a project on hold for two months, and the Stats still show how fast you actually knit it. (Applies from now on; the app starts remembering hold time with this update.)</li>
+      <li>On hold is now a proper box in the Stats overview, next to In progress and Finished.</li>
+      <li>New facts on the Stats page: how many projects your stash could feed at your usual size, this year's finishes against last year's, all your finished projects' knitting time combined, and your stash personality (the yarn weight you favour and the colour your stash leans towards).</li>
+    </ul>
+  </section>
+  <section class="release" id="v0.2.141">
+    <div class="release-head">
+      <h2>Stash value, smarter and out of the way <span class="ver">v0.2.141</span></h2>
+      <span class="date">2026-07-20</span>
+    </div>
+    <ul>
+      <li>The stash summary now shows just weight and length; the value moved to the Stats view (Timeline &gt; Stats). And since not every skein has a price noted, it's now an estimate: the average of the prices you have noted, applied to all your skeins.</li>
+    </ul>
+  </section>
+  <section class="release" id="v0.2.140">
+    <div class="release-head">
+      <h2>Landscape fixed on iPhone <span class="ver">v0.2.140</span></h2>
+      <span class="date">2026-07-19</span>
+    </div>
+    <ul>
+      <li>Screens that open on top of the app (the timeline, gallery, PDF viewer, editors and more) now follow your iPhone into landscape instead of staying portrait and getting squished. This also covers the PDF viewer, which used to refuse to turn on iPhone.</li>
+    </ul>
+  </section>
+  <section class="release" id="v0.2.139">
+    <div class="release-head">
+      <h2>A real shopping list <span class="ver">v0.2.139</span></h2>
+      <span class="date">2026-07-19</span>
+    </div>
+    <ul>
+      <li>The cart icon at the top of the Stash now opens a dedicated shopping list showing only what you've flagged to buy, so you no longer have to hunt through the whole stash. Each item has a one-tap remove, and there's Share and Clear all.</li>
+      <li>Equipment can go on the shopping list too: swipe a needle, hook or tool and choose "To buy", the same way you already do with yarn. The list and the shared text cover both.</li>
+    </ul>
+  </section>
+  <section class="release" id="v0.2.138">
+    <div class="release-head">
+      <h2>Tidier equipment stash <span class="ver">v0.2.138</span></h2>
+      <span class="date">2026-07-19</span>
+    </div>
+    <ul>
+      <li>The equipment stash now keeps its sorting and filters behind the same View options button (top right) that the yarn stash uses, instead of the rows of chips that crowded the top of the list. Sort by size, material or recent, and filter by type or material all live in one place.</li>
+    </ul>
+  </section>
+  <section class="release" id="v0.2.137">
+    <div class="release-head">
+      <h2>New patterns rise to the top <span class="ver">v0.2.137</span></h2>
+      <span class="date">2026-07-19</span>
+    </div>
+    <ul>
+      <li>The Patterns "Recent" sort now means recently used OR added, so a pattern you just imported or created sits at the top instead of sinking to the bottom for not having been opened yet. It drifts back down naturally as you open other patterns.</li>
+    </ul>
+  </section>
+  <section class="release" id="v0.2.136">
+    <div class="release-head">
+      <h2>More common yarn colours <span class="ver">v0.2.136</span></h2>
+      <span class="date">2026-07-19</span>
+    </div>
+    <ul>
+      <li>Three more shades in the colour picker's common colours: oatmeal and charcoal among the neutrals, and terracotta among the earth tones.</li>
+    </ul>
+  </section>
+  <section class="release" id="v0.2.135">
+    <div class="release-head">
+      <h2>Swipe a project to match its stage <span class="ver">v0.2.135</span></h2>
+      <span class="date">2026-07-19</span>
+    </div>
+    <ul>
+      <li>Swiping a project card to the right now matches where it is: Start a planned project, put an active one on Hold, Resume a paused one, or Re-open a finished one. Each shows an Undo, and re-opening a finished project moves it back to your active work.</li>
+    </ul>
+  </section>
+<h2 class="section-title">Earlier releases</h2>
+  <details class="release-fold" id="v0.2.134">
+    <summary>Collapsible project sections <span class="ver">v0.2.134</span><span class="date">2026-07-19</span></summary>
+    <ul>
+      <li>The Paused and Finished sections fold back up again: once you've expanded one, tap its header to collapse it.</li>
+    </ul>
+  </details>
+  <details class="release-fold" id="v0.2.133">
+    <summary>A tidier yarn editor <span class="ver">v0.2.133</span><span class="date">2026-07-19</span></summary>
+    <ul>
+      <li>Removed the yarn "origin" field. Where a yarn came from is already covered by the store and notes fields, so it was one box too many.</li>
+    </ul>
+  </details>
+  <details class="release-fold" id="v0.2.132">
+    <summary>Swipe to delete counters and charts <span class="ver">v0.2.132</span><span class="date">2026-07-15</span></summary>
+    <ul>
+      <li>Swipe a counter (in Tools) or a chart (in the chart maker) from right to left to delete it, the same quick gesture the yarn, project and pattern lists already use.</li>
+    </ul>
+  </details>
+  <details class="release-fold" id="v0.2.131">
+    <summary>The name gets its dot <span class="ver">v0.2.131</span><span class="date">2026-07-14</span></summary>
     <ul>
       <li>Purl now writes its own name as "Purl." in the app, matching the name on the App Store.</li>
     </ul>
-  </section>
-  <section class="release" id="v0.2.130">
-    <div class="release-head">
-      <h2>Clearer message on the Support screen <span class="ver">v0.2.130</span></h2>
-      <span class="date">2026-07-13</span>
-    </div>
+  </details>
+  <details class="release-fold" id="v0.2.130">
+    <summary>Clearer message on the Support screen <span class="ver">v0.2.130</span><span class="date">2026-07-13</span></summary>
     <ul>
       <li>When in-app tips can't be loaded, the Support screen now says so plainly and points you to sharing instead, rather than implying the app isn't published yet.</li>
     </ul>
-  </section>
-  <section class="release" id="v0.2.129">
-    <div class="release-head">
-      <h2>Charts in backup, and a tidier export list <span class="ver">v0.2.129</span></h2>
-      <span class="date">2026-07-13</span>
-    </div>
+  </details>
+  <details class="release-fold" id="v0.2.129">
+    <summary>Charts in backup, and a tidier export list <span class="ver">v0.2.129</span><span class="date">2026-07-13</span></summary>
     <ul>
       <li>Your colour charts are now their own section in Export and Import, so you can pick exactly which ones travel to another device.</li>
       <li>The export and import lists group into sections you can collapse, so a big library is easy to scan instead of one long scroll. Each heading shows how many you have selected.</li>
     </ul>
-  </section>
-  <section class="release" id="v0.2.128">
-    <div class="release-head">
-      <h2>Delete a colour in the chart maker <span class="ver">v0.2.128</span></h2>
-      <span class="date">2026-07-13</span>
-    </div>
+  </details>
+  <details class="release-fold" id="v0.2.128">
+    <summary>Delete a colour in the chart maker <span class="ver">v0.2.128</span><span class="date">2026-07-13</span></summary>
     <ul>
       <li>In the chart maker you can now remove a colour: tap it, tap Delete, and pick which of the other colours the stitches should become. No more colours stuck in the palette at 0%.</li>
     </ul>
-  </section>
-  <section class="release" id="v0.2.127">
-    <div class="release-head">
-      <h2>Truer, steadier colours from a photo chart <span class="ver">v0.2.127</span></h2>
-      <span class="date">2026-07-13</span>
-    </div>
+  </details>
+  <details class="release-fold" id="v0.2.127">
+    <summary>Truer, steadier colours from a photo chart <span class="ver">v0.2.127</span><span class="date">2026-07-13</span></summary>
     <ul>
       <li>Making a chart from a photo now finds the real dominant colours. A purple logo on cream comes out that true purple, not a washed-out mauve.</li>
       <li>The number of colours you ask for no longer changes what the main colours are. Before, the same two-colour picture could give a different, muddier purple at 2, 4 or 6 colours.</li>
       <li>The colours you get are genuinely distinct (no two near-identical entries), a two-colour drawing stays two colours, and real shaded artwork with several tones is kept intact.</li>
     </ul>
-  </section>
-  <section class="release" id="v0.2.125">
-    <div class="release-head">
-      <h2>Sliding to pause, delete and more, fixed <span class="ver">v0.2.125</span></h2>
-      <span class="date">2026-07-13</span>
-    </div>
+  </details>
+  <details class="release-fold" id="v0.2.125">
+    <summary>Sliding to pause, delete and more, fixed <span class="ver">v0.2.125</span><span class="date">2026-07-13</span></summary>
     <ul>
       <li>The swipe actions on your projects, patterns and yarns are reliable again, especially on iPhone. Before, a swipe would often do nothing, open the button on the wrong row, or, after moving between tabs, stop working until you reopened the app.</li>
       <li>Swiping right on a project that is on hold now resumes it, instead of sometimes asking to add a chart.</li>
       <li>The stash list opens and closes without the little fade, in exchange for sliders that respond every time.</li>
     </ul>
-  </section>
-  <section class="release" id="v0.2.124">
-    <div class="release-head">
-      <h2>A chart can be the whole project <span class="ver">v0.2.124</span></h2>
-      <span class="date">2026-07-13</span>
-    </div>
+  </details>
+  <details class="release-fold" id="v0.2.124">
+    <summary>A chart can be the whole project <span class="ver">v0.2.124</span><span class="date">2026-07-13</span></summary>
     <ul>
       <li>A colour chart from the chart maker can now be a project's pattern, for when the chart is the whole thing. Pick one when you build or edit a project, the same way you pick a written pattern or a PDF.</li>
       <li>A project can hold several charts (front, back, sleeve), and opening it to track drops you into the chart with a row and stitch counter, switching between the charts as you go.</li>
       <li>If you try to delete a chart that a project is using, the app now tells you which projects still need it instead of quietly leaving them empty.</li>
     </ul>
-  </section>
-  <section class="release" id="v0.2.123">
-    <div class="release-head">
-      <h2>Quicker swipes in the stash and patterns <span class="ver">v0.2.123</span></h2>
-      <span class="date">2026-07-13</span>
-    </div>
+  </details>
+  <details class="release-fold" id="v0.2.123">
+    <summary>Quicker swipes in the stash and patterns <span class="ver">v0.2.123</span><span class="date">2026-07-13</span></summary>
     <ul>
       <li>In the stash, swipe a yarn to the left to add it to (or take it off) your shopping list, and long-press a yarn to make a copy of it.</li>
       <li>Yarns held across several dye lots can now be swiped to delete one lot at a time, from the expanded list.</li>
@@ -117,8 +194,7 @@
       <li>In the PDF viewer, quick repeated pinches no longer leave the page stuck zoomed or panned, and triple-tap always snaps back to page view.</li>
       <li>Fixed the coloured swipe buttons showing behind yarns in the stash, and a loop where the app kept announcing the same update after every restart.</li>
     </ul>
-  </section>
-<h2 class="section-title">Earlier releases</h2>
+  </details>
   <details class="release-fold" id="v0.2.122">
     <summary>Finish with confetti <span class="ver">v0.2.122</span><span class="date">2026-07-12</span></summary>
     <ul>
@@ -2006,8 +2082,34 @@
   </details>
 </main>
 <footer class="site-footer"><div class="footer-inner">
-  <div class="footer-cols"><div class="footer-col"><h2>Purl</h2><ul><li><a href="/">Home</a></li><li><a href="/guide/">User guide</a></li><li><a href="/support/">Support</a></li><li><a href="/feedback/">Send feedback</a></li></ul></div><div class="footer-col"><h2>Updates</h2><ul><li><a href="/changelog/">What's new</a></li><li><a href="/roadmap/">Roadmap</a></li></ul></div><div class="footer-col"><h2>Legal</h2><ul><li><a href="/privacy/">Privacy policy</a></li><li><a href="/terms/">Terms of use</a></li></ul></div><div class="footer-col"><h2>More</h2><ul><li><a href="/press/">Press kit</a></li><li><a href="https://play.google.com/store/apps/details?id=no.purl.app">Get it on Google Play</a></li></ul></div></div>
+  <div class="footer-cols"><div class="footer-col"><h2>Purl</h2><ul><li><a href="/">Home</a></li><li><a href="/guide/">User guide</a></li><li><a href="/support/">Support</a></li><li><a href="/feedback/">Send feedback</a></li></ul></div><div class="footer-col"><h2>Updates</h2><ul><li><a href="/changelog/">What's new</a></li><li><a href="/roadmap/">Roadmap</a></li></ul></div><div class="footer-col"><h2>Legal</h2><ul><li><a href="/privacy/">Privacy policy</a></li><li><a href="/terms/">Terms of use</a></li></ul></div><div class="footer-col"><h2>More</h2><ul><li><a href="/press/">Press kit</a></li></ul></div></div>
+  <div class="footer-theme"><div class="theme-seg" role="group" aria-label="Theme">
+    <button type="button" data-mode="">Auto</button>
+    <button type="button" data-mode="light">Light</button>
+    <button type="button" data-mode="dark">Dark</button>
+  </div></div>
   <p class="footer-note">Purl, a free knitting and crochet companion. Your data stays on your device. &copy; 2026 Purl.</p>
 </div></footer>
+<script>
+(function () {
+  var KEY = 'purl-theme';
+  var root = document.documentElement;
+  function store(v) { try { if (v) localStorage.setItem(KEY, v); else localStorage.removeItem(KEY); } catch (e) {} }
+  function apply(mode) {
+    if (mode === 'light' || mode === 'dark') root.setAttribute('data-theme', mode);
+    else root.removeAttribute('data-theme');
+    root.style.colorScheme = mode || '';
+    var btns = document.querySelectorAll('.theme-seg button');
+    for (var i = 0; i < btns.length; i++) {
+      btns[i].classList.toggle('active', (btns[i].getAttribute('data-mode') || '') === (mode || ''));
+    }
+  }
+  var btns = document.querySelectorAll('.theme-seg button');
+  for (var i = 0; i < btns.length; i++) {
+    btns[i].addEventListener('click', function () { var m = this.getAttribute('data-mode') || ''; store(m); apply(m); });
+  }
+  apply(root.getAttribute('data-theme') || '');
+})();
+</script>
 </body>
 </html>
