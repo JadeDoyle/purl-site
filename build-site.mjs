@@ -301,7 +301,9 @@ function shotPair(file, darkFile, alt) {
 }
 // Which screenshot illustrates each landing feature, by index (structure
 // stays in code; the editable text lives in copy.json's landing.feat).
-const FEAT_IMGS = ['stash', 'patterns', 'projects'];
+// Stash goes LAST: the hero already shows the stash screen, so the feature
+// tour runs patterns, projects, then closes on the stash + no-paywall punch.
+const FEAT_IMGS = ['patterns', 'projects', 'stash'];
 
 function landing(lang) {
   const c = COPY[lang].landing;
