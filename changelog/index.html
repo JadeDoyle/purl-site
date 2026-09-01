@@ -40,6 +40,72 @@
 <main class="wrap wrap-wide">
 <article class="prose"><h1>What's new</h1>
   <p>The latest Purl updates, newest first, straight from the app's own "What's new" list. Earlier releases are folded below; tap one to open it.</p></article>
+  <section class="release" id="v0.2.148">
+    <div class="release-head">
+      <h2>See which project a pattern belongs to <span class="ver">v0.2.148</span></h2>
+      <span class="date">2026-09-01</span>
+    </div>
+    <ul>
+      <li>A pattern that says "used in 1 project" now names the project, and you can tap it to go straight there. Patterns used in several projects list them all.</li>
+      <li>When you follow your own written pattern, tapping Finish on the last step now gives you the same confetti as finishing a project.</li>
+      <li>Stepping back from that last step un-ticks it again, so a mis-tapped Finish no longer leaves the final step stuck as done.</li>
+      <li>The button that switches from following the pattern back to just reading it is now an eye, not a book, so it is no longer mistaken for the terminology tool.</li>
+    </ul>
+  </section>
+  <section class="release" id="v0.2.147">
+    <div class="release-head">
+      <h2>Tools survive a PDF crash <span class="ver">v0.2.147</span></h2>
+      <span class="date">2026-08-02</span>
+    </div>
+    <ul>
+      <li>If the PDF viewer crashes and recovers (it can happen when zooming hard on a big pattern, especially mid chart setup), the floating tools now come back with it. Previously they could stay hidden until you closed and reopened the pattern.</li>
+      <li>This is the first of the fixes for the chart-setup crash reported on iPhone; making the crash itself stop, and keeping your half-placed chart, come next.</li>
+    </ul>
+  </section>
+  <section class="release" id="v0.2.146">
+    <div class="release-head">
+      <h2>Save to folder actually saves <span class="ver">v0.2.146</span></h2>
+      <span class="date">2026-08-01</span>
+    </div>
+    <ul>
+      <li>Saving a backup to a folder you choose (Android) works properly again: the file in the folder really contains your backup. A bug could leave an empty file there while the actual backup only went out through the share sheet, which is a nasty surprise the day you need it.</li>
+      <li>The saved file keeps its .purl name, so tapping it later opens Purl for import. A failed save now cleans up after itself instead of leaving an empty file behind.</li>
+    </ul>
+  </section>
+  <section class="release" id="v0.2.145">
+    <div class="release-head">
+      <h2>Backups now carry your progress between devices <span class="ver">v0.2.145</span></h2>
+      <span class="date">2026-07-29</span>
+    </div>
+    <ul>
+      <li>Importing a backup now updates patterns and projects you already have: row counters, annotations, notes, bookmarks and reading position come across from the backup instead of being silently skipped. Track on your phone, export, import on your iPad, continue where you were.</li>
+      <li>The import picker marks items whose backup copy is newer than what's on the device and preselects them, so the usual flow is: choose the file, glance, Import.</li>
+      <li>Notes and bookmarks merge (things you only added on this device survive); counters, annotations and reading position follow the backup for the items you select.</li>
+      <li>Counters from the Counters tool now travel in backups too (they never did before).</li>
+    </ul>
+  </section>
+  <section class="release" id="v0.2.144">
+    <div class="release-head">
+      <h2>Find the wool <span class="ver">v0.2.144</span></h2>
+      <span class="date">2026-07-29</span>
+    </div>
+    <ul>
+      <li>Stash search understands fibre content in your language now: searching "ull" finds your wool yarns even though the fibre is stored under its technical name. Ball-band aliases like nylon work too.</li>
+      <li>New fibre filter in the stash View options, so "show me everything with mohair" is two taps.</li>
+      <li>The size you're making is now on the project form directly, not tucked under Advanced.</li>
+      <li>Swipe a counter card to the right to reset it (with the usual confirmation). Swiping left still deletes.</li>
+    </ul>
+  </section>
+  <section class="release" id="v0.2.143">
+    <div class="release-head">
+      <h2>The app explains itself a little more <span class="ver">v0.2.143</span></h2>
+      <span class="date">2026-07-29</span>
+    </div>
+    <ul>
+      <li>Pick yarn from your stash now appears on a pattern once it has yarn requirements (added under Edit) to match against, instead of guessing from nothing. Combining a pattern with yarn happens most naturally in a project, and a first-time note on the pattern page points there.</li>
+      <li>One-time hint cards in spots that were easy to miss: holding + or − to count quickly, reversing a counter for charts read bottom-up, and flagging yarn to rebuy for the shopping list. Dismiss a card and it stays gone (Settings can bring them back).</li>
+    </ul>
+  </section>
   <section class="release" id="v0.2.142">
     <div class="release-head">
       <h2>Fairer pace and more stats <span class="ver">v0.2.142</span></h2>
@@ -60,62 +126,44 @@
       <li>The stash summary now shows just weight and length; the value moved to the Stats view (Timeline &gt; Stats). And since not every skein has a price noted, it's now an estimate: the average of the prices you have noted, applied to all your skeins.</li>
     </ul>
   </section>
-  <section class="release" id="v0.2.140">
-    <div class="release-head">
-      <h2>Landscape fixed on iPhone <span class="ver">v0.2.140</span></h2>
-      <span class="date">2026-07-19</span>
-    </div>
+<h2 class="section-title">Earlier releases</h2>
+  <details class="release-fold" id="v0.2.140">
+    <summary>Landscape fixed on iPhone <span class="ver">v0.2.140</span><span class="date">2026-07-19</span></summary>
     <ul>
       <li>Screens that open on top of the app (the timeline, gallery, PDF viewer, editors and more) now follow your iPhone into landscape instead of staying portrait and getting squished. This also covers the PDF viewer, which used to refuse to turn on iPhone.</li>
     </ul>
-  </section>
-  <section class="release" id="v0.2.139">
-    <div class="release-head">
-      <h2>A real shopping list <span class="ver">v0.2.139</span></h2>
-      <span class="date">2026-07-19</span>
-    </div>
+  </details>
+  <details class="release-fold" id="v0.2.139">
+    <summary>A real shopping list <span class="ver">v0.2.139</span><span class="date">2026-07-19</span></summary>
     <ul>
       <li>The cart icon at the top of the Stash now opens a dedicated shopping list showing only what you've flagged to buy, so you no longer have to hunt through the whole stash. Each item has a one-tap remove, and there's Share and Clear all.</li>
       <li>Equipment can go on the shopping list too: swipe a needle, hook or tool and choose "To buy", the same way you already do with yarn. The list and the shared text cover both.</li>
     </ul>
-  </section>
-  <section class="release" id="v0.2.138">
-    <div class="release-head">
-      <h2>Tidier equipment stash <span class="ver">v0.2.138</span></h2>
-      <span class="date">2026-07-19</span>
-    </div>
+  </details>
+  <details class="release-fold" id="v0.2.138">
+    <summary>Tidier equipment stash <span class="ver">v0.2.138</span><span class="date">2026-07-19</span></summary>
     <ul>
       <li>The equipment stash now keeps its sorting and filters behind the same View options button (top right) that the yarn stash uses, instead of the rows of chips that crowded the top of the list. Sort by size, material or recent, and filter by type or material all live in one place.</li>
     </ul>
-  </section>
-  <section class="release" id="v0.2.137">
-    <div class="release-head">
-      <h2>New patterns rise to the top <span class="ver">v0.2.137</span></h2>
-      <span class="date">2026-07-19</span>
-    </div>
+  </details>
+  <details class="release-fold" id="v0.2.137">
+    <summary>New patterns rise to the top <span class="ver">v0.2.137</span><span class="date">2026-07-19</span></summary>
     <ul>
       <li>The Patterns "Recent" sort now means recently used OR added, so a pattern you just imported or created sits at the top instead of sinking to the bottom for not having been opened yet. It drifts back down naturally as you open other patterns.</li>
     </ul>
-  </section>
-  <section class="release" id="v0.2.136">
-    <div class="release-head">
-      <h2>More common yarn colours <span class="ver">v0.2.136</span></h2>
-      <span class="date">2026-07-19</span>
-    </div>
+  </details>
+  <details class="release-fold" id="v0.2.136">
+    <summary>More common yarn colours <span class="ver">v0.2.136</span><span class="date">2026-07-19</span></summary>
     <ul>
       <li>Three more shades in the colour picker's common colours: oatmeal and charcoal among the neutrals, and terracotta among the earth tones.</li>
     </ul>
-  </section>
-  <section class="release" id="v0.2.135">
-    <div class="release-head">
-      <h2>Swipe a project to match its stage <span class="ver">v0.2.135</span></h2>
-      <span class="date">2026-07-19</span>
-    </div>
+  </details>
+  <details class="release-fold" id="v0.2.135">
+    <summary>Swipe a project to match its stage <span class="ver">v0.2.135</span><span class="date">2026-07-19</span></summary>
     <ul>
       <li>Swiping a project card to the right now matches where it is: Start a planned project, put an active one on Hold, Resume a paused one, or Re-open a finished one. Each shows an Undo, and re-opening a finished project moves it back to your active work.</li>
     </ul>
-  </section>
-<h2 class="section-title">Earlier releases</h2>
+  </details>
   <details class="release-fold" id="v0.2.134">
     <summary>Collapsible project sections <span class="ver">v0.2.134</span><span class="date">2026-07-19</span></summary>
     <ul>
