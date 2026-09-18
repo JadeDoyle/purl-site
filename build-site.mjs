@@ -41,6 +41,16 @@ const SITE = {
   year: 2026,
 };
 
+// Safari on iPhone and iPad renders an install banner from this. The id is
+// derived from the store URL above so there is only one place to change it.
+const APPLE_APP_ID = SITE.appStoreUrl.match(/id(\d+)/)[1];
+
+// JSON-LD is embedded in a <script>, so "</script>" inside any string value
+// would end the element early. Escaping "<" as \u003c is the standard guard
+// and leaves the JSON semantically identical.
+const ldJson = (data) =>
+  `<script type="application/ld+json">${JSON.stringify(data).replace(/</g, '\\u003c')}</script>\n`;
+
 const COLORS = {
   primary: '#7C5E9B',
   primaryDark: '#5E4478',
@@ -207,7 +217,7 @@ function footer(lang) {
 
 // path is the site-relative logical path (e.g. '/no/support/'); pageKey names
 // the resource for the language toggle (omit for shared/no-toggle pages).
-function shell({ lang, pageKey, activeKey, path, title, description, body, wide }) {
+function shell({ lang, pageKey, activeKey, path, title, description, body, wide, jsonLd, noCounterpart }) {
   const canonical = abs(path);
   const pageTitle = pageKey === 'home' ? `${SITE.name}, ${title}` : `${title} | ${SITE.name}`;
   const d = escAttr(description);
@@ -216,9 +226,17 @@ function shell({ lang, pageKey, activeKey, path, title, description, body, wide 
   // Everything else toggles to the SAME page in the other language.
   const enPath = path.startsWith('/no/') ? path.slice(3) : path;
   const noPath = '/no' + (enPath === '/' ? '/' : enPath);
-  const altHref = SHARED.has(pageKey) ? link('no', 'home') : u(lang === 'en' ? noPath : enPath);
-  const hreflang = SHARED.has(pageKey)
-    ? `<link rel="alternate" hreflang="en" href="${canonical}" />\n<link rel="alternate" hreflang="x-default" href="${canonical}" />`
+  // A guide page can exist in one language and not the other: buildGuide skips
+  // a page whose source is missing, so claiming the pair unconditionally would
+  // point hreflang at a URL that was never written. Treat such a page like a
+  // shared page instead: advertise only itself, and send the toggle to the
+  // other language's guide index rather than to a 404.
+  const alone = SHARED.has(pageKey) || noCounterpart;
+  const altHref = alone
+    ? link(lang === 'en' ? 'no' : 'en', SHARED.has(pageKey) ? 'home' : 'guide')
+    : u(lang === 'en' ? noPath : enPath);
+  const hreflang = alone
+    ? `<link rel="alternate" hreflang="${COPY[lang].htmlLang}" href="${canonical}" />\n<link rel="alternate" hreflang="x-default" href="${canonical}" />`
     : `<link rel="alternate" hreflang="en" href="${abs(enPath)}" />\n<link rel="alternate" hreflang="no" href="${abs(noPath)}" />\n<link rel="alternate" hreflang="x-default" href="${abs(enPath)}" />`;
   const ogLocale = lang === 'no' ? 'nb_NO' : 'en_GB';
   const ogAlt = lang === 'no' ? 'en_GB' : 'nb_NO';
@@ -247,7 +265,8 @@ ${THEME_HEAD}
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />
 <meta name="twitter:card" content="summary_large_image" />
-</head>
+<meta name="apple-itunes-app" content="app-id=${APPLE_APP_ID}" />
+${jsonLd ? ldJson(jsonLd) : ''}</head>
 <body>
 ${header(lang, activeKey || pageKey, altHref)}
 <main class="wrap${wide ? ' wrap-wide' : ''}">
@@ -260,11 +279,18 @@ ${THEME_SCRIPT}
 `;
 }
 
+// Every page this run produced. The build never deletes output, so a page that
+// stops being generated (a guide page dropped from the source, a section
+// retired) would otherwise sit on disk, get committed by CI and stay live and
+// indexable forever, orphaned and unlinked. Warn rather than delete: deciding
+// what to remove from a published site is not a thing a build should do alone.
+const WRITTEN = new Set();
 function writePage(sitePath, html) {
   const rel = sitePath === '/' ? 'index.html' : sitePath.replace(/^\//, '').replace(/\/$/, '') + '/index.html';
   const out = join(HERE, rel);
   mkdirSync(dirname(out), { recursive: true });
   writeFileSync(out, html, 'utf8');
+  WRITTEN.add(out);
 }
 
 // --- markdown pages (privacy, terms) -------------------------------------
@@ -300,7 +326,15 @@ function downloadRow(lang) {
 // A screenshot pair: the light image shows by default, CSS flips to the dark
 // one together with the palette. Files live in assets/landing/ (committed
 // static assets, regenerated from the current App Store screenshots).
-function shotPair(file, darkFile, alt) {
+// Alt text describes the SCREENSHOT, not the heading next to it. A slogan
+// ("Never forget what you have.") tells a screen reader nothing about the
+// image and repeats text already on the page. The descriptions live in
+// copy.json (shotAlt) so they are reviewed like the rest of the copy; the
+// heading stays as a fallback for a key that has not been written yet.
+function shotPair(lang, key, fallbackAlt) {
+  const alt = COPY[lang].shotAlt?.[key] || fallbackAlt;
+  const file = `${lang}_${key}.png`;
+  const darkFile = `${lang}_${key}_dark.png`;
   return `<span class="shot"><img class="img-light" src="${u('/assets/landing/' + file)}" alt="${escAttr(alt)}" loading="lazy" /><img class="img-dark" src="${u('/assets/landing/' + darkFile)}" alt="" loading="lazy" aria-hidden="true" /></span>`;
 }
 // Which screenshot illustrates each landing feature, by index (structure
@@ -330,7 +364,7 @@ function landing(lang) {
 ${points}
     </ul>
   </div>
-  <div class="lfeature-shot"><div class="phoneframe">${shotPair(`${lang}_${img}.png`, `${lang}_${img}_dark.png`, ft.h2)}</div></div>
+  <div class="lfeature-shot"><div class="phoneframe">${shotPair(lang, img, ft.h2)}</div></div>
 </section>`;
   }).join('\n');
   const body = `<section class="lhero">
@@ -341,7 +375,7 @@ ${points}
     ${downloadRow(lang)}
     <p class="hero-note">${esc(h.note)}</p>
   </div>
-  <div class="lhero-shot"><div class="phoneframe">${shotPair(`${lang}_stash.png`, `${lang}_stash_dark.png`, h.h1)}</div></div>
+  <div class="lhero-shot"><div class="phoneframe">${shotPair(lang, 'stash', h.h1)}</div></div>
 </section>
 
 <div class="pillars">
@@ -356,7 +390,7 @@ ${features}
 ${c.tools.items.map((it, i) => {
     const img = TOOL_IMGS[i] || 'calculator';
     return `    <figure class="toolcard">
-      <div class="phoneframe">${shotPair(`${lang}_${img}.png`, `${lang}_${img}_dark.png`, it.title)}</div>
+      <div class="phoneframe">${shotPair(lang, img, it.title)}</div>
       <figcaption><b>${esc(it.title)}</b><span>${esc(it.desc)}</span></figcaption>
     </figure>`;
   }).join('\n')}
@@ -367,7 +401,7 @@ ${c.tools.items.map((it, i) => {
   <p class="eyebrow">${esc(c.ipad.eyebrow)}</p>
   <h2>${esc(c.ipad.h2)}</h2>
   <p class="lsub">${esc(c.ipad.sub)}</p>
-  <div class="ipadframe"><span class="shot"><img class="img-light" src="${u('/assets/landing/ipad.jpg')}" alt="${escAttr(c.ipad.h2)}" loading="lazy" /><img class="img-dark" src="${u('/assets/landing/ipad_dark.jpg')}" alt="" loading="lazy" aria-hidden="true" /></span></div>
+  <div class="ipadframe"><span class="shot"><img class="img-light" src="${u('/assets/landing/ipad.jpg')}" alt="${escAttr(COPY[lang].shotAlt?.ipad || c.ipad.h2)}" loading="lazy" /><img class="img-dark" src="${u('/assets/landing/ipad_dark.jpg')}" alt="" loading="lazy" aria-hidden="true" /></span></div>
 </section>
 
 <section class="plumband">
@@ -381,7 +415,19 @@ ${c.tools.items.map((it, i) => {
 <ul class="cards">
 ${cards}
 </ul>`;
-  return shell({ lang, pageKey: 'home', path: link(lang, 'home').slice(BASE.length), title: c.tagline.replace('&amp;', '&'), description: c.desc, body, wide: true });
+  // WebSite is the one JSON-LD node with a visible effect: it is what Google
+  // uses for the site name shown above a result. Deliberately nothing else.
+  // No SearchAction (the sitelinks search box was removed in 2024), and no
+  // BreadcrumbList (no visible breadcrumb trail exists to mark up).
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: SITE.name,
+    alternateName: `${SITE.name}.`,
+    url: abs(lang === 'no' ? '/no/' : '/'),
+    inLanguage: COPY[lang].htmlLang,
+  };
+  return shell({ lang, pageKey: 'home', path: link(lang, 'home').slice(BASE.length), title: c.tagline.replace('&amp;', '&'), description: c.desc, body, wide: true, jsonLd });
 }
 
 // --- support -------------------------------------------------------------
@@ -644,10 +690,17 @@ function stripFlagged(md) {
   return md.replace(fence, (block, flag) => (GUIDE_FLAGS[flag] ? block.replace(marker, '') : ''));
 }
 
+// The one place that decides a guide page's URL. `index` is served at the
+// directory itself, which is what canonical, hreflang and the sitemap say.
+function guideHref(dir, slug) {
+  return slug === 'index' ? `${dir}/guide/` : `${dir}/guide/${slug}.html`;
+}
+
 function guideLinkRewrite(md, dir) {
   return md.replace(/\]\(\.?\/?([A-Za-z0-9_-]+)\.md(#[^)]*)?\)/g, (_, name, hash = '') => {
-    const slug = name === 'README' ? 'index' : name;
-    return `](${u(dir + '/guide/' + slug + '.html' + hash)})`;
+    // The guide index is canonically /guide/, not /guide/index.html. Internal
+    // links must point at the canonical URL, not a form that only redirects.
+    return `](${u(guideHref(dir, name === 'README' ? 'index' : name) + hash)})`;
   });
 }
 function guideSourceDir(lang) {
@@ -665,7 +718,7 @@ function guideNav(lang, currentSlug) {
       .map(([base, enT, noT]) => {
         const slug = base === 'README' ? 'index' : base;
         const cur = slug === currentSlug ? ' aria-current="page"' : '';
-        return `<li><a href="${u(dir + '/guide/' + slug + '.html')}"${cur}>${lang === 'no' ? noT : enT}</a></li>`;
+        return `<li><a href="${u(guideHref(dir, slug))}"${cur}>${lang === 'no' ? noT : enT}</a></li>`;
       })
       .join('');
     return items ? `<h3>${lang === 'no' ? no : en}</h3><ul>${items}</ul>` : '';
@@ -726,6 +779,53 @@ function copyGuideImages(lang) {
   return n;
 }
 
+// A meta description for a guide page, derived from the page's own opening
+// paragraph. That paragraph is authored, reviewed prose in both languages, so
+// it reads like a person wrote it and it stays correct when the guide changes:
+// a table keyed by slug in here would go stale the day the rewrite publishes.
+// copy.json may override any single page (COPY[lang].guideMeta[slug].desc),
+// either because the lede does not stand alone (it introduces a list, or is
+// one short clause) or because the page is worth a written snippet: the guide
+// index sells the whole guide, and a page whose opening is one long sentence
+// would otherwise be truncated mid-thought.
+function guideDescription(srcFile, lang, slug) {
+  const override = COPY[lang].guideMeta?.[slug]?.desc;
+  if (override) return override;
+  const md = stripFlagged(readFileSync(srcFile, 'utf8'));
+  const para = md
+    .split(/\r?\n\s*\r?\n/)
+    .map((b) => b.trim())
+    .find((b) => b && !b.startsWith('#') && !b.startsWith('!') && !b.startsWith('>') &&
+                 !b.startsWith('-') && !b.startsWith('*') && !/^\d+\./.test(b) &&
+                 !b.startsWith('<!--') && !b.startsWith('|'));
+  if (!para) return null;
+  const text = para
+    .replace(/!\[[^\]]*\]\([^)]*\)/g, '')       // images
+    .replace(/\[([^\]]+)\]\([^)]*\)/g, '$1')    // links keep their text
+    .replace(/[*_`]/g, '')                       // emphasis and code ticks
+    .replace(/\s+/g, ' ')
+    .trim();
+  // A lede that introduces the list below it ("Two calculators in the app:")
+  // or is a single short clause does not stand alone as a search snippet.
+  // Refuse it so the caller's fallback runs, and say so, because the fix is a
+  // copy.json override and nobody will write one they were not told about.
+  if (text.length < 40 || /[:;]$/.test(text)) {
+    console.warn(`guide description: ${lang}/${slug} lede does not stand alone ("${text}"), using the fallback. Add COPY.${lang}.guideMeta.${slug}.desc.`);
+    return null;
+  }
+  if (text.length <= 155) return text;
+  // Prefer a sentence boundary, fall back to a word boundary, never mid-word.
+  // The boundary has to allow a closing quote or bracket after the stop, or a
+  // lede that ends on quoted speech ('is "I am making this thing."') is missed
+  // and ships as a dangling fragment. 40 matches the stand-alone floor above:
+  // a complete first sentence is a better snippet than a truncated second one.
+  const cut = text.slice(0, 156);
+  const stops = [...cut.matchAll(/[.?!]["'”»)]?(?=\s)/g)];
+  const stop = stops.length ? stops[stops.length - 1].index + stops[stops.length - 1][0].length : -1;
+  if (stop >= 40) return cut.slice(0, stop);
+  return cut.slice(0, cut.lastIndexOf(' ')).replace(/[,;:]$/, '') + '...';
+}
+
 function buildGuide(lang) {
   const dir = lang === 'no' ? '/no' : '';
   const src = guideSourceDir(lang);
@@ -735,24 +835,30 @@ function buildGuide(lang) {
   for (const [base, enTitle, noTitle, isIndex] of GUIDE_PAGES) {
     const srcFile = join(src, `${base}.md`);
     if (!existsSync(srcFile)) { console.warn(`skip (missing ${lang}): ${base}.md`); continue; }
-    const title = lang === 'no' ? noTitle : enTitle;
+    const title = COPY[lang].guideMeta?.[isIndex ? 'index' : base]?.title
+      || (lang === 'no' ? noTitle : enTitle);
     const md = guideLinkRewrite(stripFlagged(readFileSync(srcFile, 'utf8')), dir);
     const bodyHtml = guideFigures(marked.parse(md), lang);
     const slug = isIndex ? 'index' : base;
+    // Does this page exist in the other language? If not, it must not claim a
+    // translation it does not have.
+    const noCounterpart = !existsSync(join(guideSourceDir(lang === 'no' ? 'en' : 'no'), `${base}.md`));
     const html = shell({
       lang,
       pageKey: 'guide',
       activeKey: 'guide',
+      noCounterpart,
       path: isIndex ? `${dir}/guide/` : `${dir}/guide/${slug}.html`,
       title,
-      description: isIndex
-        ? (lang === 'no'
-          ? 'Hvordan du bruker Purl, i klarspråk: prosjekter, mønstre, stash, PDF-verktøyene og mer.'
-          : 'How to use Purl, in plain language: projects, patterns, yarn stash, the PDF tools and more.')
-        : (lang === 'no' ? `${title}: en del av Purls brukerveiledning.` : `${title}: part of the Purl user guide.`),
+      description: guideDescription(srcFile, lang, isIndex ? 'index' : base)
+        || (lang === 'no'
+          ? 'Hvordan du bruker Purl, i klarspråk: prosjekter, oppskrifter, stash, PDF-verktøyene og mer.'
+          : 'How to use Purl, in plain language: projects, patterns, yarn stash, the PDF tools and more.'),
       body: `<article class="prose">${bodyHtml}</article>\n${guideNav(lang, slug)}`,
     });
-    writeFileSync(join(HERE, `${dir}/guide`.replace(/^\//, ''), `${slug}.html`), html, 'utf8');
+    const outFile = join(HERE, `${dir}/guide`.replace(/^\//, ''), `${slug}.html`);
+    writeFileSync(outFile, html, 'utf8');
+    WRITTEN.add(outFile);
     count++;
   }
   return count;
@@ -803,6 +909,81 @@ async function buildIcons() {
   render(ogSvg(), 1200, 'og.png');
 }
 
+// --- build-time link graph check -----------------------------------------
+// hreflang and canonical are invisible when wrong, and Search Console stopped
+// reporting hreflang errors when the International Targeting report was retired
+// in 2022, so a build that emits a broken language graph would ship silently.
+// This asserts what a crawler checks: every canonical, alternate and sitemap
+// URL resolves to a file that was actually written, and the pages in a language
+// pair point at each other. It exists mainly for the day GUIDE_DRAFT flips and
+// five new pages per language appear.
+function fileFor(url) {
+  const path = url.replace(ORIGIN + BASE, '');
+  return join(HERE, (path.endsWith('/') ? `${path}index.html` : path).replace(/^\//, ''));
+}
+function verifyLinkGraph() {
+  const pages = [];
+  const walk = (dir) => {
+    for (const entry of readdirSync(dir, { withFileTypes: true })) {
+      if (entry.name === 'node_modules' || entry.name === '.git' || entry.name === 'guide-frozen') continue;
+      const full = join(dir, entry.name);
+      if (entry.isDirectory()) walk(full);
+      else if (entry.name.endsWith('.html')) pages.push(full);
+    }
+  };
+  walk(HERE);
+  const problems = [];
+  const alternates = new Map();
+  for (const file of pages) {
+    const html = readFileSync(file, 'utf8');
+    if (/<meta name="robots" content="noindex"/.test(html)) continue;
+    const canonical = html.match(/<link rel="canonical" href="([^"]+)"/)?.[1];
+    if (!canonical) { problems.push(`${file}: no canonical`); continue; }
+    if (fileFor(canonical) !== file) problems.push(`${file}: canonical ${canonical} does not resolve back to this file`);
+    const ogUrl = html.match(/<meta property="og:url" content="([^"]+)"/)?.[1];
+    if (ogUrl && ogUrl !== canonical) problems.push(`${file}: og:url ${ogUrl} disagrees with canonical ${canonical}`);
+    const alts = [...html.matchAll(/<link rel="alternate" hreflang="([^"]+)" href="([^"]+)"/g)].map((m) => [m[1], m[2]]);
+    for (const [code, href] of alts) {
+      // WRITTEN, not existsSync: a leftover file from an earlier build exists
+      // on disk but is no longer a page this site produces.
+      if (!WRITTEN.has(fileFor(href))) problems.push(`${file}: hreflang ${code} points at ${href}, which was not written`);
+    }
+    alternates.set(canonical, alts.filter(([code]) => code !== 'x-default').map(([, href]) => href).sort().join(' '));
+  }
+  // Reciprocity: two pages that claim each other must advertise the same set.
+  for (const [url, set] of alternates) {
+    for (const href of set.split(' ').filter((h) => h && h !== url)) {
+      const other = alternates.get(href);
+      if (other === undefined) continue;
+      if (other !== set) problems.push(`${url} and ${href} advertise different alternate sets`);
+    }
+  }
+  const stale = pages.filter((f) => !WRITTEN.has(f));
+  for (const f of stale) {
+    // ::warning:: so it surfaces in the Actions run summary. A plain
+    // console.warn scrolls past in a log nobody opens.
+    const rel = f.replace(HERE, '').replace(/^[\\/]/, '').replace(/\\/g, '/');
+    console.warn(`::warning file=${rel}::Stale output: no longer generated, but still live and indexable. Delete it deliberately.`);
+  }
+  const sitemap = readFileSync(join(HERE, 'sitemap.xml'), 'utf8');
+  const listed = new Set();
+  for (const m of sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)) {
+    listed.add(m[1]);
+    if (!WRITTEN.has(fileFor(m[1]))) problems.push(`sitemap lists ${m[1]}, which was not written`);
+  }
+  // And the reverse: a page that is indexable but absent from the sitemap is
+  // invisible to the one place we tell search engines to look.
+  for (const url of alternates.keys()) {
+    if (!listed.has(url)) problems.push(`${url} is indexable but missing from sitemap.xml`);
+  }
+  if (problems.length) {
+    console.error('Link graph check FAILED:');
+    for (const p of problems) console.error(`  - ${p}`);
+    process.exit(1);
+  }
+  console.log(`Link graph OK: ${alternates.size} indexable pages, canonical + hreflang + sitemap all resolve.`);
+}
+
 // --- robots + sitemap ----------------------------------------------------
 function robotsAndSitemap(paths) {
   const urls = paths.map((p) => `  <url><loc>${abs(p)}</loc></url>`).join('\n');
@@ -838,7 +1019,7 @@ async function main() {
       srcMd: lang === 'no' ? 'docs/legal/terms.no.md' : 'docs/legal/terms.md',
       title: lang === 'no' ? 'Vilkår for bruk' : 'Terms of use',
       description: lang === 'no'
-        ? 'Vilkårene for bruk av Purl, en gratis følgesvenn-app for strikking og hekling, i klarspråk.'
+        ? 'Vilkårene for bruk av Purl, en gratis app for strikking og hekling, i klarspråk.'
         : 'The plain-language terms of use for Purl, a free knitting and crochet companion app.',
     }));
     writePage(`${dir}/press/`, press(lang));
@@ -854,14 +1035,23 @@ async function main() {
   // Only advertise guide pages that were actually written. While GUIDE_DRAFT
   // holds the rewrite back, five of them do not exist, and a sitemap pointing
   // search engines at 404s is worse than a short sitemap.
-  const guidePaths = GUIDE_PAGES.filter(([, , , isIndex]) => !isIndex)
-    .filter(([base]) => existsSync(join(HERE, 'guide', `${base}.html`)))
-    .map(([base]) => `/guide/${base}.html`);
+  // Each language is filtered against its OWN output. Mirroring the English
+  // list onto /no assumes the translation exists, and buildGuide skips a page
+  // whose source is missing in one language: that assumption would put a 404
+  // in the sitemap the first time a page lands in one language only.
+  // Tested against what THIS run wrote, not against what is on disk: a page
+  // dropped from the source but left behind by an earlier build still exists
+  // as a file, and testing existsSync would keep advertising it forever.
+  const guidePathsFor = (dir) => GUIDE_PAGES.filter(([, , , isIndex]) => !isIndex)
+    .filter(([base]) => WRITTEN.has(join(HERE, `${dir}/guide/${base}.html`.replace(/^\//, ''))))
+    .map(([base]) => `${dir}/guide/${base}.html`);
   robotsAndSitemap([
-    '/', '/support/', '/privacy/', '/terms/', '/press/', '/changelog/', '/roadmap/', '/guide/', ...guidePaths,
+    '/', '/support/', '/privacy/', '/terms/', '/press/', '/changelog/', '/roadmap/', '/guide/',
+    ...guidePathsFor(''),
     '/no/', '/no/support/', '/no/privacy/', '/no/terms/', '/no/press/', '/no/guide/',
-    ...guidePaths.map((p) => '/no' + p),
+    ...guidePathsFor('/no'),
   ]);
+  verifyLinkGraph();
   await buildIcons();
   console.log(`Built bilingual site (en + no) + ${guideCount} guide pages across both languages, icons, sitemap.`);
 }
