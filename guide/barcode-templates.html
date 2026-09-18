@@ -39,141 +39,122 @@
   <a class="lang" href="/no/guide/barcode-templates.html" hreflang="no" aria-label="Bytt til norsk / Switch to Norwegian"><b>EN</b><span aria-hidden="true">/</span>NO</a>
 </header>
 <main class="wrap">
-<article class="prose"><h1>Barcodes and the yarn library</h1>
-<p>Scanning a ball band should not be a one-off prefill. It should teach the app
-what that yarn is, so the next scan, by you or by a friend you share with, has
-the answer ready.</p>
-<p>That is what the yarn library is for.</p>
+<article class="prose"><h1>Barcode templates</h1>
+<p>Scanning a yarn ball-band shouldn&#39;t be just a one-shot prefill.
+It should <em>teach the app</em> what that product is, so the next time
+anyone scans it (you, a friend, a new install) the answer is there.</p>
+<p>That&#39;s what barcode templates are for.</p>
 <h2>The basic flow</h2>
-<p>You are at the yarn shop. You buy two skeins of a yarn you have never logged.
-At home:</p>
+<p>You&#39;re at the yarn store. You buy two skeins of a Sandnes yarn
+you&#39;ve never logged before. At home:</p>
 <ol>
-<li>Tap <strong>Stash</strong>, then <strong>Add</strong>.</li>
-<li>In the <strong>Add yarn</strong> form, tap the barcode button next to <strong>Pick from
-library</strong>.</li>
-<li>Hold the ball band inside the frame on <strong>Scan a skein</strong>.</li>
-<li>Purl recognises the yarn and fills the form in: brand, name, weight, fibre,
-gauge, suggested needle. You add the skein count.</li>
-<li>Tap <strong>Add to stash</strong>.</li>
+<li><strong>Stash → barcode icon</strong> (next to Add yarn).</li>
+<li>Camera opens, scan the ball-band.</li>
+<li>Purl recognises Sandnes Sunday, opens the Add-yarn form
+prefilled with the brand, name, weight, fibre, gauge,
+recommended needle. You just type the colour name and the
+dye lot.</li>
+<li>Save.</li>
 </ol>
-<p>That recognition comes either from the bundled catalogue or from a yarn your
-library already knows.</p>
-<p>If the code is new, the form opens with the barcode attached and nothing else
-filled in. You type brand, name, weight and the rest, and save. That save
-quietly teaches the library: the next scan of that code is recognised.</p>
-<h2>A barcode belongs to a colour</h2>
-<p>A yarn barcode is a shop-floor code for one shade, not for a whole yarn line.
-The till and the picking list work that way, and so does Purl.</p>
-<p>So a scanned code attaches to a <strong>colourway</strong> of a yarn where it can, and to
-the yarn itself otherwise. Two consequences you will notice:</p>
+<p>That recognition happens because Sandnes Sunday is in the bundled
+<strong>catalogue</strong> that ships with Purl.</p>
+<p>If the yarn isn&#39;t recognised:</p>
+<ol start="3">
+<li><em>(unknown code)</em>: the form opens blank with the barcode
+attached. You fill in brand / name / weight / etc.</li>
+<li>Save.</li>
+</ol>
+<p>That <strong>save</strong> quietly creates a barcode template. The next time
+you (or a friend with the same template) scan the same code,
+it&#39;ll be recognised.</p>
+<h2>The catalogue</h2>
+<p>Purl ships with a curated catalogue of ~20 Nordic yarn producers
+and their lines: DROPS, Sandnes Garn, Ístex, Knitting for Olive,
+Du Store Alpakka, Hillesvåg, Filcolana, Rauma, Dale, Camilla
+Pihl, Viking of Norway, Järbo, Svarta Fåret, CaMaRose, Hjertegarn,
+Isager, Novita, and more.</p>
+<p>For most of them: brand, yarn names, weight, fibre, meterage,
+populated. For some of them: colourways too (full DROPS range,
+Ístex Lopi numbers, the entire Knitting for Olive named ranges).</p>
+<p>The catalogue is <strong>read-only at the source</strong> but you can edit any
+entry: your edit forks into your own template store. App
+updates ship new catalogue entries without overwriting what
+you&#39;ve changed.</p>
+<h2>Barcode templates view</h2>
+<p><strong>More → Barcode templates</strong> opens the management surface.</p>
+<p>At the top: a live camera for scanning. Below it: the list of
+templates you own + everything in the catalogue (which surfaces
+only when you search, so the day-one list isn&#39;t ~150 items long).</p>
+<p>Each row: brand · name + a subtitle showing barcode count, weight,
+fibre. Tap a row to open it.</p>
+<p>Inside a template:</p>
 <ul>
-<li>Scan a code Purl has seen on a colour, and the colour comes back with it,
-swatch and all, not just the brand and name.</li>
-<li>Scan a colour you already own and the question is the useful one: <strong>Add a
-skein</strong> to the row you have, or <strong>New dye lot</strong> for this ball band.</li>
+<li><strong>Barcodes</strong>: a chip list. Add one via the text input;
+remove via the × on each chip. Multiple barcodes per template
+is the whole point: manufacturers cycle EAN codes between
+packaging runs, and an old skein + a fresh one can have
+different codes for the same product.</li>
+<li>Brand / name / weight / fibre / gauge / needle / meters / grams
+fields.</li>
 </ul>
-<p>Correcting a colour in the form corrects what the code means. The code moves
-to the colour you saved it under.</p>
-<h2>The Yarn library screen</h2>
-<p>Open <strong>More</strong>, then <strong>Barcode scanner</strong> under <strong>Power tools</strong>. The screen is
-called <strong>Yarn library</strong>.</p>
-<p>The camera sits at the top, live and ready. Under it are your saved yarns, and
-a search field.</p>
-<p class="figpending">Scan from the top of the screen, browse what you have saved underneath.</p>
-<p>What a scan gives you here:</p>
-<ul>
-<li>A code you already have: an <strong>Already in your library</strong> card, with <strong>Edit</strong>
-and <strong>Remove</strong>.</li>
-<li>A new code: a <strong>Save as a new yarn</strong> card, with the fields to fill in and
-<strong>Save yarn</strong> at the bottom.</li>
-</ul>
-<p>Tap <strong>Scan another</strong> in the strip at the top to go back to the camera.</p>
-<h2>Inside a yarn</h2>
-<p>Tap any row in <strong>Saved yarns</strong> to open it. On a device that has never
-scanned, that list is empty: search the catalogue instead and tap a result,
-which opens the same screen.</p>
-<ul>
-<li><strong>Barcodes</strong>: a chip for each code. Add one by typing it into <strong>Add a
-barcode…</strong>, remove one with its cross. Several codes per yarn is the whole
-point: manufacturers cycle codes between packaging runs, so an old skein and
-a fresh one often carry different ones.</li>
-<li><strong>Colourways</strong>: the colours Purl knows this yarn comes in, each with its
-colour code. A colour you have scanned or saved yourself also shows its
-shade and the barcodes pointing at it; one that came from the catalogue
-shows the code alone, with an empty swatch, until a scan fills it in. Tap
-the cross to forget one it got wrong.</li>
-<li><strong>Brand</strong>, <strong>Name</strong>, <strong>Fibre</strong>, <strong>Weight</strong>, <strong>Gauge</strong>, <strong>Suggested needle</strong>,
-<strong>Metres per skein</strong>, <strong>Grams per skein</strong>.</li>
-</ul>
-<figure class="guidefig"><img src="./images/yarn-library-entry.webp" alt="A library entry showing its barcode chips and its list of known colourways" loading="lazy" decoding="async" /><figcaption>Barcodes and colours, both editable, both learned rather than typed.</figcaption></figure>
-<h2>The bundled catalogue</h2>
-<p>Purl ships with a curated catalogue of Nordic producers and their yarn lines:
-Sandnes Garn, DROPS, Rauma Garn, Dale Garn, Hillesvåg (Hifa), Du Store
-Alpakka, Camilla Pihl Garn, Viking Garn, Järbo, Svarta Fåret, Filcolana,
-Knitting for Olive, CaMaRose, Hjertegarn, Isager, Ístex and Novita. Brand,
-yarn names, weight, fibre and meterage for all of them, and named colour
-ranges for many.</p>
-<p>Catalogue yarns carry a <strong>Catalogue</strong> badge, and they stay out of the list
-until you search, so your own saved yarns are not buried under two hundred
-others. A line at the bottom tells you how many are waiting: <strong>Plus N
-yarns from the built-in catalogue: search to attach a barcode or edit one.</strong></p>
-<p>Editing a catalogue yarn makes it yours. Your version shadows the built-in one
-from then on, and app updates can ship new catalogue entries without
-overwriting what you changed.</p>
-<p>You can switch the catalogue off entirely: <strong>More</strong>, the gear in the header,
-then <strong>Built-in yarn catalogue</strong> under <strong>Defaults</strong>.</p>
+<p>The <strong>search field</strong> above the list searches everything (brand,
+name, weight, fibre, barcodes). Diacritic-folded: &quot;jarbo&quot; finds
+Järbo.</p>
 <h2>Duplicates</h2>
-<p>If you end up with two entries for the same yarn, usually a blank weight one
-time and a filled one the next, a card appears at the top: <strong>N possible
-duplicates, same brand &amp; yarn</strong>. Tap <strong>Merge</strong> and they fold into one.
-Barcodes are combined, blank fields are filled from the others, and the most
-complete entry is kept.</p>
-<p class="figpending">Two records of one yarn, folded back into one.</p>
-<h2>Attaching a code to a yarn you already have</h2>
-<p>If you scan an unknown code but you can see the product in your library, or in
-the catalogue, tap <strong>Or attach this barcode to an existing yarn…</strong> on the
-<strong>Save as a new yarn</strong> card. A searchable picker opens, <strong>Pick the yarn this
-barcode is for</strong>. Tap the right one and the code attaches there, instead of
-starting a second record for the same yarn.</p>
-<h2>Sharing your library</h2>
-<p>The share icon in the <strong>Yarn library</strong> header writes a <code>.purlt</code> file with your
-whole library and opens the system share sheet. Email it, put it in Drive,
-send it however you like.</p>
-<p>Your friend taps the import icon on their own <strong>Yarn library</strong> and picks the
-file, or simply opens the <code>.purlt</code> from their file manager, and Purl merges:</p>
+<p>If you end up with two templates for the same yarn (a blank
+weight one time, &quot;DK&quot; another time, or a slight name typo), Purl
+notices: a <strong>Possible duplicates</strong> card appears at the top of the
+list. Tap <strong>Merge</strong> on a group and they fold together: barcodes
+unioned, blank fields filled from the others, the most-complete
+entry kept as the primary.</p>
+<p>You can also avoid creating duplicates in the first place:
+v0.1.96+ uses brand + name as the identity for save-time matching,
+falling back from brand + name + weight, so a blank weight won&#39;t
+fork.</p>
+<h2>Linking a scanned code to an existing template</h2>
+<p>If you scan an unknown code but you can see the matching product
+in your library (or in the catalogue), tap <strong>Or attach this
+barcode to an existing template</strong> in the form. A picker opens
+(searchable across user + catalogue) to find the right product.
+Tap it, the barcode gets attached, and you don&#39;t end up with two
+templates for the same yarn.</p>
+<h2>Sharing templates with a friend</h2>
+<p><strong>More → Barcode templates → share icon</strong> in the header. Purl
+writes a <code>.purlt</code> file with your whole template library and opens
+the system share sheet. Email it / Drive it / AirDrop it.</p>
+<p>Your friend receives the file, taps it (on Android with Purl
+installed), Purl opens straight to the import screen and merges:</p>
 <ul>
-<li>Yarns that match on brand, name and weight get their barcodes combined, and
-their known colours folded in. Where you both know a colour by the same
-name, your own shade is kept and their barcodes are still added.</li>
-<li>Anything new lands as a fresh entry.</li>
+<li>Templates that match by brand + name + weight get their barcodes
+combined.</li>
+<li>New products land as fresh entries.</li>
 </ul>
-<p>No yarn, projects or photos cross over. Only the library.</p>
+<p>No yarn / projects / photos cross over. Just the template
+catalogue.</p>
 <h2>The flywheel</h2>
 <p>Over time:</p>
 <ol>
-<li>You scan yarn, and your library fills out.</li>
-<li>You share a <code>.purlt</code> with a friend, or it rides along in your regular
-<code>.purl</code> backups.</li>
-<li>Those yarns get folded into the bundled catalogue in a later Purl release.</li>
-<li>The next person installing Purl gets them on day one.</li>
+<li>You scan yarn → templates accrue in your library.</li>
+<li>You share <code>.purlt</code> with your tester contact (or it rides in
+your regular <code>.purl</code> backups).</li>
+<li>The new templates get folded into the bundled catalogue in a
+future Purl release.</li>
+<li>The next user installing Purl gets your templates as part of
+the catalogue, ready to recognise on day one.</li>
 </ol>
-<p>The whole catalogue is built this way, and the folding-in step is manual by
-design.</p>
-<h2>A note on the scanner</h2>
-<p>The barcode scanner is still experimental, and Purl says so the first time you
-open it. It reads EAN, UPC, Code 128, Code 39 and QR codes. Ball-band barcodes
-are small and often on shiny paper, so give it light and hold the band flat.</p>
+<p>The whole catalogue is built this way. The folding-in step is
+manual by design: Purl has no server, so nothing leaves your
+device unless you choose to share it.</p>
 <h2>See also</h2>
 <ul>
-<li><a href="/guide/yarn-stash.html">Yarn stash</a>: the scanning flow from the stash side, and the
-colours Purl remembers.</li>
-<li><a href="/guide/tutorial-stash.html">Tutorial: your yarn, in and out</a>: one scan, start to
-finish.</li>
-<li><a href="/guide/backups.html">Backups</a>: <code>.purlt</code> is one of three share formats, alongside
-<code>.purl</code> for a whole backup and <code>.purlp</code> for a single pattern.</li>
+<li><a href="/guide/yarn-stash.html">Yarn stash</a>: the scan-into-stash flow
+from the user&#39;s side.</li>
+<li><a href="/guide/backups.html">Backups + recovery</a>: <code>.purlt</code> is one of the
+three share formats; the other two are <code>.purl</code> (whole backup)
+and <code>.purlp</code> (single pattern).</li>
 </ul>
 </article>
-<nav class="pagenav pagenav-guide"><h2>All guide pages</h2><h3>Start here</h3><ul><li><a href="/guide/index.html">User guide</a></li><li><a href="/guide/getting-started.html">Getting started</a></li></ul><h3>Tutorials</h3><ul><li><a href="/guide/tutorial-first-project.html">Your first project</a></li><li><a href="/guide/tutorial-read-a-pattern.html">Read a pattern</a></li><li><a href="/guide/tutorial-stash.html">Get your yarn in</a></li><li><a href="/guide/tutorial-charts.html">Make a chart</a></li></ul><h3>Reference</h3><ul><li><a href="/guide/yarn-stash.html">Yarn stash</a></li><li><a href="/guide/patterns.html">Patterns</a></li><li><a href="/guide/projects.html">Projects</a></li><li><a href="/guide/pdf-tools.html">PDF tools</a></li><li><a href="/guide/chart-maker.html">Chart maker</a></li><li><a href="/guide/barcode-templates.html" aria-current="page">Barcodes and the yarn library</a></li><li><a href="/guide/backups.html">Backups and recovery</a></li><li><a href="/guide/terminology.html">Terminology glossary</a></li><li><a href="/guide/calculator.html">Calculator</a></li><li><a href="/guide/faq.html">FAQ</a></li></ul></nav>
+<nav class="pagenav pagenav-guide"><h2>All guide pages</h2><h3>Start here</h3><ul><li><a href="/guide/index.html">User guide</a></li><li><a href="/guide/getting-started.html">Getting started</a></li></ul><h3>Reference</h3><ul><li><a href="/guide/yarn-stash.html">Yarn stash</a></li><li><a href="/guide/patterns.html">Patterns</a></li><li><a href="/guide/projects.html">Projects</a></li><li><a href="/guide/pdf-tools.html">PDF tools</a></li><li><a href="/guide/barcode-templates.html" aria-current="page">Barcodes and the yarn library</a></li><li><a href="/guide/backups.html">Backups and recovery</a></li><li><a href="/guide/terminology.html">Terminology glossary</a></li><li><a href="/guide/calculator.html">Calculator</a></li><li><a href="/guide/faq.html">FAQ</a></li></ul></nav>
 </main>
 <footer class="site-footer"><div class="footer-inner">
   <div class="footer-cols"><div class="footer-col"><h2>Purl</h2><ul><li><a href="/">Home</a></li><li><a href="/guide/">User guide</a></li><li><a href="/support/">Support</a></li><li><a href="/feedback/">Send feedback</a></li></ul></div><div class="footer-col"><h2>Updates</h2><ul><li><a href="/changelog/">What's new</a></li><li><a href="/roadmap/">Roadmap</a></li></ul></div><div class="footer-col"><h2>Legal</h2><ul><li><a href="/privacy/">Privacy policy</a></li><li><a href="/terms/">Terms of use</a></li></ul></div><div class="footer-col"><h2>More</h2><ul><li><a href="/press/">Press kit</a></li></ul></div></div>

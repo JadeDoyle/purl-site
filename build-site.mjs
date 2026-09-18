@@ -623,6 +623,19 @@ const GUIDE_GROUPS = [
 // the released app (src/featureFlags.ts), so a reader on purl.no cannot open
 // it; documenting it publicly sends them looking for a screen that is not
 // there. Turn the flag on in the same change that ships the feature.
+// The user guide in the Purl repo has been rewritten (16 pages, illustrated,
+// both languages) and is under review before it goes public. While this is
+// true the site publishes the frozen copy in guide-frozen/ instead, which is
+// the guide that was live before the rewrite.
+//
+// The app deep-links to https://purl.no/guide/ from More, in both languages
+// (MoreScreen.tsx), so this path must keep serving something: an unpublished
+// guide is a 404 inside every installed copy of Purl.
+//
+// TO PUBLISH THE REWRITE: set this to false and delete guide-frozen/.
+const GUIDE_DRAFT = true;
+const GUIDE_FROZEN = join(HERE, 'guide-frozen');
+
 const GUIDE_FLAGS = { garment: false };
 
 function stripFlagged(md) {
@@ -637,11 +650,18 @@ function guideLinkRewrite(md, dir) {
     return `](${u(dir + '/guide/' + slug + '.html' + hash)})`;
   });
 }
+function guideSourceDir(lang) {
+  return GUIDE_DRAFT
+    ? join(GUIDE_FROZEN, lang === 'no' ? 'no' : '')
+    : join(PURL, 'user-guide', lang === 'no' ? 'no' : '');
+}
+
 function guideNav(lang, currentSlug) {
   const dir = lang === 'no' ? '/no' : '';
   const heading = lang === 'no' ? 'Alle sider i veiledningen' : 'All guide pages';
   const groups = GUIDE_GROUPS.map(([key, en, no]) => {
     const items = GUIDE_PAGES.filter((p) => p[4] === key)
+      .filter(([base]) => existsSync(join(guideSourceDir(lang), `${base}.md`)))
       .map(([base, enT, noT]) => {
         const slug = base === 'README' ? 'index' : base;
         const cur = slug === currentSlug ? ' aria-current="page"' : '';
@@ -691,6 +711,7 @@ function guideFigures(html, lang) {
 }
 
 function copyGuideImages(lang) {
+  if (GUIDE_DRAFT) return 0; // the frozen guide predates the figures
   const from = join(PURL, 'user-guide', lang === 'no' ? 'no' : '', 'images');
   if (!existsSync(from)) return 0;
   const dir = lang === 'no' ? '/no' : '';
@@ -707,7 +728,7 @@ function copyGuideImages(lang) {
 
 function buildGuide(lang) {
   const dir = lang === 'no' ? '/no' : '';
-  const src = join(PURL, 'user-guide', lang === 'no' ? 'no' : '');
+  const src = guideSourceDir(lang);
   mkdirSync(join(HERE, `${dir}/guide`.replace(/^\//, '')), { recursive: true });
   let count = 0;
   copyGuideImages(lang);
@@ -830,7 +851,12 @@ async function main() {
   const guideCount = buildGuide('en') + buildGuide('no');
 
   // sitemap + robots (English + Norwegian pages, guide pages in both languages)
-  const guidePaths = GUIDE_PAGES.filter(([, , , isIndex]) => !isIndex).map(([base]) => `/guide/${base}.html`);
+  // Only advertise guide pages that were actually written. While GUIDE_DRAFT
+  // holds the rewrite back, five of them do not exist, and a sitemap pointing
+  // search engines at 404s is worse than a short sitemap.
+  const guidePaths = GUIDE_PAGES.filter(([, , , isIndex]) => !isIndex)
+    .filter(([base]) => existsSync(join(HERE, 'guide', `${base}.html`)))
+    .map(([base]) => `/guide/${base}.html`);
   robotsAndSitemap([
     '/', '/support/', '/privacy/', '/terms/', '/press/', '/changelog/', '/roadmap/', '/guide/', ...guidePaths,
     '/no/', '/no/support/', '/no/privacy/', '/no/terms/', '/no/press/', '/no/guide/',
