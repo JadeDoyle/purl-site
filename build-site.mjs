@@ -19,7 +19,7 @@
 //
 // Style rules, matching the app: no em dashes, no emojis in any output.
 
-import { readFileSync, writeFileSync, mkdirSync, existsSync, copyFileSync } from 'node:fs';
+import { readFileSync, writeFileSync, mkdirSync, existsSync, copyFileSync, readdirSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { marked } from 'marked';
@@ -91,7 +91,11 @@ function readArray(tsxRelPath, varName) {
   // `: Release[]` (whose own [] would otherwise match first) is skipped.
   const eq = src.indexOf('=', idx);
   if (eq < 0) throw new Error(`no assignment for ${varName} in ${tsxRelPath}`);
-  return (new Function('return (' + sliceArray(src, eq) + ')'))();
+  // The app's data arrays may reference its compile-time feature flags (the
+  // Roadmap does). The public site mirrors a stable build, where the garment
+  // tool is compiled out, so the flag reads false here for the same reason
+  // GUIDE_FLAGS.garment does.
+  return (new Function('GARMENT_ENTRY_POINTS', 'return (' + sliceArray(src, eq) + ')'))(false);
 }
 
 // --- languages + resource links ------------------------------------------
@@ -444,13 +448,17 @@ function isMilestone(v) {
   return s.length === 3 && Number.isFinite(s[2]) && s[2] === 0;
 }
 function changelog() {
-  const releases = readArray('src/screens/ChangelogScreen.tsx', 'RELEASES');
-  // The full history is long (170+ releases). Show the most recent ones in
-  // full and fold everything older behind a tap, so the page stays scannable
-  // without hiding anything.
-  const RECENT = 8;
+  // The app hides garment-only releases where the tool is compiled out, which
+  // is every build a reader of this page can install. Same reason GUIDE_FLAGS
+  // hides the garment sections of the guide: do not advertise a screen nobody
+  // can open.
+  const releases = readArray('src/screens/ChangelogScreen.tsx', 'RELEASES').filter((r) => !r.garmentOnly);
+  const eras = readArray('src/screens/ChangelogScreen.tsx', 'ERAS');
+  // Mirror the app: the recent releases in full, and everything older folded
+  // into era cards that say what the app became over that stretch. The page
+  // and the What's new screen should tell the same story.
   const notesList = (r) => r.notes.map((n) => `      <li>${esc(n)}</li>`).join('\n');
-  const recent = releases.slice(0, RECENT).map((r) => {
+  const full = (r) => {
     const date = r.date ? `<span class="date">${esc(r.date)}</span>` : '';
     return `  <section class="release${isMilestone(r.version) ? ' milestone' : ''}" id="v${escAttr(r.version)}">
     <div class="release-head">
@@ -461,25 +469,45 @@ function changelog() {
 ${notesList(r)}
     </ul>
   </section>`;
-  }).join('\n');
-  const older = releases.slice(RECENT).map((r) => {
+  };
+  const folded = (r) => {
     const date = r.date ? `<span class="date">${esc(r.date)}</span>` : '';
-    return `  <details class="release-fold${isMilestone(r.version) ? ' milestone' : ''}" id="v${escAttr(r.version)}">
-    <summary>${esc(r.title)} <span class="ver">v${esc(r.version)}</span>${date}</summary>
-    <ul>
+    return `    <details class="release-fold${isMilestone(r.version) ? ' milestone' : ''}" id="v${escAttr(r.version)}">
+      <summary>${esc(r.title)} <span class="ver">v${esc(r.version)}</span>${date}</summary>
+      <ul>
 ${notesList(r)}
+      </ul>
+    </details>`;
+  };
+
+  const cut = eras.length ? releases.findIndex((r) => r.version === eras[0].from) : releases.length;
+  const recent = releases.slice(0, cut < 0 ? releases.length : cut).map(full).join('\n');
+
+  const eraBlocks = eras.map((e) => {
+    const from = releases.findIndex((r) => r.version === e.from);
+    const to = releases.findIndex((r) => r.version === e.to);
+    if (from < 0 || to < 0) return '';
+    const inside = releases.slice(from, to + 1);
+    return `  <section class="era">
+    <div class="era-head"><h2>${esc(e.title)}</h2><span class="date">${esc(e.period)}</span></div>
+    <ul class="era-summary">
+${e.summary.map((b) => `      <li>${esc(b)}</li>`).join('\n')}
     </ul>
-  </details>`;
+    <details class="era-fold">
+      <summary>Show all ${inside.length} releases, v${esc(e.to)} to v${esc(e.from)}</summary>
+${inside.map(folded).join('\n')}
+    </details>
+  </section>`;
   }).join('\n');
+
   const body = `<article class="prose"><h1>What's new</h1>
-  <p>The latest Purl updates, newest first, straight from the app's own "What's new" list. Earlier releases are folded below; tap one to open it.</p></article>
+  <p>The latest Purl updates, newest first, straight from the app's own "What's new" list. Everything before them is grouped below by the stretch of work it belongs to; open one to read the releases inside it.</p></article>
 ${recent}
 <h2 class="section-title">Earlier releases</h2>
-${older}`;
+${eraBlocks}`;
   return shell({ lang: 'en', pageKey: 'changelog', path: SLUGS.changelog, title: "What's new", description: 'The full Purl changelog: every update and what changed, newest first.', body, wide: true });
 }
 
-// --- roadmap (English, as in the app) ------------------------------------
 function roadmap() {
   const groups = readArray('src/screens/RoadmapScreen.tsx', 'DONE_GROUPS');
   const next = readArray('src/screens/RoadmapScreen.tsx', 'NEXT');
@@ -560,20 +588,49 @@ ${shots}
 }
 
 // --- user guide (bilingual: user-guide/ + user-guide/no/) -----------------
-// [basename, EN title, NO title, isIndex]
+// [basename, EN title, NO title, isIndex, group]
+// The guide is three groups: where a newcomer starts, the short illustrated
+// tutorials, and the reference pages they lead into. The order here is the
+// order of the nav.
 const GUIDE_PAGES = [
-  ['README', 'User guide', 'Brukerveiledning', true],
-  ['getting-started', 'Getting started', 'Kom i gang', false],
-  ['yarn-stash', 'Yarn stash', 'Stash', false],
-  ['patterns', 'Patterns', 'Mønstre', false],
-  ['projects', 'Projects', 'Prosjekter', false],
-  ['pdf-tools', 'PDF tools', 'PDF-verktøy', false],
-  ['barcode-templates', 'Barcode templates', 'Strekkode-maler', false],
-  ['backups', 'Backups and recovery', 'Sikkerhetskopier og gjenoppretting', false],
-  ['terminology', 'Terminology glossary', 'Terminologiordlisten', false],
-  ['calculator', 'Calculator', 'Strikkekalkulator', false],
-  ['faq', 'FAQ', 'FAQ', false],
+  ['README', 'User guide', 'Brukerveiledning', true, 'start'],
+  ['getting-started', 'Getting started', 'Kom i gang', false, 'start'],
+  ['tutorial-first-project', 'Your first project', 'Ditt første prosjekt', false, 'tutorial'],
+  ['tutorial-read-a-pattern', 'Read a pattern', 'Les en oppskrift', false, 'tutorial'],
+  ['tutorial-stash', 'Get your yarn in', 'Garnet ditt, inn og ut', false, 'tutorial'],
+  ['tutorial-charts', 'Make a chart', 'Lag et diagram', false, 'tutorial'],
+  ['yarn-stash', 'Yarn stash', 'Stash', false, 'reference'],
+  ['patterns', 'Patterns', 'Oppskrifter', false, 'reference'],
+  ['projects', 'Projects', 'Prosjekter', false, 'reference'],
+  ['pdf-tools', 'PDF tools', 'PDF-verktøy', false, 'reference'],
+  ['chart-maker', 'Chart maker', 'Diagramverksted', false, 'reference'],
+  ['barcode-templates', 'Barcodes and the yarn library', 'Strekkoder og garnbiblioteket', false, 'reference'],
+  ['backups', 'Backups and recovery', 'Sikkerhetskopier og gjenoppretting', false, 'reference'],
+  ['terminology', 'Terminology glossary', 'Terminologiordlisten', false, 'reference'],
+  ['calculator', 'Calculator', 'Strikkekalkulator', false, 'reference'],
+  ['faq', 'FAQ', 'FAQ', false, 'reference'],
 ];
+
+const GUIDE_GROUPS = [
+  ['start', 'Start here', 'Start her'],
+  ['tutorial', 'Tutorials', 'Veiledninger'],
+  ['reference', 'Reference', 'Oppslag'],
+];
+
+// Feature flags for guide content. A section fenced with
+//   <!-- purl:flag garment --> ... <!-- /purl:flag -->
+// is dropped unless its flag is on here. The garment maker is compiled out of
+// the released app (src/featureFlags.ts), so a reader on purl.no cannot open
+// it; documenting it publicly sends them looking for a screen that is not
+// there. Turn the flag on in the same change that ships the feature.
+const GUIDE_FLAGS = { garment: false };
+
+function stripFlagged(md) {
+  const fence = /[ \t]*<!--\s*purl:flag\s+([a-z-]+)\s*-->[\s\S]*?<!--\s*\/purl:flag\s*-->[ \t]*\r?\n?/g;
+  const marker = /[ \t]*<!--\s*\/?purl:flag[^>]*-->[ \t]*\r?\n?/g;
+  return md.replace(fence, (block, flag) => (GUIDE_FLAGS[flag] ? block.replace(marker, '') : ''));
+}
+
 function guideLinkRewrite(md, dir) {
   return md.replace(/\]\(\.?\/?([A-Za-z0-9_-]+)\.md(#[^)]*)?\)/g, (_, name, hash = '') => {
     const slug = name === 'README' ? 'index' : name;
@@ -582,25 +639,84 @@ function guideLinkRewrite(md, dir) {
 }
 function guideNav(lang, currentSlug) {
   const dir = lang === 'no' ? '/no' : '';
-  const items = GUIDE_PAGES.map(([base, en, no]) => {
-    const slug = base === 'README' ? 'index' : base;
-    const cur = slug === currentSlug ? ' aria-current="page"' : '';
-    return `<li><a href="${u(dir + '/guide/' + slug + '.html')}"${cur}>${lang === 'no' ? no : en}</a></li>`;
-  }).join('');
   const heading = lang === 'no' ? 'Alle sider i veiledningen' : 'All guide pages';
-  return `<nav class="pagenav"><h2>${heading}</h2><ul>${items}</ul></nav>`;
+  const groups = GUIDE_GROUPS.map(([key, en, no]) => {
+    const items = GUIDE_PAGES.filter((p) => p[4] === key)
+      .map(([base, enT, noT]) => {
+        const slug = base === 'README' ? 'index' : base;
+        const cur = slug === currentSlug ? ' aria-current="page"' : '';
+        return `<li><a href="${u(dir + '/guide/' + slug + '.html')}"${cur}>${lang === 'no' ? noT : enT}</a></li>`;
+      })
+      .join('');
+    return items ? `<h3>${lang === 'no' ? no : en}</h3><ul>${items}</ul>` : '';
+  }).join('');
+  return `<nav class="pagenav pagenav-guide"><h2>${heading}</h2>${groups}</nav>`;
 }
+
+// Turn "image paragraph followed by an italic paragraph" into a real figure
+// with a caption, and make every guide image lazy and full width. Markdown has
+// no figure syntax, so the guide's convention (spec'd for the writers) is the
+// image on its own line with the caption in italics under it.
+function guideFigures(html, lang) {
+  const dir = lang === 'no' ? '/no' : '';
+  const haveImage = (src) => {
+    const name = src.split('/').pop();
+    return existsSync(join(PURL, 'user-guide', lang === 'no' ? 'no' : '', 'images', name));
+  };
+  const fig = (src, alt, cap) =>
+    !haveImage(src)
+      ? cap
+        ? `<p class="figpending">${cap}</p>`
+        : ''
+      :
+    `<figure class="guidefig"><img src="${src}" alt="${alt}" loading="lazy" decoding="async" />` +
+    (cap ? `<figcaption>${cap}</figcaption>` : '') +
+    `</figure>`;
+  // Inside a numbered step, marked keeps the image and its caption in one
+  // paragraph, separated by a newline. At the top level they are two
+  // paragraphs. Both shapes are the same figure.
+  html = html.replace(
+    /<p><img src="([^"]+)" alt="([^"]*)"\s*\/?>\s*<em>([^<]+)<\/em><\/p>/g,
+    (_, src, alt, cap) => fig(src, alt, cap),
+  );
+  html = html.replace(
+    /<p><img src="([^"]+)" alt="([^"]*)"\s*\/?><\/p>\s*<p><em>([^<]+)<\/em><\/p>/g,
+    (_, src, alt, cap) => fig(src, alt, cap),
+  );
+  html = html.replace(
+    /<p><img src="([^"]+)" alt="([^"]*)"\s*\/?><\/p>/g,
+    (_, src, alt) => fig(src, alt, ''),
+  );
+  return html;
+}
+
+function copyGuideImages(lang) {
+  const from = join(PURL, 'user-guide', lang === 'no' ? 'no' : '', 'images');
+  if (!existsSync(from)) return 0;
+  const dir = lang === 'no' ? '/no' : '';
+  const to = join(HERE, `${dir}/guide/images`.replace(/^\//, ''));
+  mkdirSync(to, { recursive: true });
+  let n = 0;
+  for (const f of readdirSync(from)) {
+    if (!/\.(png|jpe?g|webp|gif|svg)$/i.test(f)) continue;
+    copyFileSync(join(from, f), join(to, f));
+    n++;
+  }
+  return n;
+}
+
 function buildGuide(lang) {
   const dir = lang === 'no' ? '/no' : '';
   const src = join(PURL, 'user-guide', lang === 'no' ? 'no' : '');
   mkdirSync(join(HERE, `${dir}/guide`.replace(/^\//, '')), { recursive: true });
   let count = 0;
+  copyGuideImages(lang);
   for (const [base, enTitle, noTitle, isIndex] of GUIDE_PAGES) {
     const srcFile = join(src, `${base}.md`);
     if (!existsSync(srcFile)) { console.warn(`skip (missing ${lang}): ${base}.md`); continue; }
     const title = lang === 'no' ? noTitle : enTitle;
-    const md = guideLinkRewrite(readFileSync(srcFile, 'utf8'), dir);
-    const bodyHtml = marked.parse(md);
+    const md = guideLinkRewrite(stripFlagged(readFileSync(srcFile, 'utf8')), dir);
+    const bodyHtml = guideFigures(marked.parse(md), lang);
     const slug = isIndex ? 'index' : base;
     const html = shell({
       lang,

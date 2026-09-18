@@ -39,116 +39,130 @@
   <a class="lang" href="/no/guide/backups.html" hreflang="no" aria-label="Bytt til norsk / Switch to Norwegian"><b>EN</b><span aria-hidden="true">/</span>NO</a>
 </header>
 <main class="wrap">
-<article class="prose"><h1>Backups + recovery</h1>
-<p>Three layers of protection against losing your data.</p>
+<article class="prose"><h1>Backups and recovery</h1>
+<p>Three layers of protection against losing your work.</p>
 <h2>The short version</h2>
 <ul>
-<li><strong>Recently Deleted</strong>: anything you delete sits in trash for
-30 days. One tap to restore.</li>
-<li><strong>Snapshots</strong>: the app auto-snapshots its entire state every
-day or so, keeping 7 days of history. Restore from a snapshot
-if something went badly wrong.</li>
-<li><strong>Backup files</strong>: you can export a single <code>.purl</code> file with
-everything in it, save it to Drive / email it to yourself /
-share it however. The path for moving to a new device or
-keeping an off-device safety copy.</li>
+<li><strong>Recently deleted</strong>: anything you delete sits in the trash for 30 days. One
+tap to restore.</li>
+<li><strong>Snapshots</strong>: Purl takes a small snapshot of everything once a day and
+keeps seven days of them. The way back from something that went badly wrong.</li>
+<li><strong>Backup files</strong>: one <code>.purl</code> file with everything in it, saved wherever you
+like. The way to a new device, and the only copy that survives losing this
+one.</li>
 </ul>
-<p>All three live under <strong>More → Data</strong>: Recover (the first two),
-Backup (the third).</p>
-<h2>Recently Deleted</h2>
-<p>When you delete a yarn, equipment item, project, or pattern, it
-doesn&#39;t actually go away. It goes into trash for 30 days. During
-that window you can restore it with a tap.</p>
-<p><strong>More → Data → Recover</strong> shows everything in the trash, newest
-first, alongside a timeline of what you&#39;ve recently <em>added</em> or
-<em>imported</em> (so you can see both directions of what you&#39;ve done
-lately).</p>
-<p>Tap <strong>Restore</strong> on a trash entry → the record comes back, files
-and all. The action is logged in the timeline so you can see when
-you restored.</p>
-<p>After 30 days, trash entries are purged automatically; the files
-they referenced get unlinked at the same time.</p>
+<p>All three live on the <strong>More</strong> tab, under <strong>Your data</strong>: <strong>Backups &amp; history</strong>
+for the first two, <strong>Export &amp; import</strong> for the third.</p>
+<figure class="guidefig"><img src="./images/more-your-data.webp" alt="The Your data section of the More tab, with the Backups and history and Export and import tiles" loading="lazy" decoding="async" /><figcaption>Two tiles, under the heading Your data.</figcaption></figure>
+<h2>Recently deleted</h2>
+<p>Delete a yarn, a piece of equipment, a project or a pattern and it does not
+actually go away. It sits in the trash for 30 days.</p>
+<p>Open <strong>More</strong>, then <strong>Backups &amp; history</strong>. The first section is <strong>Recently
+deleted</strong>, newest first. Each entry offers <strong>Restore</strong>, which brings the record
+back with the files it had, or <strong>Delete forever</strong>, which does exactly that.</p>
+<p>Under it, <strong>Activity history</strong> is a running timeline of what you have added,
+imported, restored and deleted lately, so you can see both directions of what
+you have been doing.</p>
+<p>After 30 days, trash entries are cleared out automatically.</p>
+<figure class="guidefig"><img src="./images/recover-screen.webp" alt="The Backups and history screen showing Recently deleted, Activity history and Snapshot history" loading="lazy" decoding="async" /><figcaption>Deleted items, your recent activity, and the snapshot dates, on one screen.</figcaption></figure>
 <h2>Snapshots</h2>
-<p>Periodically (automatically, in the background, no setup) Purl
-saves a snapshot of its entire state. Every yarn, every pattern,
-every project, every photo reference, every preference.</p>
-<p>7 days of snapshots are kept; older ones are pruned. They live
-inside Purl&#39;s own storage, not anywhere you have to manage.</p>
-<p>To use one: <strong>More → Data → Recover</strong> → scroll to <strong>Snapshots</strong>
-at the bottom → tap a date. The diff view shows what&#39;s in the
-snapshot that <em>isn&#39;t</em> in your current state. Pick what to
-restore (per category, or per item).</p>
-<p>Useful for the &quot;I imported a bad backup over my data&quot; or &quot;I
-deleted ten yarns thinking they were duplicates&quot; cases, where the
-per-item trash isn&#39;t enough.</p>
-<p>The catch: snapshots are local-only. A factory reset of your phone
-wipes them too. For off-device safety, use Backup files.</p>
-<h2>Backup files (.purl)</h2>
-<p><strong>More → Data → Backup</strong> opens the picker. Tick the categories you
-want to include (Projects / Yarn / Patterns / Equipment / etc.).
-Small things like settings, the colour palette, your fibre list,
-your barcode templates, and your activity log always come along
-automatically (they&#39;re shared across the app and you&#39;d always
-want them).</p>
-<p>Tap <strong>Export</strong> → the system share sheet opens → save to Drive /
-email to yourself / save to Files / send via WhatsApp / wherever.</p>
-<p>The output is a single <code>.purl</code> file. The file size is roughly your
-total stored data. For a year of active use, expect tens or
-hundreds of MB depending on how many PDFs you&#39;ve imported.</p>
-<h3>Importing a backup</h3>
-<p>Two paths:</p>
-<ul>
-<li><strong>From inside the app</strong>: More → Data → Backup → Import tab. Pick
-the <code>.purl</code> file.</li>
-<li><strong>From your file manager</strong>: tap a <code>.purl</code> file directly. Purl
-opens straight to the import screen with the file pre-loaded.</li>
-</ul>
-<p>The import shows a preview (what&#39;s inside, how old, what app
-version produced it). Pick the merge strategy per category:</p>
-<ul>
-<li><strong>Add</strong>: merges (keep yours + theirs).</li>
-<li><strong>Replace</strong>: overwrites (only the imported records remain
-for that category).</li>
-<li><strong>Skip</strong>: leaves that category alone.</li>
-</ul>
-<h2>Sharing patterns + templates separately</h2>
-<p>Two smaller file formats for sharing <em>just</em> one thing:</p>
-<ul>
-<li><strong>.purlp</strong>: a single hand-written pattern. Useful for &quot;I made
-this beanie pattern, here you go.&quot; Share from the pattern&#39;s
-detail screen. Tapping a <code>.purlp</code> in a file manager opens Purl
-with the pattern added.</li>
-<li><strong>.purlt</strong>: your barcode template library. Useful for
-bootstrapping a friend&#39;s stash. They don&#39;t have to scan every
-yarn themselves. Share from Barcode templates → the share icon
-in the header. Tapping a <code>.purlt</code> in a file manager opens Purl
-with the merge preview.</li>
-</ul>
-<p>These are tiny JSON files (typically KB, not MB) and don&#39;t include
-your yarn, projects, or photos. Just the named thing.</p>
-<h2>Moving to a new device</h2>
+<p>Purl saves a snapshot of its whole state automatically, when you open the app
+and more than 24 hours have passed. Every yarn, every pattern, every project,
+every preference. Seven days are kept and older ones are pruned.</p>
+<p>They live inside Purl&#39;s own storage, not anywhere you have to manage.</p>
+<p>The same screen carries the controls: <strong>Recovery snapshots</strong> with <strong>On</strong> and
+<strong>Off</strong>, the date of the <strong>Last snapshot</strong>, and <strong>Take snapshot now</strong> if you
+are about to do something drastic.</p>
+<p>To use one, scroll to <strong>Snapshot history</strong> and tap a date. Purl compares that
+snapshot against your data now and lists only what differs, marked <strong>Deleted
+since</strong> or <strong>Changed since</strong>. Tap <strong>Restore</strong> on an item to bring it back.</p>
+<p>Restoring a changed item overwrites the current version with the snapshot
+version, so if you might want today&#39;s version back, take a snapshot first.</p>
+<p>The catch: snapshots are local-only. A factory reset of your phone wipes them
+too. For off-device safety, use backup files.</p>
+<h2>Backup files</h2>
+<p>Open <strong>More</strong>, then <strong>Export &amp; import</strong>. The screen is headed <strong>Choose items</strong>
+and has two modes, <strong>Export</strong> and <strong>Import</strong>.</p>
+<h3>Exporting</h3>
 <ol>
-<li>On the old device: <strong>More → Data → Backup → Export</strong>. Tick
-everything. Save the <code>.purl</code> file somewhere accessible
-(Drive, email, USB transfer).</li>
-<li>Install Purl on the new device.</li>
-<li>Open the <code>.purl</code> file from the new device&#39;s file manager (or
-import via the Backup screen). Use <strong>Replace</strong> for every
-category: the new device is empty.</li>
+<li>Tap <strong>Export</strong>.</li>
+<li>Tick what you want to keep, section by section: <strong>Projects</strong>, <strong>PDF
+patterns</strong>, <strong>Patterns</strong>, <strong>Yarn</strong>, <strong>Equipment</strong>, <strong>Colour charts</strong>.
+<strong>Select all</strong> beside a section heading ticks everything in that section.
+Ticking a project brings its yarn and the pattern it is tracking along
+automatically.</li>
+<li>Tap <strong>Export</strong>, at the bottom. Every section starts open, so on a full
+library that button is a long way down; tap a section heading to fold it
+away and the bottom comes up quickly. The button shows how many items and
+roughly how large the file will be.</li>
+<li>Pick where it goes. On Android you choose a folder; otherwise the system
+share sheet opens, so you can put it in Drive, mail it to yourself, or save
+it to Files.</li>
 </ol>
-<p>That&#39;s it. PDFs, photos, drawings, sticky notes, dye lots,
-counters: everything travels.</p>
+<p>Your yarn library, saved colours, fibre list, categories and settings always
+travel along. They are small, they are shared across the whole app, and you
+would always want them.</p>
+<figure class="guidefig"><img src="./images/backup-export.webp" alt="The Choose items screen in Export mode with sections ticked and the Export button" loading="lazy" decoding="async" /><figcaption>Per-item ticks, with the size of each one, and the total on the button.</figcaption></figure>
+<h3>Importing</h3>
+<p>Two ways in: <strong>Import</strong> inside <strong>Export &amp; import</strong>, then <strong>Choose backup
+file</strong>; or tap a <code>.purl</code> file in your file manager, which opens Purl on this
+screen with the file already loaded.</p>
+<p>Either way you get a preview, item by item, before anything changes. Items you
+already have are tagged <strong>on device</strong>, and <strong>newer in backup</strong> where the
+backup&#39;s copy is more recent. Tick what you want and tap <strong>Import</strong>.</p>
+<p>New items are added. Items you already have keep their place and take their
+knitting progress from the backup: row counters, annotations, notes, reading
+position. Nothing you leave unticked is touched.</p>
+<figure class="guidefig"><img src="./images/backup-import.webp" alt="The Choose items screen in Import mode, with a loaded file and on-device tags" loading="lazy" decoding="async" /><figcaption>Nothing is imported until you have seen the list and ticked it.</figcaption></figure>
+<h2>Sharing patterns and libraries separately</h2>
+<p>Two smaller formats, for sharing one thing rather than everything:</p>
+<ul>
+<li><strong>.purlp</strong>: a single hand-written pattern. Share it from the pattern&#39;s own
+screen. Opening one adds that pattern to the library.</li>
+<li><strong>.purlt</strong>: your yarn library, for bootstrapping a friend who is starting
+from nothing. Share it from the share icon in <strong>Yarn library</strong>. See
+<a href="/guide/barcode-templates.html">Barcodes and the yarn library</a>.</li>
+</ul>
+<p>These are tiny files and do not include your yarn, projects, or photos. Just
+the named thing.</p>
+<h2>Delete all data on this device</h2>
+<p>At the very bottom of the <strong>More</strong> tab is <strong>Delete all data on this device</strong>.
+It is the most dangerous thing in the app, so it asks twice, and offers you a
+way out in between.</p>
+<ol>
+<li><strong>Delete all data?</strong> explains what goes: all yarn, equipment, patterns,
+projects, progress, PDFs and photos. It offers <strong>Back up first</strong>, <strong>Skip
+backup</strong>, or <strong>Cancel</strong>.</li>
+<li><strong>Back up first</strong> runs a full export and only carries on once the file is
+safely written. If the export fails, Purl stops there and deletes nothing.</li>
+<li><strong>Are you sure?</strong> is the last step. <strong>Delete everything</strong> wipes the device,
+including the recently-deleted bin and the recovery snapshots, and cannot be
+undone.</li>
+</ol>
+<p>Take the backup. It costs one tap.</p>
+<figure class="guidefig"><img src="./images/reset-confirm.webp" alt="The Delete all data dialog offering Back up first, Skip backup and Cancel" loading="lazy" decoding="async" /><figcaption>The one dialog worth reading twice.</figcaption></figure>
+<h2>Moving everything to a new phone</h2>
+<ol>
+<li>On the old device, open <strong>More</strong>, then <strong>Export &amp; import</strong>.</li>
+<li>Tap <strong>Export</strong>, then <strong>Select all</strong> on every section.</li>
+<li>Tap <strong>Export</strong> at the bottom and save the <code>.purl</code> file somewhere you can
+reach from the new device: Drive, email, a USB transfer.</li>
+<li>Install Purl on the new device.</li>
+<li>Open the <code>.purl</code> file from the new device&#39;s file manager, or open <strong>More</strong>,
+<strong>Export &amp; import</strong>, <strong>Import</strong>, then <strong>Choose backup file</strong>.</li>
+<li>Check the preview, tap <strong>Select all</strong> on every section, and tap <strong>Import</strong>.</li>
+<li>Close and reopen Purl.</li>
+</ol>
+<p>The new device is empty, so nothing collides. PDFs, photos, drawings,
+bookmarks, dye lots and counters all travel.</p>
 <h2>See also</h2>
 <ul>
-<li><a href="/guide/yarn-stash.html">Yarn stash</a>: the stash that&#39;s being backed
-up.</li>
-<li><a href="/guide/barcode-templates.html">Barcode templates</a>: the <code>.purlt</code>
-format for sharing template libraries.</li>
-<li><a href="/guide/patterns.html">Patterns</a>: the <code>.purlp</code> format for sharing
-patterns.</li>
+<li><a href="/guide/yarn-stash.html">Yarn stash</a>: the stash that is being backed up.</li>
+<li><a href="/guide/barcode-templates.html">Barcodes and the yarn library</a>: the <code>.purlt</code> format.</li>
+<li><a href="/guide/patterns.html">Patterns</a>: the <code>.purlp</code> format.</li>
 </ul>
 </article>
-<nav class="pagenav"><h2>All guide pages</h2><ul><li><a href="/guide/index.html">User guide</a></li><li><a href="/guide/getting-started.html">Getting started</a></li><li><a href="/guide/yarn-stash.html">Yarn stash</a></li><li><a href="/guide/patterns.html">Patterns</a></li><li><a href="/guide/projects.html">Projects</a></li><li><a href="/guide/pdf-tools.html">PDF tools</a></li><li><a href="/guide/barcode-templates.html">Barcode templates</a></li><li><a href="/guide/backups.html" aria-current="page">Backups and recovery</a></li><li><a href="/guide/terminology.html">Terminology glossary</a></li><li><a href="/guide/calculator.html">Calculator</a></li><li><a href="/guide/faq.html">FAQ</a></li></ul></nav>
+<nav class="pagenav pagenav-guide"><h2>All guide pages</h2><h3>Start here</h3><ul><li><a href="/guide/index.html">User guide</a></li><li><a href="/guide/getting-started.html">Getting started</a></li></ul><h3>Tutorials</h3><ul><li><a href="/guide/tutorial-first-project.html">Your first project</a></li><li><a href="/guide/tutorial-read-a-pattern.html">Read a pattern</a></li><li><a href="/guide/tutorial-stash.html">Get your yarn in</a></li><li><a href="/guide/tutorial-charts.html">Make a chart</a></li></ul><h3>Reference</h3><ul><li><a href="/guide/yarn-stash.html">Yarn stash</a></li><li><a href="/guide/patterns.html">Patterns</a></li><li><a href="/guide/projects.html">Projects</a></li><li><a href="/guide/pdf-tools.html">PDF tools</a></li><li><a href="/guide/chart-maker.html">Chart maker</a></li><li><a href="/guide/barcode-templates.html">Barcodes and the yarn library</a></li><li><a href="/guide/backups.html" aria-current="page">Backups and recovery</a></li><li><a href="/guide/terminology.html">Terminology glossary</a></li><li><a href="/guide/calculator.html">Calculator</a></li><li><a href="/guide/faq.html">FAQ</a></li></ul></nav>
 </main>
 <footer class="site-footer"><div class="footer-inner">
   <div class="footer-cols"><div class="footer-col"><h2>Purl</h2><ul><li><a href="/">Home</a></li><li><a href="/guide/">User guide</a></li><li><a href="/support/">Support</a></li><li><a href="/feedback/">Send feedback</a></li></ul></div><div class="footer-col"><h2>Updates</h2><ul><li><a href="/changelog/">What's new</a></li><li><a href="/roadmap/">Roadmap</a></li></ul></div><div class="footer-col"><h2>Legal</h2><ul><li><a href="/privacy/">Privacy policy</a></li><li><a href="/terms/">Terms of use</a></li></ul></div><div class="footer-col"><h2>More</h2><ul><li><a href="/press/">Press kit</a></li></ul></div></div>

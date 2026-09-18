@@ -40,85 +40,99 @@
 </header>
 <main class="wrap">
 <article class="prose"><h1>Calculator</h1>
-<p>Two calculators in the app:</p>
+<p>Six small tools on one scrolling screen. Type what you know and the
+answer appears underneath as you go. There is no Calculate button
+and nothing to clear: fill in the one card you need and ignore the
+rest.</p>
+<h2>Opening it</h2>
 <ul>
-<li><strong>The big one</strong>: opened from More → Calculator, from the pattern
-reader header, from the PDF viewer tools, or from the calculator
-icon next to a project&#39;s gauge row. A quick-math card up top,
-then the craft tools: gauge swatch, stitch resize, even shaping,
-skeins needed.</li>
-<li><strong>The little one</strong>: inline four-function calculator inside the
-PDF viewer&#39;s tools dial. Quick arithmetic mid-row without leaving
-the PDF.</li>
+<li><strong>More</strong>, then <strong>Craft calculator</strong> in the <strong>Tools</strong> section.</li>
+<li>The <strong>Calculator</strong> tool in the PDF viewer&#39;s tool fan, so you can
+work out a number without leaving the pattern.</li>
+<li>The calculator icon in the pattern reader header.</li>
+<li><strong>Use in calculator</strong> on a project&#39;s gauge row. That one opens
+with the gauge you recorded already filled in.</li>
 </ul>
-<p>This page covers the big one.</p>
+<p>Whichever way you come in, it is the same screen.</p>
+<figure class="guidefig"><img src="./images/calculator-top.webp" alt="The Calculator screen with the Knitting and Crochet chips and the Quick math card" loading="lazy" decoding="async" /><figcaption>Set the craft first. Two of the tools change their wording to match.</figcaption></figure>
+<h2>Knitting or crochet</h2>
+<p>At the top, <strong>Knitting</strong> and <strong>Crochet</strong>. It starts on your default
+craft, set in Settings.</p>
+<p>The choice changes the wording in two places: <strong>Gauge from a
+swatch</strong> asks for stitches or for stitches worked as sc or dc, and
+<strong>Increase / decrease evenly</strong> writes its answer in knitting terms
+or in crochet terms.</p>
+<p>The calculator works in centimetres, and in metres for yarn
+lengths.</p>
 <h2>Quick math</h2>
-<p>At the top: a four-function calculator with parentheses, for the
-in-between numbers (&quot;3 skeins × 175 m&quot;). Below it, the craft
-sections stack vertically; scroll through them and fill in just
-the one you need. The others stay empty.</p>
-<h3>Gauge swatch</h3>
-<p>You knit a swatch. You measure it:</p>
+<p>A four-function calculator with brackets, for the in-between sums
+(&quot;3 skeins at 175 m&quot;). It handles plus, minus, times, divide,
+decimals and negative numbers. There are no scientific functions.</p>
+<h2>Gauge from a swatch</h2>
+<p>You knitted a swatch. This turns it into a gauge per 10 cm.</p>
 <ul>
-<li>Number of <strong>stitches</strong> across.</li>
-<li>Over what <strong>width</strong> (cm or in).</li>
-<li>Number of <strong>rows</strong> down.</li>
-<li>Over what <strong>height</strong>.</li>
+<li><strong>Stitches counted</strong>, and <strong>Across this width (cm)</strong>.</li>
+<li><strong>Rows counted</strong>, and <strong>Over this height (cm)</strong>.</li>
 </ul>
-<p>The calculator gives you stitches-per-cm and rows-per-cm (or
-per-inch), plus a hint at the implied yarn weight.</p>
-<h3>Stitch resize</h3>
-<p>You have a pattern. The pattern was knit at a certain gauge, but
-you knit at a different gauge. How many stitches do you cast on
-to hit the same finished dimensions?</p>
+<p>You get <strong>Stitch gauge</strong> and <strong>Row gauge</strong>, each per 10 cm. The two
+halves are independent, so you can fill in one and leave the other
+empty.</p>
+<p>Measure over as wide a piece of the swatch as you can. Counting 18
+stitches over 8 cm gives a truer figure than counting 5 over 2 cm.</p>
+<figure class="guidefig"><img src="./images/calculator-gauge.webp" alt="The Gauge from a swatch card with stitches, width and the resulting gauge" loading="lazy" decoding="async" /><figcaption>Count over the widest part of the swatch you can manage.</figcaption></figure>
+<h2>Stitches and rows for a width</h2>
+<p>The one most people want first: how many stitches do I cast on to
+get the width I want?</p>
 <ul>
-<li>Pattern&#39;s gauge (sts × rows / over).</li>
-<li>Your actual gauge.</li>
-<li>The pattern&#39;s original stitch count.</li>
+<li><strong>Stitch gauge (sts / 10 cm)</strong> and <strong>Desired width (cm)</strong> give you
+<strong>Cast on</strong>.</li>
+<li><strong>Row gauge (rows / 10 cm)</strong> and <strong>Desired length (cm)</strong> give you
+<strong>Work</strong>, in rows.</li>
 </ul>
-<p>Output: the stitch count you need at your gauge. Same for rows.</p>
-<h3>Even shaping</h3>
-<p>You need to decrease (or increase) some number of stitches
-evenly across a row.</p>
+<figure class="guidefig"><img src="./images/calculator-width.webp" alt="The Stitches and rows for a width card showing a cast-on count" loading="lazy" decoding="async" /><figcaption>Your gauge plus the measurement you want equals the number to cast on.</figcaption></figure>
+<h2>Adjust a pattern to your gauge</h2>
+<p>For when the pattern&#39;s tension is not yours, and you want the
+pattern&#39;s finished size anyway.</p>
 <ul>
-<li>Total stitches.</li>
-<li>How many to decrease (or increase).</li>
-<li>Edge padding optional.</li>
+<li><strong>Pattern stitch count</strong>, the number the pattern tells you to cast
+on.</li>
+<li><strong>Pattern gauge (sts / 10 cm)</strong>.</li>
+<li><strong>Your gauge (sts / 10 cm)</strong>.</li>
 </ul>
-<p>Output: an instruction string like &quot;k4, <em>k2tog, k7</em> until 6 sts,
-k6&quot;, what you&#39;d write into a custom shaping row.</p>
-<p>The calc rounds in favour of leaving extra rather than running
-short.</p>
-<h3>Skeins needed</h3>
-<p>You estimate the project needs X meters of yarn. Each skein
-is Y meters. How many skeins do you buy?</p>
-<p>Output: skeins (rounded up), with <strong>+10%</strong> and <strong>+20%</strong> safety
-lines so you can pick your risk tolerance.</p>
-<h2>Seeding from a project</h2>
-<p>Open the calculator from a project&#39;s gauge row (the calculator
-icon next to the actual-gauge line) and the gauge swatch opens
-pre-filled with what you recorded. Saves you re-typing.</p>
-<p>Open from the pattern reader header and no specific gauge is
-pre-loaded (there&#39;s no project context).</p>
-<h2>Tips</h2>
+<p>You get <strong>Cast on instead</strong>, plus a note saying what width that
+keeps.</p>
+<h2>Increase / decrease evenly</h2>
+<p>You have a stitch count and you need a different one, spread evenly
+across a row or round.</p>
 <ul>
-<li>Stitches-per-cm is more precise than per-10cm, but the display
-shows the span you typed (so &quot;22 sts over 10 cm&quot; stays as
-written; the math is done at higher precision under the
-hood).</li>
-<li>Quick math handles negative numbers, decimals, and parentheses
-fine, but doesn&#39;t have scientific functions (sin/cos/log). Use
-your phone&#39;s built-in calculator if you need those.</li>
+<li><strong>Current stitches</strong>.</li>
+<li><strong>Target stitches</strong>.</li>
 </ul>
+<p>The answer comes out as an instruction you can work straight from,
+in the terms of the craft you picked at the top, for example a
+repeat with k2tog for knitting or a decrease over two stitches for
+crochet. Where the repeats do not divide evenly, it tells you which
+of them to work one stitch longer so the shaping stays spread out.</p>
+<p>If the change will not fit across the stitches you have, it says so
+rather than giving you a number that cannot be worked.</p>
+<figure class="guidefig"><img src="./images/calculator-shaping.webp" alt="The Increase / decrease evenly card with a worked repeat instruction" loading="lazy" decoding="async" /><figcaption>The answer is written as a repeat you can follow, not just a count.</figcaption></figure>
+<h2>Skeins needed</h2>
+<ul>
+<li><strong>Total length needed (m)</strong>, from the pattern.</li>
+<li><strong>Length per skein (m)</strong>, from the ball band.</li>
+</ul>
+<p>You get <strong>Buy</strong>, rounded up, with a reminder to grab an extra if the
+dye lot matters. For a jumper in a single colour, one spare ball is
+cheap insurance; matching a dye lot later usually is not possible.</p>
 <h2>See also</h2>
 <ul>
-<li><a href="/guide/projects.html">Projects</a>: the gauge row and the
-calculator-icon path.</li>
-<li><a href="/guide/pdf-tools.html">PDF tools</a>: the inline four-function calc
-inside the PDF viewer.</li>
+<li><a href="/guide/projects.html">Projects</a>: recording your actual gauge, and the
+<strong>Use in calculator</strong> shortcut.</li>
+<li><a href="/guide/pdf-tools.html">PDF tools</a>: the calculator inside the tool fan.</li>
+<li><a href="/guide/yarn-stash.html">Yarn stash</a>: what a ball band tells you.</li>
 </ul>
 </article>
-<nav class="pagenav"><h2>All guide pages</h2><ul><li><a href="/guide/index.html">User guide</a></li><li><a href="/guide/getting-started.html">Getting started</a></li><li><a href="/guide/yarn-stash.html">Yarn stash</a></li><li><a href="/guide/patterns.html">Patterns</a></li><li><a href="/guide/projects.html">Projects</a></li><li><a href="/guide/pdf-tools.html">PDF tools</a></li><li><a href="/guide/barcode-templates.html">Barcode templates</a></li><li><a href="/guide/backups.html">Backups and recovery</a></li><li><a href="/guide/terminology.html">Terminology glossary</a></li><li><a href="/guide/calculator.html" aria-current="page">Calculator</a></li><li><a href="/guide/faq.html">FAQ</a></li></ul></nav>
+<nav class="pagenav pagenav-guide"><h2>All guide pages</h2><h3>Start here</h3><ul><li><a href="/guide/index.html">User guide</a></li><li><a href="/guide/getting-started.html">Getting started</a></li></ul><h3>Tutorials</h3><ul><li><a href="/guide/tutorial-first-project.html">Your first project</a></li><li><a href="/guide/tutorial-read-a-pattern.html">Read a pattern</a></li><li><a href="/guide/tutorial-stash.html">Get your yarn in</a></li><li><a href="/guide/tutorial-charts.html">Make a chart</a></li></ul><h3>Reference</h3><ul><li><a href="/guide/yarn-stash.html">Yarn stash</a></li><li><a href="/guide/patterns.html">Patterns</a></li><li><a href="/guide/projects.html">Projects</a></li><li><a href="/guide/pdf-tools.html">PDF tools</a></li><li><a href="/guide/chart-maker.html">Chart maker</a></li><li><a href="/guide/barcode-templates.html">Barcodes and the yarn library</a></li><li><a href="/guide/backups.html">Backups and recovery</a></li><li><a href="/guide/terminology.html">Terminology glossary</a></li><li><a href="/guide/calculator.html" aria-current="page">Calculator</a></li><li><a href="/guide/faq.html">FAQ</a></li></ul></nav>
 </main>
 <footer class="site-footer"><div class="footer-inner">
   <div class="footer-cols"><div class="footer-col"><h2>Purl</h2><ul><li><a href="/">Home</a></li><li><a href="/guide/">User guide</a></li><li><a href="/support/">Support</a></li><li><a href="/feedback/">Send feedback</a></li></ul></div><div class="footer-col"><h2>Updates</h2><ul><li><a href="/changelog/">What's new</a></li><li><a href="/roadmap/">Roadmap</a></li></ul></div><div class="footer-col"><h2>Legal</h2><ul><li><a href="/privacy/">Privacy policy</a></li><li><a href="/terms/">Terms of use</a></li></ul></div><div class="footer-col"><h2>More</h2><ul><li><a href="/press/">Press kit</a></li></ul></div></div>

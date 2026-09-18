@@ -168,6 +168,52 @@ a { color: var(--primary); }
 }
 
 /* Guide sub-nav (all pages) ----------------------------------------------- */
+/* Guide figures -----------------------------------------------------------
+   A screenshot of a phone is very tall, so height is what has to be capped,
+   not width. Wide crops still fill the column. The frame matches the
+   screenshot treatment on the landing page. */
+.guidefig { margin: 20px 0 22px; text-align: center; }
+.guidefig img {
+  max-width: 100%;
+  max-height: 520px;
+  width: auto;
+  height: auto;
+  display: inline-block;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--surface);
+}
+.guidefig figcaption {
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.45;
+  margin: 8px auto 0;
+  max-width: 44ch;
+  text-align: center;
+}
+/* A figure whose screenshot has not been captured yet. The caption usually
+   carries a real hint, so it stays as a muted line rather than disappearing
+   with the missing image. */
+.prose .figpending {
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.5;
+  margin: 0 0 14px;
+  padding-left: 12px;
+  border-left: 2px solid var(--border);
+}
+
+/* Steps read as a task, not as prose. */
+.prose ol { counter-reset: none; }
+.prose ol > li { margin: 0 0 10px; padding-left: 2px; }
+.prose ol > li::marker { color: var(--primary); font-weight: 700; }
+
+.pagenav-guide h3 {
+  font-size: 12px; letter-spacing: .05em; text-transform: uppercase;
+  color: var(--muted); margin: 16px 0 8px; font-weight: 700;
+}
+.pagenav-guide h3:first-of-type { margin-top: 12px; }
+
 .pagenav { margin-top: 44px; padding-top: 18px; border-top: 1px solid var(--border); }
 .pagenav h2 { font-size: 13px; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); margin: 0 0 10px; }
 .pagenav ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
@@ -195,6 +241,19 @@ a { color: var(--primary); }
 .release li { margin: 0 0 7px; }
 .release.milestone { border-color: var(--primary); background: var(--surface-alt); }
 /* Older releases fold behind a tap so the page stays scannable. */
+/* Changelog era cards: one stretch of the app's history, summarised, with its
+   releases folded inside. Mirrors the What's new screen in the app. */
+.era { background: var(--surface-alt); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px 20px; margin: 0 0 14px; }
+.era-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 10px; }
+.era-head h2 { margin: 0; font-size: 18px; }
+.era-head .date { color: var(--muted); font-size: 13px; }
+.era-summary { margin: 0 0 14px; padding-left: 20px; }
+.era-summary li { margin: 0 0 7px; }
+.era-fold > summary { cursor: pointer; font-weight: 700; font-size: 14px; color: var(--primary); list-style-position: inside; padding: 4px 0; }
+.era-fold > summary:hover { text-decoration: underline; }
+.era-fold[open] > summary { margin-bottom: 10px; }
+.era .release-fold { background: var(--bg); }
+
 .release-fold { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin: 0 0 10px; }
 .release-fold summary { cursor: pointer; padding: 13px 20px; font-weight: 700; font-size: 15px; list-style-position: inside; }
 .release-fold summary:hover { color: var(--primary); }
@@ -310,7 +369,10 @@ a { color: var(--primary); }
 /* On small screens the header is a tight single row, so the switch lives in
    the footer instead (hidden there on wider screens). */
 .footer-theme { display: none; margin-top: 20px; }
-@media (max-width: 560px) { .footer-theme { display: block; } }
+@media (max-width: 560px) {
+  .guidefig { margin: 16px -4px 18px; }
+  .guidefig img { max-height: 62vh; border-radius: 12px; }
+  .guidefig figcaption { font-size: 13px; max-width: none; } .footer-theme { display: block; } }
 
 /* Dark theme tokens: chosen explicitly (data-theme="dark"), or system-dark
    while on Auto (no data-theme). Most of the site follows via the variables;

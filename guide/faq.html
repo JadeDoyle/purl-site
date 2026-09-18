@@ -43,53 +43,61 @@
 <p>Things that come up often, things that look like bugs but aren&#39;t,
 and known limitations.</p>
 <h2>Does Purl upload my data anywhere?</h2>
-<p>No. Everything lives on your device. Purl has no account system,
-no cloud, no analytics, no telemetry. You can use it on an
-airplane. The trade-off is that backups are your responsibility
+<p>No. Everything lives on your device. Purl has no account system and
+no cloud. You can use it on an airplane. The trade-off is that backups are your responsibility
 (see <a href="/guide/backups.html">backups</a>) but the app makes them simple.</p>
 <h2>How do I move my data to a new phone?</h2>
-<p>Export a <code>.purl</code> backup from More → Data → Backup, transfer the
-file to the new device (Drive, email, USB, anything works),
-install Purl on the new phone, and import. See
+<p>Export a <code>.purl</code> backup from <strong>More</strong> &gt; <strong>Your data</strong> &gt; <strong>Export &amp;
+import</strong>, transfer the file to the new device (Drive, email, USB,
+anything works), install Purl on the new device, and import. See
 <a href="/guide/backups.html">backups</a> for the step-by-step.</p>
 <h2>I deleted something by accident.</h2>
-<p>Don&#39;t panic. <strong>More → Data → Recover</strong> has your back:</p>
+<p>Don&#39;t panic. <strong>More</strong> &gt; <strong>Your data</strong> &gt; <strong>Backups &amp; history</strong> has
+your back, in three sections:</p>
 <ul>
-<li><strong>Recently Deleted</strong>: anything you deleted in the last 30 days
-is restorable with a tap.</li>
-<li><strong>Snapshots</strong>: the app auto-snapshots its state daily; 7 days
-of history. Useful for &quot;I deleted ten yarns thinking they were
-duplicates&quot; or &quot;I imported a backup over my data&quot; cases.</li>
+<li><strong>Recently deleted</strong>: anything you deleted in the last 30 days is
+restorable with a tap.</li>
+<li><strong>Activity history</strong>: a running list of what you have added,
+imported, restored and deleted, so you can see what happened and
+when.</li>
+<li><strong>Snapshot history</strong>: the app snapshots itself when you open it,
+at most once a day, and keeps 7 days. Useful for &quot;I deleted ten
+yarns thinking they were duplicates&quot; or &quot;I imported a backup over
+my data&quot; cases.</li>
 </ul>
+<figure class="guidefig"><img src="./images/faq-recover.webp" alt="The Recover screen with Recently deleted, Activity history and Snapshot history" loading="lazy" decoding="async" /><figcaption>Three ways back: the bin, the history, and yesterday&#39;s snapshot.</figcaption></figure>
 <h2>Search isn&#39;t finding something I know is there.</h2>
 <p>Try searching with fewer letters; the search is substring-based
 (so &quot;lopi&quot; finds &quot;Léttlopi&quot;, &quot;jarbo&quot; finds &quot;Järbo&quot;). It also
 folds accents in both directions. It does <em>not</em> yet handle typos
 (so &quot;Sandnse&quot; won&#39;t find &quot;Sandnes&quot;, type carefully).</p>
-<p>Each tab (Stash, Patterns, Projects, Barcode templates) has its
-own search above the list. The <strong>global search</strong> (magnifying
-glass in the More header) searches across everything: projects,
-patterns, yarn, equipment, PDF sticky notes, PDF bookmarks, and
-the glossary.</p>
+<p>The <strong>Projects</strong>, <strong>Patterns</strong> and <strong>Stash</strong> tabs each have their
+own search above the list. The global search, the magnifying glass
+in the <strong>More</strong> header, runs across everything at once: projects,
+patterns, yarn, equipment, PDF sticky notes, PDF bookmarks, and the
+terminology glossary.</p>
 <h2>The Norwegian translation has a typo / awkward phrase.</h2>
-<p>Send a note via <strong>More → Send feedback</strong>. Norwegian translations
-are reviewed before sign-off; if something sounds wrong, it
-probably is.</p>
+<p>Send a note via <strong>More</strong> &gt; <strong>Send feedback</strong>, which opens a short
+form in your browser. Norwegian translations are reviewed before
+sign-off; if something sounds wrong, it probably is.</p>
 <h2>The PDF tools button is in the way.</h2>
 <p>Drag it. The floating button is movable to wherever you want it
-(any corner, any edge) and it remembers its position per device.
-You can also reorder or hide the tools it shows, and tune its
-spacing and transparency, in <strong>Settings</strong>.</p>
+(any corner, any edge) and it remembers its position per device.</p>
+<p>Long-press the round button to open <strong>Tool settings</strong>, which holds the
+fan spacing, the tool names, and which tools show at all. Only their
+order lives in <strong>Settings</strong>, under <strong>PDF speed-dial buttons</strong>, behind
+the gear in the <strong>More</strong> header.</p>
+<figure class="guidefig"><img src="./images/faq-pdf-fan.webp" alt="The PDF tool fan open with its eight tools" loading="lazy" decoding="async" /><figcaption>Long-press the round button to choose which tools it holds.</figcaption></figure>
 <h2>My drawings on a PDF vanished after I tapped Clear.</h2>
-<p>The Clear button asks first (&quot;This page only&quot; vs &quot;All pages&quot;)
-since v0.1.98. If you tapped &quot;All pages&quot;, it&#39;s wiped. If you
-realised right after: open Recovery and restore from the most
-recent snapshot (your annotations are part of the snapshot).</p>
+<p>Clear asks first: <strong>This page only</strong> or <strong>All pages</strong>. If you tapped
+<strong>All pages</strong>, it&#39;s wiped. If you realised right after, open
+<strong>More</strong> &gt; <strong>Your data</strong> &gt; <strong>Backups &amp; history</strong> and restore from
+the most recent snapshot; your annotations are part of the snapshot.</p>
 <h2>A scan didn&#39;t recognise my yarn.</h2>
 <p>The bundled catalogue covers Nordic producers. If you scanned a
 non-Nordic yarn (Cascade, Madelinetosh, Brooklyn Tweed, etc.),
 the code is unknown until you save the yarn for the first time,
-after which the app remembers. Scan again later → it&#39;s
+after which the app remembers. Scan it again later and it is
 recognised.</p>
 <p>If you scanned a Nordic yarn that <em>should</em> be in the catalogue
 and isn&#39;t, that&#39;s worth feeding back. The catalogue gets richer
@@ -118,40 +126,45 @@ inside, then by dye lot inside that. If you have <em>actually</em>
 two duplicate entries for the same yarn / same colour / same
 dye lot, merge by deleting one and adjusting the other&#39;s skein
 count.</p>
-<h2>My barcode template list has duplicates.</h2>
-<p>Open Barcode templates. If there are same-product duplicates
-(blank weight one time, &quot;DK&quot; another, or a name typo), a
-<strong>Possible duplicates</strong> card appears at the top with a Merge
-button per group. Tap to merge.</p>
+<h2>My scanned yarn library has duplicates.</h2>
+<p>Open <strong>More</strong> &gt; <strong>Barcode scanner</strong>, which is your <strong>Yarn library</strong>.
+If there are same-product duplicates (blank weight one time, &quot;DK&quot;
+another, or a name typo), a card at the top counts the possible
+duplicates and offers <strong>Merge</strong>. Their barcodes are combined and the
+most complete details are kept.</p>
 <h2>Are PDFs included in backups?</h2>
 <p>Yes. A <code>.purl</code> backup with the Patterns category ticked includes
 every imported PDF file, every cover thumbnail, every drawing,
 every sticky note. The backup file is correspondingly bigger.</p>
 <h2>How do I share a pattern with a friend?</h2>
-<p>For a pattern you wrote: pattern detail → Share → it writes a
-<code>.purlp</code> file you can email / Drive / AirDrop.</p>
-<p>For a PDF you imported: share the PDF itself via your phone&#39;s
-normal share sheet (out of any file manager that can see it).
-There&#39;s no Purl-specific &quot;share PDF&quot; affordance. It&#39;s just a
-PDF, sharable like any other.</p>
-<p>For your scanned barcode library (so a friend doesn&#39;t have to
-re-scan every yarn): Barcode templates → share icon in the
-header → <code>.purlt</code> file.</p>
-<h2>Where&#39;s the iPhone version?</h2>
-<p>In progress. The Android build is the testing-iteration target
-right now because the test device is a Samsung S25. iOS comes via
-the App Store path eventually; no ETA, but the codebase is
-designed for both from day one.</p>
+<p>For a pattern you wrote: tap it on the <strong>Patterns</strong> tab to open its
+details, then tap <strong>Share pattern</strong>. It writes a <code>.purlp</code> file you
+can email, put in Drive, or AirDrop.</p>
+<p>For a PDF you imported: tap it on the <strong>Patterns</strong> tab, then tap
+<strong>Share PDF file</strong>. It hands the original PDF to your device&#39;s
+normal share sheet.</p>
+<p>It works the other way round too. A PDF sent to your device from
+mail, a message or a file manager can be opened straight into Purl,
+which imports it into your pattern library.</p>
+<figure class="guidefig"><img src="./images/faq-share-pdf.webp" alt="A pattern&#39;s panel on the Patterns tab showing Share PDF file" loading="lazy" decoding="async" /><figcaption>Share PDF file hands the original file to your usual share sheet.</figcaption></figure>
+<p>For your scanned yarn library (so a friend doesn&#39;t have to re-scan
+every yarn): <strong>More</strong> &gt; <strong>Barcode scanner</strong> &gt; <strong>Share library</strong>,
+which writes a <code>.purlt</code> file.</p>
+<h2>Is there an iPhone or iPad version?</h2>
+<p>Yes. Purl is on the App Store, and the same app runs on both iPhone
+and iPad. The iPad is the device the layout is designed around,
+including Apple Pencil for drawing on patterns and on charts.</p>
 <h2>A feature seems missing / I want X.</h2>
 <p>Two places to look:</p>
 <ul>
-<li><strong>More → Roadmap</strong>: what&#39;s planned next.</li>
-<li><strong>More → Changelog</strong>: what shipped recently.</li>
+<li><strong>More</strong> &gt; <strong>What&#39;s planned</strong>: what&#39;s coming up.</li>
+<li><strong>More</strong> &gt; <strong>What&#39;s new</strong>: what shipped recently, version by
+version.</li>
 </ul>
-<p>If your idea isn&#39;t on either, <strong>More → Send feedback</strong> is the
+<p>If your idea isn&#39;t on either, <strong>More</strong> &gt; <strong>Send feedback</strong> is the
 direct line. Every note is read.</p>
 </article>
-<nav class="pagenav"><h2>All guide pages</h2><ul><li><a href="/guide/index.html">User guide</a></li><li><a href="/guide/getting-started.html">Getting started</a></li><li><a href="/guide/yarn-stash.html">Yarn stash</a></li><li><a href="/guide/patterns.html">Patterns</a></li><li><a href="/guide/projects.html">Projects</a></li><li><a href="/guide/pdf-tools.html">PDF tools</a></li><li><a href="/guide/barcode-templates.html">Barcode templates</a></li><li><a href="/guide/backups.html">Backups and recovery</a></li><li><a href="/guide/terminology.html">Terminology glossary</a></li><li><a href="/guide/calculator.html">Calculator</a></li><li><a href="/guide/faq.html" aria-current="page">FAQ</a></li></ul></nav>
+<nav class="pagenav pagenav-guide"><h2>All guide pages</h2><h3>Start here</h3><ul><li><a href="/guide/index.html">User guide</a></li><li><a href="/guide/getting-started.html">Getting started</a></li></ul><h3>Tutorials</h3><ul><li><a href="/guide/tutorial-first-project.html">Your first project</a></li><li><a href="/guide/tutorial-read-a-pattern.html">Read a pattern</a></li><li><a href="/guide/tutorial-stash.html">Get your yarn in</a></li><li><a href="/guide/tutorial-charts.html">Make a chart</a></li></ul><h3>Reference</h3><ul><li><a href="/guide/yarn-stash.html">Yarn stash</a></li><li><a href="/guide/patterns.html">Patterns</a></li><li><a href="/guide/projects.html">Projects</a></li><li><a href="/guide/pdf-tools.html">PDF tools</a></li><li><a href="/guide/chart-maker.html">Chart maker</a></li><li><a href="/guide/barcode-templates.html">Barcodes and the yarn library</a></li><li><a href="/guide/backups.html">Backups and recovery</a></li><li><a href="/guide/terminology.html">Terminology glossary</a></li><li><a href="/guide/calculator.html">Calculator</a></li><li><a href="/guide/faq.html" aria-current="page">FAQ</a></li></ul></nav>
 </main>
 <footer class="site-footer"><div class="footer-inner">
   <div class="footer-cols"><div class="footer-col"><h2>Purl</h2><ul><li><a href="/">Home</a></li><li><a href="/guide/">User guide</a></li><li><a href="/support/">Support</a></li><li><a href="/feedback/">Send feedback</a></li></ul></div><div class="footer-col"><h2>Updates</h2><ul><li><a href="/changelog/">What's new</a></li><li><a href="/roadmap/">Roadmap</a></li></ul></div><div class="footer-col"><h2>Legal</h2><ul><li><a href="/privacy/">Privacy policy</a></li><li><a href="/terms/">Terms of use</a></li></ul></div><div class="footer-col"><h2>More</h2><ul><li><a href="/press/">Press kit</a></li></ul></div></div>
