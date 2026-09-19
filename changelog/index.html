@@ -40,6 +40,65 @@
 <main class="wrap wrap-wide">
 <article class="prose"><h1>What's new</h1>
   <p>The latest Purl updates, newest first, straight from the app's own "What's new" list. Everything before them is grouped below by the stretch of work it belongs to; open one to read the releases inside it.</p></article>
+  <section class="release" id="v0.2.215">
+    <div class="release-head">
+      <h2>Patterns that stopped opening come back <span class="ver">v0.2.215</span></h2>
+      <span class="date">2026-09-19</span>
+    </div>
+    <ul>
+      <li>Patterns that would not open, and showed a blank cover in the list, open again. Every update moves the folder the app keeps your files in, and some patterns were left pointing at the old one. The app now checks every file at startup and repoints the ones that moved, on every launch rather than once.</li>
+      <li>A pattern whose file really is gone now says so on the record and offers to find it again. Relinking keeps everything else about that pattern: your notes, its charts, the yarn, and the projects that use it.</li>
+      <li>Blank covers fill themselves in again. One pattern that could not be read used to stop the whole queue for the rest of the session, so every pattern behind it stayed blank.</li>
+      <li>A project that has a pattern but no photo of its own shows the pattern cover instead of an empty square.</li>
+      <li>Nothing is deleted by any of this, and a library with no broken files is left exactly as it is.</li>
+      <li>Putting another app alongside Purl while you are in the chart maker or the garment maker no longer throws away what you were doing. The layout used to change underneath the editor and take the editor with it, without so much as a warning, and on an iPad it took nothing more than dragging a second app in beside it.</li>
+      <li>The file check now asks about a pattern the same way opening it does. It was asking a different question, so a pattern could look perfectly healthy to the check and refuse to open a second later, with nothing said either way.</li>
+      <li>Norwegian file names are matched properly. There are two ways to spell a letter like the a with a ring in Unicode, and a name stored one way did not match the same file stored the other, so a Norwegian library was repaired in patches.</li>
+      <li>A pattern the app exported itself, saved before the folder rule changed, is found again too. It sat outside every folder the check knew to look in.</li>
+      <li>A pattern whose file is there but empty now says it is empty, rather than failing to open with no explanation. Some empty files came from restoring a backup that had been written short, which is a fault that was fixed in the export side in July while the restore went on trusting it.</li>
+      <li>A backup will not take an empty file into itself, every file is checked after it is written and thrown away if it did not land, and restoring tells you if anything could not be brought back. Opening a backup also tells you if the file is shorter than it says it is.</li>
+      <li>The picture on the front of an exported pattern shows the motif in your own yarn colours. It was drawing every garment in the colours of whichever chart happened to be first, and a garment whose first part has no chart came out in flat grey with the motif invisible, while the colour list underneath printed the right yarns all along.</li>
+    </ul>
+  </section>
+  <section class="release" id="v0.2.214">
+    <div class="release-head">
+      <h2>A raglan looks like a raglan, and an export leaves the theme behind <span class="ver">v0.2.214</span></h2>
+      <span class="date">2026-09-19</span>
+    </div>
+    <ul>
+      <li>A raglan is drawn as one now. The raglan lines run from the underarm to the neck, the sleeve joins the body along them instead of stopping bluntly at the underarm, and its cap reaches the neck. The sleeve page says how many rounds the cap is and that it is worked together with the body.</li>
+      <li>A picture you export no longer wears the app’s theme. Exported in dark mode it used to come out dark, and the pattern photo it added to a project came out dark with it. Everything that leaves the app is now printed on white paper in a fixed ink, whichever theme you are using.</li>
+      <li>Hold an arrow on the chart bar while reading a pattern and it keeps stepping, the way the chart tracker already did.</li>
+      <li>The settings column no longer leaves a blank band where the keyboard was. On iPad the keyboard kept reporting its height after it had gone, so the column stayed short and the screen showed through behind it.</li>
+      <li>The chart preview opens inside the landscape layout instead of covering it: the fabric in the canvas, its controls in the column. Portrait is unchanged.</li>
+      <li>Fit to the screen brings a chart back to fitting its pane after you have panned or zoomed it.</li>
+      <li>Two garment buttons whose labels ran outside them now stack when the column is too narrow for both.</li>
+    </ul>
+  </section>
+  <section class="release" id="v0.2.213">
+    <div class="release-head">
+      <h2>Landscape puts the settings beside the drawing <span class="ver">v0.2.213</span></h2>
+      <span class="date">2026-09-19</span>
+    </div>
+    <ul>
+      <li>Turn a tablet sideways in the chart maker or the garment maker and the settings move into a column down the left, with the drawing beside them taking two thirds of the screen. Before, the drawing sat above a sheet that took half the height and still had to be scrolled.</li>
+      <li>The whole column scrolls now, including its margins. It used to scroll only down the middle, so a drag that started anywhere else did nothing.</li>
+      <li>Turning the tablet refits the drawing to its new pane instead of keeping the zoom it had at the old size.</li>
+      <li>Portrait is unchanged, on tablets and on phones.</li>
+    </ul>
+  </section>
+  <section class="release" id="v0.2.212">
+    <div class="release-head">
+      <h2>Four from the notebook <span class="ver">v0.2.212</span></h2>
+      <span class="date">2026-09-19</span>
+    </div>
+    <ul>
+      <li>Swiping a garment sideways to delete it works on Android now. It had only ever worked on iPhone, because on a phone the garment list opens in its own window and the swipe was never reaching it.</li>
+      <li>Hold an arrow on the chart tracker and it keeps going, gently at first and then faster, instead of one tap per row.</li>
+      <li>The counter pills go up to three times their old size, in three new steps. A pill too big for the screen now sits centred instead of hanging off the edge when you drag it.</li>
+      <li>On the developer screen, switching update channel no longer says the switch failed when the switch worked and only the check after it could not reach the network.</li>
+    </ul>
+  </section>
   <section class="release" id="v0.2.205">
     <div class="release-head">
       <h2>The More tab reads better on a tablet <span class="ver">v0.2.205</span></h2>
