@@ -40,6 +40,97 @@
 <main class="wrap wrap-wide">
 <article class="prose"><h1>What's new</h1>
   <p>The latest Purl updates, newest first, straight from the app's own "What's new" list. Everything before them is grouped below by the stretch of work it belongs to; open one to read the releases inside it.</p></article>
+  <section class="release" id="v0.2.222">
+    <div class="release-head">
+      <h2>A shared colourway file cannot invent barcodes <span class="ver">v0.2.222</span></h2>
+      <span class="date">2026-09-20</span>
+    </div>
+    <ul>
+      <li>Importing a damaged colourway file no longer adds barcodes that were never in it. A file whose barcode field had the wrong shape was being read one letter at a time, so four invented barcodes went into your library and the import reported success.</li>
+      <li>And a colourway file with one bad entry in it now imports the rest instead of failing completely.</li>
+      <li>Purl also clears out the backup and export files it used to leave in its own temporary space. If you have taken backups regularly, that is one full copy of your library per export, and the next start removes them.</li>
+    </ul>
+  </section>
+  <section class="release" id="v0.2.221">
+    <div class="release-head">
+      <h2>A note you were part way through <span class="ver">v0.2.221</span></h2>
+      <span class="date">2026-09-20</span>
+    </div>
+    <ul>
+      <li>Text you are part way through typing now survives the app closing itself. A note, a feedback report or a half-edited yarn used to come back empty if the phone or iPad shut Purl down in the background to free memory, which it does without telling you.</li>
+      <li>It comes back on its own, with nothing to answer: open the same screen and the words are where you left them. A draft older than three days is let go, so an unfinished sentence from last week does not reappear over something you have since changed.</li>
+    </ul>
+  </section>
+  <section class="release" id="v0.2.220">
+    <div class="release-head">
+      <h2>The picture on a pattern, and the files a share leaves behind <span class="ver">v0.2.220</span></h2>
+      <span class="date">2026-09-20</span>
+    </div>
+    <ul>
+      <li>An exported pattern says so when its picture could not be made, instead of handing you a pattern with a blank front page and no explanation.</li>
+      <li>Sharing two charts with the same name no longer has one quietly replace the other. Each share is written in a folder of its own, and old ones are cleared out the next time Purl starts.</li>
+      <li>A shared file keeps the Norwegian letters in its name. "Baerestykke" with the ae written properly was arriving with an underscore in the middle of it.</li>
+    </ul>
+  </section>
+  <section class="release" id="v0.2.219">
+    <div class="release-head">
+      <h2>Your lists, and the patterns you send <span class="ver">v0.2.219</span></h2>
+      <span class="date">2026-09-20</span>
+    </div>
+    <ul>
+      <li>Sharing a pattern no longer sends the other person a row of blank squares. A shared pattern now carries its cover picture inside the file, and says how many of the other pictures stayed behind.</li>
+      <li>It also cannot reach into the files on the phone that opens it. A shared pattern used to carry the exact locations of the pictures on the device that made it, so importing your own shared pattern back, or one from a copy of your install, gave you a second pattern pointing at the first one's photos: removing a picture from the copy deleted it from the original.</li>
+      <li>A backup now carries three settings it had been quietly leaving out: where you put the PDF toolbar button, which timeline you chose, and your glossary preferences. Your weigh log travels too.</li>
+      <li>Your colours, categories, materials, fibres and the rest are protected the way your library already was. If one of those lists cannot be read, Purl says so and keeps the old contents instead of replacing them with the defaults.</li>
+    </ul>
+  </section>
+  <section class="release" id="v0.2.218">
+    <div class="release-head">
+      <h2>A scarf lies across its front page <span class="ver">v0.2.218</span></h2>
+      <span class="date">2026-09-20</span>
+    </div>
+    <ul>
+      <li>The picture on a scarf pattern is turned a quarter turn so the scarf lies across the width of the page. A scarf is drawn along its length, so it was landing as a narrow strip down the middle with most of the page empty either side.</li>
+      <li>The measurements and the gauge line printed on that picture turn with it, so on a scarf they read from the bottom up.</li>
+      <li>Nothing else changed shape: a sweater is drawn wider than it is tall and is left exactly as it was.</li>
+    </ul>
+  </section>
+  <section class="release" id="v0.2.217">
+    <div class="release-head">
+      <h2>Purl tells you when it cannot read something <span class="ver">v0.2.217</span></h2>
+      <span class="date">2026-09-20</span>
+    </div>
+    <ul>
+      <li>If Purl ever cannot read one of your lists, it now says so at the top of the screen instead of showing you an empty list and saying nothing. Nothing is overwritten while that message is up, and it clears itself as soon as the list can be read again.</li>
+      <li>The knit look preview keeps the fabric you set up. Turning the iPad used to quietly put the gauge, the repeat, the look and the background back to how they started while the controls still showed your choices, so a picture saved at that moment was of a fabric you never chose.</li>
+      <li>A half-written feedback report survives leaving the screen. Tapping another tool, or another tab, used to throw it away without asking.</li>
+      <li>Leaving the counter sheet with something typed in it asks first, instead of discarding it. There is no Cancel button on that sheet, so tapping beside it was both the way out and the way to lose what you had written.</li>
+      <li>The garment drawing comes back as your garment rather than a plain swatch if its page ever has to reload.</li>
+      <li>Every full screen in the app now behaves properly when you rotate an iPhone or iPad. A couple had been left on the old behaviour, which locks to portrait and keeps the wrong margins.</li>
+      <li>A pattern made at a size that is not on the size chart says so properly on the front page. It used to print a stray dash where the size letter would go.</li>
+      <li>The picture on an exported sweater pattern sits closer to the details under it. It was being given a fixed amount of room whatever its shape, so there was a band of empty paper between the drawing and the table below it.</li>
+      <li>A photo that cannot be copied into Purl now tells you instead of quietly not appearing.</li>
+      <li>Backups made from now on record how big each file should be, and restoring checks against it, so a pattern that was only partly saved is reported rather than restored half-finished. Backups you already have do not carry that, and restore exactly as they did before.</li>
+      <li>Deleted items that could not be listed are cleaned up properly instead of taking up space forever.</li>
+    </ul>
+  </section>
+  <section class="release" id="v0.2.216">
+    <div class="release-head">
+      <h2>Work you have not saved yet is harder to lose <span class="ver">v0.2.216</span></h2>
+      <span class="date">2026-09-20</span>
+    </div>
+    <ul>
+      <li>Turning an iPad while you are drawing no longer loses the chart. The two makers laid themselves out one way in landscape and another in portrait, and the canvas was rebuilt from scratch each time the layout changed, taking every stitch you had painted since you opened it. Putting a second app alongside did the same thing. The drawing now stays exactly where it was.</li>
+      <li>A note you are part way through typing survives the same moment. Yarn, equipment, project and pattern notes were all thrown away when the screen changed shape, and on a project so were a photo caption and a half-entered weigh-in.</li>
+      <li>A backup file that is incomplete says so before you choose what to restore. A backup cut short while it was being written used to look like a smaller, healthy backup, and the restore afterwards read as though the old device had lost those patterns. It had not.</li>
+      <li>Photos are checked after they are copied in. A photo that did not copy properly used to be kept anyway, pointing at a temporary file the phone deletes later, so it turned into a grey square weeks afterwards with nothing to explain it.</li>
+      <li>Covers that were saved empty are drawn again instead of staying blank forever. The app decided a pattern had a cover by finding the setting rather than the picture.</li>
+      <li>Saving a chart to a folder on the device now tells you if it did not save. On some cloud folders the file is created and no data reaches it, and the app used to report that as a success.</li>
+      <li>Charts named in Norwegian keep their names. Sharing a chart called Bærestykke frø used to strip the letters out of the file name.</li>
+      <li>A daily recovery snapshot that cannot be read says so, instead of reporting that nothing has changed. That sentence was shown to anyone who had come looking for something they had lost.</li>
+      <li>If the app ever cannot read your patterns, projects, yarn, equipment or charts, it will not write over them. The contents are kept aside and that list stops accepting changes until it can be read again, so a single unreadable file can no longer turn into an empty library.</li>
+    </ul>
+  </section>
   <section class="release" id="v0.2.215">
     <div class="release-head">
       <h2>Patterns that stopped opening come back <span class="ver">v0.2.215</span></h2>
