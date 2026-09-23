@@ -38,7 +38,7 @@ const SITE = {
   playUrl: 'https://play.google.com/store/apps/details?id=no.purl.app',
   appStoreUrl: 'https://apps.apple.com/no/app/purl/id6788513793',
   feedbackForm: 'https://docs.google.com/forms/d/e/1FAIpQLSdXgzhbJAsj0Zkr3Qrj4zyk_lO9kETwUbGvxIWLFSstn9p4lw/viewform',
-  email: 'pierre.boniface90@gmail.com',
+  email: 'contact@purl.no',
   year: 2026,
 };
 
