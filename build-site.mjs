@@ -23,6 +23,7 @@ import { readFileSync, writeFileSync, mkdirSync, existsSync, copyFileSync, readd
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { marked } from 'marked';
+import ts from 'typescript';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const PURL = join(HERE, '..', 'Purl');
@@ -105,7 +106,14 @@ function readArray(tsxRelPath, varName) {
   // Roadmap does). The public site mirrors a stable build, where the garment
   // tool is compiled out, so the flag reads false here for the same reason
   // GUIDE_FLAGS.garment does.
-  return (new Function('GARMENT_ENTRY_POINTS', 'return (' + sliceArray(src, eq) + ')'))(false);
+  // The slice is TypeScript, not JavaScript: the app may cast inside it
+  // (`] as Item[]`), which plain eval rejects. Strip the types with the
+  // compiler itself rather than by pattern, so any valid TypeScript reads.
+  const js = ts.transpile('const __data = (' + sliceArray(src, eq) + ');', {
+    target: ts.ScriptTarget.ES2020,
+    module: ts.ModuleKind.None,
+  });
+  return (new Function('GARMENT_ENTRY_POINTS', js + '\nreturn __data;'))(false);
 }
 
 // --- languages + resource links ------------------------------------------
