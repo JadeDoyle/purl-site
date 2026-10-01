@@ -356,7 +356,7 @@ a { color: var(--primary); }
 .plumband p { margin: 0 0 4px; opacity: .92; }
 .plumband .plumband-btn {
   display: inline-block; background: #FBF8F5; border-color: #FBF8F5; color: #5E4478;
-  margin-top: 20px; font-weight: 700;
+  margin: 20px 5px 0; font-weight: 700;
 }
 .plumband .plumband-btn:hover { background: #fff; }
 /* Theme switch (Auto follows the system, like the app). */

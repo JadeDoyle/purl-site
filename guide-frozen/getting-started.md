@@ -7,11 +7,8 @@ signal) and to stay calm out of your way while you craft.
 
 ## Install
 
-Purl is on Google Play (currently in testing; ask for an invite if the
-listing isn't visible to you yet). Some testers instead run a
-sideloaded APK; Android may ask you to allow installing apps from
-outside the Play Store the first time. iPhone and iPad support is
-coming.
+Purl is on Google Play for Android and on the App Store for iPhone
+and iPad. Follow the links from purl.no.
 
 ## The four tabs
 

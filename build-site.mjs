@@ -328,7 +328,7 @@ function downloadRow(lang) {
   const s = COPY[lang].store;
   return `<div class="btn-row">
   <a class="btn btn-primary btn-store" href="${SITE.appStoreUrl}"><span class="store-line"><span class="store-top">${s.get}</span>App Store</span></a>
-  <span class="btn btn-store btn-disabled"><span class="store-line"><span class="store-top">${s.soon}</span>Google Play</span></span>
+  <a class="btn btn-primary btn-store" href="${SITE.playUrl}"><span class="store-line"><span class="store-top">${s.get}</span>Google Play</span></a>
 </div>`;
 }
 // A screenshot pair: the light image shows by default, CSS flips to the dark
@@ -417,6 +417,7 @@ ${c.tools.items.map((it, i) => {
   <p>${esc(c.band.p1)}</p>
   <p>${esc(c.band.p2)}</p>
   <a class="btn plumband-btn" href="${SITE.appStoreUrl}">${esc(c.band.cta)}</a>
+  <a class="btn plumband-btn" href="${SITE.playUrl}">${esc(c.band.ctaPlay || COPY[lang].footerLabel.play)}</a>
 </section>
 
 <h2 class="section-title">${c.exploreTitle}</h2>

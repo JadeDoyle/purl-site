@@ -8,11 +8,8 @@ håndarbeider.
 
 ## Installering
 
-Purl ligger på Google Play (foreløpig i testfase; be om en
-invitasjon hvis du ikke ser oppføringen ennå). Noen testere kjører i
-stedet en sidelastet APK; Android kan første gang spørre om du vil
-tillate installering av apper utenfor Play Store. Støtte for iPhone
-og iPad kommer.
+Purl ligger på Google Play for Android og i App Store for iPhone og
+iPad. Følg lenkene fra purl.no.
 
 ## De fire fanene
 
