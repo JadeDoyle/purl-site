@@ -576,7 +576,8 @@ function roadmap() {
     <h3>${esc(g.title)}</h3>
 ${rows(g.items)}
   </section>`).join('\n');
-  const section = (title, sub, items, cls) => `  <section class="road ${cls}">
+  // An empty list hides its whole section, as the app's Roadmap screen does.
+  const section = (title, sub, items, cls) => !items.length ? '' : `  <section class="road ${cls}">
     <h2>${esc(title)}</h2>
     <p class="road-sub">${esc(sub)}</p>
 ${rows(items)}
