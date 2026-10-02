@@ -1,0 +1,39 @@
+name: Update server check
+
+# Catches the one failure the update server cannot report itself: the whole
+# server being off or unreachable (power cut, home internet down, Cloudflare
+# tunnel dead). Every hour it asks the public manifest URL for the stable
+# Android update, as an installed app does. A failed run makes GitHub email
+# whoever last changed the schedule below.
+#
+# Disk and update problems the server can see are pushed to the maintainer's
+# phone by purl-watch on the server itself (Purl repo, ota-server/monitor/).
+#
+# expo-runtime-version must match the store builds' runtimeVersion in the
+# Purl app.json; bump it here when that changes, or every run fails.
+
+on:
+  schedule:
+    - cron: '23 * * * *'
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - name: Manifest answers 200
+        run: |
+          for i in 1 2 3; do
+            code=$(curl -s -o /dev/null -w '%{http_code}' --max-time 20 \
+              -H 'expo-platform: android' -H 'expo-runtime-version: 1.0.0' \
+              -H 'expo-channel-name: stable' \
+              https://updates.hbc3.no/api/manifest || true)
+            echo "attempt $i: $code"
+            [ "$code" = 200 ] && exit 0
+            [ "$i" -lt 3 ] && sleep 60
+          done
+          echo "::error::updates.hbc3.no did not answer 200 in three tries over two minutes"
+          exit 1
