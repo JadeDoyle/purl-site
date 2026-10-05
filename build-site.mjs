@@ -502,12 +502,14 @@ function isMilestone(v) {
   const s = v.split('.').map((x) => parseInt(x, 10));
   return s.length === 3 && Number.isFinite(s[2]) && s[2] === 0;
 }
+// Turns true only when the crochet chart maker reaches stable.
+const CROCHET_LIVE = false;
 function changelog() {
   // The app hides garment-only releases where the tool is compiled out, which
   // is every build a reader of this page can install. Same reason GUIDE_FLAGS
   // hides the garment sections of the guide: do not advertise a screen nobody
-  // can open.
-  const releases = readArray('src/screens/ChangelogScreen.tsx', 'RELEASES').filter((r) => !r.garmentOnly);
+  // can open. Crochet-only releases stay hidden the same way until CROCHET_LIVE.
+  const releases = readArray('src/screens/ChangelogScreen.tsx', 'RELEASES').filter((r) => !r.garmentOnly && (CROCHET_LIVE || !r.crochetOnly));
   const eras = readArray('src/screens/ChangelogScreen.tsx', 'ERAS');
   // Mirror the app: the recent releases in full, and everything older folded
   // into era cards that say what the app became over that stretch. The page
