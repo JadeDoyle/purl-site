@@ -284,7 +284,7 @@ legges alltid til som et nytt diagram.
 ## Eksportere
 
 Trykk **Eksporter** øverst til høyre i redigeringen. **Eksporter
-diagrammet** viser en forhåndsvisning av siden og tre formater:
+diagrammet** viser en forhåndsvisning av siden og to formater:
 
 - **Bilde (PNG)**: utskriftskvalitet, 300 DPI på en A4-side.
 - **PDF**: én A4-side, klar til utskrift.
