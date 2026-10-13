@@ -272,7 +272,7 @@ new chart.
 ## Exporting
 
 Tap **Export** at the top right of the editor. **Export chart** shows a
-preview of the page and three formats:
+preview of the page and two formats:
 
 - **Picture (PNG)**: print quality, 300 DPI on an A4 page.
 - **PDF**: one A4 page, ready to print.
