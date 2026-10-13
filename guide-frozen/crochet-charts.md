@@ -275,7 +275,6 @@ Tap **Export** at the top right of the editor. **Export chart** shows a
 preview of the page and three formats:
 
 - **Picture (PNG)**: print quality, 300 DPI on an A4 page.
-- **Vector (SVG)**: sharp at any size, for design programs.
 - **PDF**: one A4 page, ready to print.
 
 Every page has the chart's name as its title and the legend under it.
