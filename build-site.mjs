@@ -579,7 +579,11 @@ function roadmap() {
       <span class="road-dot"></span>
       <div><div class="label">${esc(it.label)}</div>${it.sub ? `<div class="sub">${esc(it.sub)}</div>` : ''}</div>
     </div>`).join('\n');
-  const groupCards = groups.map((g) => `  <section class="road road-done">
+  // A `pro` line is a Purl Professional tool, shown in the app only on test
+  // builds (`PRO_TOOLS`, 2026-10-13). This page mirrors a stable build, so it
+  // leaves them out, and a group left empty goes with them.
+  const groupCards = groups.map((g) => ({ ...g, items: g.items.filter((it) => !it.pro) }))
+    .filter((g) => g.items.length).map((g) => `  <section class="road road-done">
     <h3>${esc(g.title)}</h3>
 ${rows(g.items)}
   </section>`).join('\n');
