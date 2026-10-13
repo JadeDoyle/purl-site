@@ -287,7 +287,6 @@ Trykk **Eksporter** øverst til høyre i redigeringen. **Eksporter
 diagrammet** viser en forhåndsvisning av siden og tre formater:
 
 - **Bilde (PNG)**: utskriftskvalitet, 300 DPI på en A4-side.
-- **Vektor (SVG)**: skarp i alle størrelser, for tegneprogrammer.
 - **PDF**: én A4-side, klar til utskrift.
 
 Hver side har navnet på diagrammet som tittel og tegnforklaringen
