@@ -26,7 +26,7 @@ import { marked } from 'marked';
 import ts from 'typescript';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
-const PURL = join(HERE, '..', 'Purl');
+const PURL = process.env.PURL_DIR || join(HERE, '..', 'Purl');
 
 const ORIGIN = 'https://purl.no';
 const BASE = '';                           // root-served on the purl.no custom domain
@@ -899,7 +899,7 @@ function ogSvg() {
   <image href="${logoDataUri()}" x="110" y="150" width="250" height="250"/>
   <text x="398" y="285" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="118" fill="${COLORS.primaryDark}">Purl.</text>
   <text x="404" y="345" font-family="Arial, Helvetica, sans-serif" font-size="37" fill="${COLORS.muted}">Knitting &amp; crochet companion</text>
-  <text x="404" y="410" font-family="Arial, Helvetica, sans-serif" font-size="29" fill="${COLORS.primary}">Free, private, and on your device</text>
+  <text x="404" y="410" font-family="Arial, Helvetica, sans-serif" font-size="29" fill="${COLORS.primary}">Private, offline, and on your device</text>
   <text x="404" y="455" font-family="Arial, Helvetica, sans-serif" font-size="25" fill="${COLORS.muted}">purl.no</text>
 </svg>`;
 }
@@ -938,6 +938,30 @@ async function buildIcons() {
 function fileFor(url) {
   const path = url.replace(ORIGIN + BASE, '');
   return join(HERE, (path.endsWith('/') ? `${path}index.html` : path).replace(/^\//, ''));
+}
+// No page may say Purl is free or stays free (the maintainer, 2026-10-14):
+// Purl Professional may change what costs money. Every page written, and the
+// share image, is read as text. Most pages fail on any bare "free" or
+// "gratis" (ad-free and free-text pass). The changelog and roadmap carry the
+// app's own notes, where "a free stroke" is a drawing term, so they fail only
+// on a claim phrase, as the app's ZU gate does. Privacy and terms are legal
+// text, changed only by legal, so they are skipped here.
+function verifyNoFreeClaim() {
+  const bare = /(?<![-\w])(free|gratis)(?![-\w])/i;
+  const claim = /\b(is|stays?|stayed|remains?|remained|always|everything stays) free\b|\bfree (and unlocked|for everyone)\b|\bfree, forever\b|\b(er|forblir|alltid) gratis\b/i;
+  const text = (html) => html.replace(/<(script|style)[\s\S]*?<\/\1>/g, ' ')
+    .replace(/<meta [^>]*content="([^"]*)"[^>]*>/g, ' $1 ').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ');
+  const problems = [];
+  for (const file of WRITTEN) {
+    const rel = file.replace(HERE, '').replace(/\\/g, '/');
+    if (!rel.endsWith('.html') || /^\/(no\/)?(privacy|terms)\//.test(rel)) continue;
+    const words = text(readFileSync(file, 'utf8'));
+    const hit = (/^\/(changelog|roadmap)\//.test(rel) ? claim : bare).exec(words);
+    if (hit) problems.push(`${rel}: "...${words.slice(Math.max(0, hit.index - 50), hit.index + 30)}..."`);
+  }
+  const og = bare.exec(text(ogSvg()));
+  if (og) problems.push(`og.png text: "${og[0]}"`);
+  if (problems.length) throw new Error(`A page says Purl is free (fix it in docs/site/copy.json, the guide or the app):\n  ${problems.join('\n  ')}`);
 }
 function verifyLinkGraph() {
   const pages = [];
@@ -1070,6 +1094,7 @@ async function main() {
     ...guidePathsFor('/no'),
   ]);
   verifyLinkGraph();
+  verifyNoFreeClaim();
   await buildIcons();
   console.log(`Built bilingual site (en + no) + ${guideCount} guide pages across both languages, icons, sitemap.`);
 }
