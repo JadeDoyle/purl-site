@@ -227,7 +227,9 @@ function footer(lang) {
 // the resource for the language toggle (omit for shared/no-toggle pages).
 function shell({ lang, pageKey, activeKey, path, title, description, body, wide, jsonLd, noCounterpart }) {
   const canonical = abs(path);
-  const pageTitle = pageKey === 'home' ? `${SITE.name}, ${title}` : `${title} | ${SITE.name}`;
+  // The name standing alone is the wordmark and carries its dot; in the home
+  // title it opens a phrase and goes without (docs/conventions.md in the app).
+  const pageTitle = pageKey === 'home' ? `${SITE.name}, ${title}` : `${title} | ${SITE.name}.`;
   const d = escAttr(description);
   // Shared pages (changelog/roadmap) are English only; offer a path to the
   // Norwegian home rather than a same-page counterpart that does not exist.
@@ -263,7 +265,7 @@ ${hreflang}
 <link rel="stylesheet" href="${u('/assets/styles.css')}" />
 ${THEME_HEAD}
 <meta property="og:type" content="website" />
-<meta property="og:site_name" content="Purl" />
+<meta property="og:site_name" content="Purl." />
 <meta property="og:locale" content="${ogLocale}" />
 <meta property="og:locale:alternate" content="${ogAlt}" />
 <meta property="og:title" content="${escAttr(pageTitle)}" />
