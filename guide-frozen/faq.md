@@ -101,7 +101,7 @@ two duplicate entries for the same yarn / same colour / same
 dye lot, merge by deleting one and adjusting the other's skein
 count.
 
-## My barcode template list has duplicates.
+## My barcode template list|has duplicates.
 
 Open Barcode templates. If there are same-product duplicates
 (blank weight one time, "DK" another, or a name typo), a

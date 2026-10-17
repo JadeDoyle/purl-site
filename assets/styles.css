@@ -135,7 +135,7 @@ a { color: var(--primary); }
   font-weight: 700;
   height: 100%;
 }
-.cards a span { display: block; color: var(--muted); font-weight: 400; font-size: 14px; margin-top: 3px; }
+.cards a > span { display: block; color: var(--muted); font-weight: 400; font-size: 14px; margin-top: 3px; }
 .cards a:hover { border-color: var(--primary); }
 
 /* Landing feature grid ---------------------------------------------------- */
@@ -301,6 +301,13 @@ a { color: var(--primary); }
 .footer-col a:hover { color: var(--primary); }
 .footer-note { color: var(--muted); font-size: 13px; margin: 26px 0 0; }
 
+/* Phrase-aware line breaks (see glue() and phrases() in build-site.mjs):
+   headings and sub lines even out their lines, body text avoids a lone last
+   word, and a marked phrase from copy.json moves to the next line whole. */
+h1, h2, h3, summary, .eyebrow, .lsub, .hero-note, .pillar p, .plumband p, .cards a > span, .toolcard figcaption > span { text-wrap: balance; }
+p, li { text-wrap: pretty; }
+.ph, .rt { display: inline-block; }
+
 /* Landing (campaign front page) ------------------------------------------- */
 .eyebrow { font-size: 13px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--primary); margin: 0 0 6px; }
 .lhero { display: flex; align-items: center; gap: 44px; padding: 26px 0 20px; }
@@ -338,7 +345,7 @@ a { color: var(--primary); }
 .toolcard .phoneframe img { border-radius: 19px; }
 .toolcard figcaption { margin-top: 10px; font-size: 14px; line-height: 1.4; }
 .toolcard figcaption b { display: block; }
-.toolcard figcaption span { color: var(--muted); font-size: 13px; }
+.toolcard figcaption > span { color: var(--muted); font-size: 13px; }
 .ipadband { text-align: center; padding: 34px 0 8px; }
 .ipadband h2 { font-size: clamp(26px, 3.4vw, 34px); margin: 4px 0 10px; }
 .ipadband .lsub { margin: 0 auto 24px; }

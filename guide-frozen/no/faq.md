@@ -40,7 +40,7 @@ eget søk over listen. **Globalsøket** (forstørrelsesglasset øverst
 i Mer) søker på tvers av alt: prosjekter, oppskrifter, garn, utstyr,
 notatlapper i PDF-er, PDF-bokmerker og ordlisten.
 
-## Den norske oversettelsen har en skrivefeil / klønete formulering.
+## Den norske oversettelsen|har en skrivefeil / klønete formulering.
 
 Send en beskjed via **Mer → Send tilbakemelding**. De norske
 tekstene gjennomgås før de godkjennes; høres noe rart ut, er det

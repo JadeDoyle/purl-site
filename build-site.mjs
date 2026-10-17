@@ -64,6 +64,55 @@ const COLORS = {
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 const escAttr = (s) => esc(s).replace(/"/g, '&quot;');
 
+// Phrase-aware line breaks (the maintainer, 2026-10-17): a headline or sub
+// line breaks where a reader would pause, never where the browser runs out of
+// room. Three layers. styles.css balances every heading and sub line. glue()
+// joins a short word (a, the, my, not, en, å) to the next one, and "yet" or a
+// Norwegian possessive (dataene mine) to the word before, so no line splits
+// them. And
+// copy.json marks its phrases: "|" means a line may end here and only here,
+// "||" means a line always ends here. Each phrase becomes an inline-block, so
+// the browser breaks between phrases; one longer than the screen still wraps
+// inside itself instead of overflowing. Every h1 to h3 and summary on every
+// page goes through both (setHeadings), so a guide heading can carry marks too.
+// The lookbehind lets a run of short words glue in one pass ("of the back").
+const GLUE = /(?<=^|[\s(])(a|an|the|I|it|to|of|in|on|at|by|as|for|and|or|no|not|cannot|have|has|had|you|my|your|our|their|en|et|ei|å|i|på|av|og|til|om|ikke) +(?=[^\s<])/giu;
+const GLUE_BACK = / +(?=(yet|min|mi|mitt|mine|din|di|ditt|dine|sin|si|sitt|sine)(?![\p{L}-]))/gu;
+// Only the text between tags is touched, never a tag or an attribute.
+const glue = (html) => String(html).replace(/(^|>)([^<]+)/g, (m, open, text) =>
+  open + text.replace(GLUE, '$1 ').replace(GLUE_BACK, ' '));
+const phrases = (html) => String(html).split('||').map((row) => {
+  const parts = row.split('|').map((p) => p.trim()).filter(Boolean);
+  return parts.length > 1 ? parts.map((p) => `<span class="ph">${p}</span>`).join(' ') : row.trim();
+}).join('<br />');
+// A copy string set as a headline or sub line: escaped, phrased, glued.
+const line = (s) => glue(phrases(esc(s)));
+// The same for copy.json strings that already hold HTML (cards, page titles).
+const lineHtml = (s) => glue(phrases(s));
+// The marks never reach alt text, page titles or meta descriptions.
+const plain = (s) => String(s).replace(/\s*\|\|?\s*/g, ' ').trim();
+// A heading nobody marks by hand (the app's release titles, the guide) gets
+// its marks from its punctuation: after a colon ("Crochet charts: | big
+// charts draw fast"), and after a comma that closes two words or more
+// ("Stagger the repeats, | colours from your stash"; "Turn, resize" stays)
+// or opens an "and" ("Folders, | and paper patterns").
+// Only a heading's leading text is read, up to its first tag.
+const autoMarks = (inner) => {
+  if (inner.includes('|')) return inner;
+  const cut = inner.indexOf('<');
+  const text = cut < 0 ? inner : inner.slice(0, cut);
+  const marked = text.replace(/([:,]) +(?=(\S+))/g, (m, mark, next, at) => {
+    const words = text.slice(0, at).split(/[|:,]/).pop().trim().split(/\s+/).length;
+    return mark === ':' || words >= 2 || /^(and|or|og|eller)$/i.test(next) ? `${mark}|` : m;
+  });
+  return marked + (cut < 0 ? '' : inner.slice(cut));
+};
+const setHeadings = (html) => html.replace(/<(h[1-3]|summary)\b([^>]*)>([\s\S]*?)<\/\1>/g,
+  (m, tag, attrs, inner) => `<${tag}${attrs}>${lineHtml(autoMarks(inner))}</${tag}>`);
+// A release title balances on its own, so the version tag after it is not
+// counted as one of its lines.
+const releaseTitle = (title) => `<span class="rt">${lineHtml(autoMarks(esc(title)))}</span>`;
+
 function appVersion() {
   const src = readFileSync(join(PURL, 'src', 'version.ts'), 'utf8');
   const m = src.match(/APP_VERSION\s*=\s*'([^']+)'/);
@@ -297,7 +346,7 @@ function writePage(sitePath, html) {
   const rel = sitePath === '/' ? 'index.html' : sitePath.replace(/^\//, '').replace(/\/$/, '') + '/index.html';
   const out = join(HERE, rel);
   mkdirSync(dirname(out), { recursive: true });
-  writeFileSync(out, html, 'utf8');
+  writeFileSync(out, setHeadings(html), 'utf8');
   WRITTEN.add(out);
 }
 
@@ -357,8 +406,8 @@ const TOOL_IMGS = ['chartmaker', 'terminology', 'timeline', 'calculator'];
 function landing(lang) {
   const c = COPY[lang].landing;
   const h = c.hero;
-  const cards = c.cards.map((card) => `  <li><a href="${link(lang, card.key)}">${card.title}<span>${card.sub}</span></a></li>`).join('\n');
-  const pillars = c.pillars.map((p) => `  <div class="pillar"><h3>${esc(p.title)}</h3><p>${esc(p.desc)}</p></div>`).join('\n');
+  const cards = c.cards.map((card) => `  <li><a href="${link(lang, card.key)}">${lineHtml(card.title)}<span>${lineHtml(card.sub)}</span></a></li>`).join('\n');
+  const pillars = c.pillars.map((p) => `  <div class="pillar"><h3>${line(p.title)}</h3><p>${line(p.desc)}</p></div>`).join('\n');
   const features = c.feat.map((ft, i) => {
     const img = FEAT_IMGS[i] || 'stash';
     const points = ft.points.map((p) => `      <li>${esc(p)}</li>`).join('\n');
@@ -366,24 +415,24 @@ function landing(lang) {
     // (phone LEFT) and the tour alternates right, left, right, left.
     return `<section class="lfeature${i % 2 === 0 ? ' lfeature-rev' : ''}">
   <div class="lfeature-text">
-    <p class="eyebrow">${esc(ft.eyebrow)}</p>
-    <h2>${esc(ft.h2)}</h2>
+    <p class="eyebrow">${line(ft.eyebrow)}</p>
+    <h2>${line(ft.h2)}</h2>
     <ul class="points">
 ${points}
     </ul>
   </div>
-  <div class="lfeature-shot"><div class="phoneframe">${shotPair(lang, img, ft.h2)}</div></div>
+  <div class="lfeature-shot"><div class="phoneframe">${shotPair(lang, img, plain(ft.h2))}</div></div>
 </section>`;
   }).join('\n');
   const body = `<section class="lhero">
   <div class="lhero-text">
-    <p class="eyebrow">${esc(h.eyebrow)}</p>
-    <h1>${esc(h.h1)}</h1>
-    <p class="lsub">${esc(h.sub)}</p>
+    <p class="eyebrow">${line(h.eyebrow)}</p>
+    <h1>${line(h.h1)}</h1>
+    <p class="lsub">${line(h.sub)}</p>
     ${downloadRow(lang)}
-    <p class="hero-note">${esc(h.note)}</p>
+    <p class="hero-note">${line(h.note)}</p>
   </div>
-  <div class="lhero-shot"><div class="phoneframe">${shotPair(lang, 'stash', h.h1)}</div></div>
+  <div class="lhero-shot"><div class="phoneframe">${shotPair(lang, 'stash', plain(h.h1))}</div></div>
 </section>
 
 <div class="pillars">
@@ -393,34 +442,34 @@ ${pillars}
 ${features}
 
 <section class="toolsband">
-  <h2>${esc(c.tools.title)}</h2>
+  <h2>${line(c.tools.title)}</h2>
   <div class="toolsgrid">
 ${c.tools.items.map((it, i) => {
     const img = TOOL_IMGS[i] || 'calculator';
     return `    <figure class="toolcard">
-      <div class="phoneframe">${shotPair(lang, img, it.title)}</div>
-      <figcaption><b>${esc(it.title)}</b><span>${esc(it.desc)}</span></figcaption>
+      <div class="phoneframe">${shotPair(lang, img, plain(it.title))}</div>
+      <figcaption><b>${line(it.title)}</b><span>${line(it.desc)}</span></figcaption>
     </figure>`;
   }).join('\n')}
   </div>
 </section>
 
 <section class="ipadband">
-  <p class="eyebrow">${esc(c.ipad.eyebrow)}</p>
-  <h2>${esc(c.ipad.h2)}</h2>
-  <p class="lsub">${esc(c.ipad.sub)}</p>
-  <div class="ipadframe"><span class="shot"><img class="img-light" src="${u('/assets/landing/ipad.jpg')}" alt="${escAttr(COPY[lang].shotAlt?.ipad || c.ipad.h2)}" loading="lazy" /><img class="img-dark" src="${u('/assets/landing/ipad_dark.jpg')}" alt="" loading="lazy" aria-hidden="true" /></span></div>
+  <p class="eyebrow">${line(c.ipad.eyebrow)}</p>
+  <h2>${line(c.ipad.h2)}</h2>
+  <p class="lsub">${line(c.ipad.sub)}</p>
+  <div class="ipadframe"><span class="shot"><img class="img-light" src="${u('/assets/landing/ipad.jpg')}" alt="${escAttr(COPY[lang].shotAlt?.ipad || plain(c.ipad.h2))}" loading="lazy" /><img class="img-dark" src="${u('/assets/landing/ipad_dark.jpg')}" alt="" loading="lazy" aria-hidden="true" /></span></div>
 </section>
 
 <section class="plumband">
-  <h2>${esc(c.band.h2)}</h2>
-  <p>${esc(c.band.p1)}</p>
-  <p>${esc(c.band.p2)}</p>
+  <h2>${line(c.band.h2)}</h2>
+  <p>${line(c.band.p1)}</p>
+  <p>${line(c.band.p2)}</p>
   <a class="btn plumband-btn" href="${SITE.appStoreUrl}">${esc(c.band.cta)}</a>
   <a class="btn plumband-btn" href="${SITE.playUrl}">${esc(c.band.ctaPlay || COPY[lang].footerLabel.play)}</a>
 </section>
 
-<h2 class="section-title">${c.exploreTitle}</h2>
+<h2 class="section-title">${lineHtml(c.exploreTitle)}</h2>
 <ul class="cards">
 ${cards}
 </ul>`;
@@ -524,7 +573,7 @@ function changelog() {
     const date = r.date ? `<span class="date">${esc(r.date)}</span>` : '';
     return `  <section class="release${isMilestone(r.version) ? ' milestone' : ''}" id="v${escAttr(r.version)}">
     <div class="release-head">
-      <h2>${esc(r.title)} <span class="ver">v${esc(r.version)}</span></h2>
+      <h2>${releaseTitle(r.title)} <span class="ver">v${esc(r.version)}</span></h2>
       ${date}
     </div>
     <ul>
@@ -535,7 +584,7 @@ ${notesList(r)}
   const folded = (r) => {
     const date = r.date ? `<span class="date">${esc(r.date)}</span>` : '';
     return `    <details class="release-fold${isMilestone(r.version) ? ' milestone' : ''}" id="v${escAttr(r.version)}">
-      <summary>${esc(r.title)} <span class="ver">v${esc(r.version)}</span>${date}</summary>
+      <summary>${releaseTitle(r.title)} <span class="ver">v${esc(r.version)}</span>${date}</summary>
       <ul>
 ${notesList(r)}
       </ul>
@@ -875,7 +924,7 @@ function buildGuide(lang) {
       body: `<article class="prose">${bodyHtml}</article>\n${guideNav(lang, slug)}`,
     });
     const outFile = join(HERE, `${dir}/guide`.replace(/^\//, ''), `${slug}.html`);
-    writeFileSync(outFile, html, 'utf8');
+    writeFileSync(outFile, setHeadings(html), 'utf8');
     WRITTEN.add(outFile);
     count++;
   }
@@ -962,6 +1011,20 @@ function verifyNoFreeClaim() {
   const og = bare.exec(text(ogSvg()));
   if (og) problems.push(`og.png text: "${og[0]}"`);
   if (problems.length) throw new Error(`A page says Purl is free (fix it in docs/site/copy.json, the guide or the app):\n  ${problems.join('\n  ')}`);
+}
+// A phrase mark from copy.json ("|" or "||" between words) never reaches the
+// reader: a string read without line() or plain() would show it. A title's
+// " | Purl" has spaces around it and passes.
+function verifyNoPhraseMarks() {
+  const problems = [];
+  for (const file of WRITTEN) {
+    if (!file.endsWith('.html')) continue;
+    const html = readFileSync(file, 'utf8').replace(/<(script|style|pre|code)[\s\S]*?<\/\1>/g, ' ');
+    const text = html.replace(/<[^>]*\balt="([^"]*)"[^>]*>/g, ' $1 ').replace(/<meta [^>]*content="([^"]*)"[^>]*>/g, ' $1 ').replace(/<[^>]+>/g, ' ');
+    const hit = /[^\s|]\|{1,2}[^\s|]|\|\|/.exec(text);
+    if (hit) problems.push(`${file.replace(HERE, '')}: "...${text.slice(Math.max(0, hit.index - 40), hit.index + 40).replace(/\s+/g, ' ')}..."`);
+  }
+  if (problems.length) throw new Error(`A phrase mark shows on a page (read the string through line() or plain()):\n  ${problems.join('\n  ')}`);
 }
 function verifyLinkGraph() {
   const pages = [];
@@ -1095,6 +1158,7 @@ async function main() {
   ]);
   verifyLinkGraph();
   verifyNoFreeClaim();
+  verifyNoPhraseMarks();
   await buildIcons();
   console.log(`Built bilingual site (en + no) + ${guideCount} guide pages across both languages, icons, sitemap.`);
 }
