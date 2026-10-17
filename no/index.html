@@ -51,6 +51,7 @@
   <a class="btn btn-primary btn-store" href="https://play.google.com/store/apps/details?id=no.purl.app"><span class="store-line"><span class="store-top">Last ned på</span>Google Play</span></a>
 </div>
     <p class="hero-note"><span class="ph">For iPhone, iPad og Android.</span> <span class="ph">Ingen konto.</span></p>
+    
   </div>
   <div class="lhero-shot"><div class="phoneframe"><span class="shot"><img class="img-light" src="/assets/landing/no_stash.png" alt="Stash-skjermen i Purl: garn sortert på merke, med farge, partinummer og totaler i gram og meter" loading="lazy" /><img class="img-dark" src="/assets/landing/no_stash_dark.png" alt="" loading="lazy" aria-hidden="true" /></span></div></div>
 </section>
@@ -175,6 +176,26 @@
     btns[i].addEventListener('click', function () { var m = this.getAttribute('data-mode') || ''; store(m); apply(m); });
   }
   apply(root.getAttribute('data-theme') || '');
+})();
+</script>
+<script>
+(function () {
+  try {
+    var p = location.pathname, now = new Date(), key = 'purl-visit';
+    var day = now.getFullYear() + '-' + (now.getMonth() + 1) + '-' + now.getDate();
+    var seen = null;
+    try { seen = JSON.parse(sessionStorage.getItem(key) || 'null'); } catch (e) {}
+    if (!seen || seen.d !== day || !seen.p) seen = { d: day, p: [] };
+    if (seen.p.indexOf(p) >= 0) return;
+    var r = '';
+    try { var h = document.referrer ? new URL(document.referrer).hostname : ''; if (h && h !== location.hostname) r = h; } catch (e) {}
+    var body = JSON.stringify({ p: p, r: r }), url = "https://editor.hbc3.no/api/public/visit";
+    var sent = false;
+    try { sent = !!(navigator.sendBeacon && navigator.sendBeacon(url, new Blob([body], { type: 'text/plain' }))); } catch (e) {}
+    if (!sent && window.fetch) fetch(url, { method: 'POST', body: body, keepalive: true, credentials: 'omit', headers: { 'content-type': 'text/plain' } }).catch(function () {});
+    seen.p.push(p);
+    try { sessionStorage.setItem(key, JSON.stringify(seen)); } catch (e) {}
+  } catch (e) {}
 })();
 </script>
 </body>
