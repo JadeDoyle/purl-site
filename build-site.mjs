@@ -408,16 +408,15 @@ const TOOL_IMGS = ['chartmaker', 'terminology', 'timeline', 'calculator'];
 
 // The "120 knitters used Purl in the last 24 hours" line (2026-10-17). The
 // page is static, so the number arrives on load: the editor server answers
-// { count, window }, already rounded down, with a window of 24h, 48h or 7d
-// (the shortest that reaches 100), or nulls under 100. The line ships hidden
-// and stays hidden on nulls, a failed fetch or an old browser. Its three
-// wordings come from copy.json (landing.hero.live), phrased at build time,
+// { count, window }, with a window of 24h, 48h, 7d or 30d (the shortest that
+// reaches 100), or nulls under 100. The line ships hidden and stays hidden on
+// nulls, a failed fetch or an old browser. Its four wordings come from copy.json (landing.hero.live), phrased at build time,
 // one per window, so the label always names the window the number covers.
 function liveLine(lang) {
   const live = COPY[lang].landing.hero.live;
   if (!live) return '';
   const lines = {};
-  for (const w of ['24h', '48h', '7d']) if (live[w]) lines[w] = line(live[w]);
+  for (const w of ['24h', '48h', '7d', '30d']) if (live[w]) lines[w] = line(live[w]);
   return `<p class="live-count" id="live-count" hidden data-src="${escAttr(SITE.liveCountUrl)}" data-lines="${escAttr(JSON.stringify(lines))}"></p>
     <script>
 (function () {
