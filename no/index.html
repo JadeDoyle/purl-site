@@ -51,7 +51,24 @@
   <a class="btn btn-primary btn-store" href="https://play.google.com/store/apps/details?id=no.purl.app"><span class="store-line"><span class="store-top">Last ned på</span>Google Play</span></a>
 </div>
     <p class="hero-note"><span class="ph">For iPhone, iPad og Android.</span> <span class="ph">Ingen konto.</span></p>
-    
+    <p class="live-count" id="live-count" hidden data-src="https://editor.hbc3.no/api/public/active" data-lines="{&quot;24h&quot;:&quot;&lt;span class=\&quot;ph\&quot;&gt;{n} strikkere brukte Purl&lt;/span&gt; &lt;span class=\&quot;ph\&quot;&gt;det siste døgnet&lt;/span&gt;&quot;,&quot;48h&quot;:&quot;&lt;span class=\&quot;ph\&quot;&gt;{n} strikkere brukte Purl&lt;/span&gt; &lt;span class=\&quot;ph\&quot;&gt;de siste 48 timene&lt;/span&gt;&quot;,&quot;7d&quot;:&quot;&lt;span class=\&quot;ph\&quot;&gt;{n} strikkere brukte Purl&lt;/span&gt; &lt;span class=\&quot;ph\&quot;&gt;den siste uka&lt;/span&gt;&quot;,&quot;30d&quot;:&quot;&lt;span class=\&quot;ph\&quot;&gt;{n} strikkere brukte Purl&lt;/span&gt; &lt;span class=\&quot;ph\&quot;&gt;de siste 30 dagene&lt;/span&gt;&quot;}"></p>
+    <script>
+(function () {
+  var el = document.getElementById('live-count');
+  if (!el || !window.fetch || !window.JSON) return;
+  var lines;
+  try { lines = JSON.parse(el.getAttribute('data-lines')); } catch (e) { return; }
+  fetch(el.getAttribute('data-src'), { credentials: 'omit' })
+    .then(function (r) { return r.ok ? r.json() : null; })
+    .then(function (d) {
+      if (!d || typeof d.count !== 'number' || !(d.count > 0) || !lines[d.window]) return;
+      var n = d.count.toLocaleString("no");
+      el.innerHTML = '<span class="live-dot" aria-hidden="true"></span><span>' + lines[d.window].replace('{n}', n) + '</span>';
+      el.hidden = false;
+    })
+    .catch(function () {});
+})();
+</script>
   </div>
   <div class="lhero-shot"><div class="phoneframe"><span class="shot"><img class="img-light" src="/assets/landing/no_stash.png" alt="Stash-skjermen i Purl: garn sortert på merke, med farge, partinummer og totaler i gram og meter" loading="lazy" /><img class="img-dark" src="/assets/landing/no_stash_dark.png" alt="" loading="lazy" aria-hidden="true" /></span></div></div>
 </section>
