@@ -43,6 +43,10 @@ const SITE = {
   // The landing's "knitters used Purl" line reads { count, window } from here
   // (the editor server, tools/catalogue-editor/liveCount.js in the app repo).
   liveCountUrl: 'https://editor.hbc3.no/api/public/active',
+  // Every page tells the editor server it was visited (tools/catalogue-editor/
+  // visits.js in the app repo). PURL_VISIT_URL points a local test build at a
+  // capture server instead.
+  visitUrl: process.env.PURL_VISIT_URL || 'https://editor.hbc3.no/api/public/visit',
 };
 
 // Safari on iPhone and iPad renders an install banner from this. The id is
@@ -263,6 +267,33 @@ const THEME_SCRIPT = `<script>
 })();
 </script>`;
 
+// Visit counting (the maintainer, 2026-10-17, "Count on our server"): each
+// page load sends its path and, when the visitor came from another site, that
+// site's domain, nothing else. The server keeps running totals only. A reload
+// of the same page on the same day in the same tab is not sent again: the
+// tab's sessionStorage remembers today's paths, and nothing leaves the
+// browser for that. No cookie, no identifier.
+const VISIT_SCRIPT = `<script>
+(function () {
+  try {
+    var p = location.pathname, now = new Date(), key = 'purl-visit';
+    var day = now.getFullYear() + '-' + (now.getMonth() + 1) + '-' + now.getDate();
+    var seen = null;
+    try { seen = JSON.parse(sessionStorage.getItem(key) || 'null'); } catch (e) {}
+    if (!seen || seen.d !== day || !seen.p) seen = { d: day, p: [] };
+    if (seen.p.indexOf(p) >= 0) return;
+    var r = '';
+    try { var h = document.referrer ? new URL(document.referrer).hostname : ''; if (h && h !== location.hostname) r = h; } catch (e) {}
+    var body = JSON.stringify({ p: p, r: r }), url = ${JSON.stringify(SITE.visitUrl)};
+    var sent = false;
+    try { sent = !!(navigator.sendBeacon && navigator.sendBeacon(url, new Blob([body], { type: 'text/plain' }))); } catch (e) {}
+    if (!sent && window.fetch) fetch(url, { method: 'POST', body: body, keepalive: true, credentials: 'omit', headers: { 'content-type': 'text/plain' } }).catch(function () {});
+    seen.p.push(p);
+    try { sessionStorage.setItem(key, JSON.stringify(seen)); } catch (e) {}
+  } catch (e) {}
+})();
+</script>`;
+
 function footer(lang) {
   const t = COPY[lang];
   const cols = FOOTER_GROUPS.map((keys, i) => `<div class="footer-col"><h2>${t.footerTitles[i]}</h2><ul>${
@@ -334,6 +365,7 @@ ${body}
 </main>
 ${footer(lang)}
 ${THEME_SCRIPT}
+${VISIT_SCRIPT}
 </body>
 </html>
 `;
