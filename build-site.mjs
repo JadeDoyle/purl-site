@@ -40,6 +40,9 @@ const SITE = {
   feedbackForm: 'https://docs.google.com/forms/d/e/1FAIpQLSdXgzhbJAsj0Zkr3Qrj4zyk_lO9kETwUbGvxIWLFSstn9p4lw/viewform',
   email: 'contact@purl.no',
   year: 2026,
+  // The landing's "knitters used Purl" line reads { count, window } from here
+  // (the editor server, tools/catalogue-editor/liveCount.js in the app repo).
+  liveCountUrl: 'https://editor.hbc3.no/api/public/active',
 };
 
 // Safari on iPhone and iPad renders an install banner from this. The id is
@@ -403,6 +406,38 @@ const FEAT_IMGS = ['patterns', 'projects', 'stash'];
 // text in copy.json's landing.tools.items.
 const TOOL_IMGS = ['chartmaker', 'terminology', 'timeline', 'calculator'];
 
+// The "120 knitters used Purl in the last 24 hours" line (2026-10-17). The
+// page is static, so the number arrives on load: the editor server answers
+// { count, window }, already rounded down, with a window of 24h, 48h or 7d
+// (the shortest that reaches 100), or nulls under 100. The line ships hidden
+// and stays hidden on nulls, a failed fetch or an old browser. Its three
+// wordings come from copy.json (landing.hero.live), phrased at build time,
+// one per window, so the label always names the window the number covers.
+function liveLine(lang) {
+  const live = COPY[lang].landing.hero.live;
+  if (!live) return '';
+  const lines = {};
+  for (const w of ['24h', '48h', '7d']) if (live[w]) lines[w] = line(live[w]);
+  return `<p class="live-count" id="live-count" hidden data-src="${escAttr(SITE.liveCountUrl)}" data-lines="${escAttr(JSON.stringify(lines))}"></p>
+    <script>
+(function () {
+  var el = document.getElementById('live-count');
+  if (!el || !window.fetch || !window.JSON) return;
+  var lines;
+  try { lines = JSON.parse(el.getAttribute('data-lines')); } catch (e) { return; }
+  fetch(el.getAttribute('data-src'), { credentials: 'omit' })
+    .then(function (r) { return r.ok ? r.json() : null; })
+    .then(function (d) {
+      if (!d || typeof d.count !== 'number' || !(d.count > 0) || !lines[d.window]) return;
+      var n = d.count.toLocaleString(${JSON.stringify(COPY[lang].htmlLang)});
+      el.innerHTML = '<span class="live-dot" aria-hidden="true"></span><span>' + lines[d.window].replace('{n}', n) + '</span>';
+      el.hidden = false;
+    })
+    .catch(function () {});
+})();
+</script>`;
+}
+
 function landing(lang) {
   const c = COPY[lang].landing;
   const h = c.hero;
@@ -431,6 +466,7 @@ ${points}
     <p class="lsub">${line(h.sub)}</p>
     ${downloadRow(lang)}
     <p class="hero-note">${line(h.note)}</p>
+    ${liveLine(lang)}
   </div>
   <div class="lhero-shot"><div class="phoneframe">${shotPair(lang, 'stash', plain(h.h1))}</div></div>
 </section>
