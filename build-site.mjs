@@ -258,11 +258,38 @@ const THEME_SCRIPT = `<script>
     var b = document.querySelectorAll('.theme-moon');
     for (var i = 0; i < b.length; i++) b[i].setAttribute('aria-pressed', dark ? 'true' : 'false');
   }
+  // Each screenshot has a light and a dark picture, and the hidden one is
+  // lazy, so a browser never fetched it and the first switch popped it in
+  // (the maintainer, 2026-10-18). Both pictures of a shot load once it comes
+  // near the screen, unless the visitor saves data.
+  var c = navigator.connection, frugal = c && (c.saveData || /(^|-)2g$/.test(c.effectiveType || ''));
+  function warm(shot) { var im = shot.querySelectorAll('img'); for (var j = 0; j < im.length; j++) im[j].loading = 'eager'; }
+  if (!frugal && 'IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (es) {
+      for (var k = 0; k < es.length; k++) if (es[k].isIntersecting) { warm(es[k].target); io.unobserve(es[k].target); }
+    }, { rootMargin: '600px 0px' });
+    var shots = document.querySelectorAll('.shot');
+    for (var s = 0; s < shots.length; s++) io.observe(shots[s]);
+  }
+  // A switch waits for the new theme's pictures on screen (at most 0.4 s),
+  // then the page cross-fades from one theme to the other.
+  function swap(dark) {
+    var wait = [], im = document.querySelectorAll('.shot .' + (dark ? 'img-dark' : 'img-light'));
+    for (var j = 0; j < im.length; j++) {
+      var r = im[j].parentNode.getBoundingClientRect();
+      if (r.bottom > -200 && r.top < innerHeight + 200 && im[j].decode) { im[j].loading = 'eager'; wait.push(im[j].decode().catch(function () {})); }
+    }
+    Promise.race([Promise.all(wait), new Promise(function (ok) { setTimeout(ok, 400); })]).then(function () {
+      if (!document.startViewTransition) return apply(dark);
+      root.classList.add('theme-fade');
+      document.startViewTransition(function () { apply(dark); }).finished.then(function () { root.classList.remove('theme-fade'); }, function () { root.classList.remove('theme-fade'); });
+    });
+  }
   var b = document.querySelectorAll('.theme-moon');
   for (var i = 0; i < b.length; i++) b[i].addEventListener('click', function () {
     var dark = root.getAttribute('data-theme') !== 'dark';
     try { if (dark) localStorage.setItem(KEY, 'dark'); else localStorage.removeItem(KEY); } catch (e) {}
-    apply(dark);
+    swap(dark);
   });
   apply(root.getAttribute('data-theme') === 'dark');
 })();

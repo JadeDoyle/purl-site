@@ -386,6 +386,8 @@ p, li { text-wrap: pretty; }
 .theme-moon:hover { border-color: var(--primary); color: var(--primary); }
 .theme-moon[aria-pressed="true"] { color: var(--primary); }
 .theme-moon[aria-pressed="true"] svg { fill: currentColor; }
+/* A theme switch cross-fades the whole page (the theme script). */
+:root.theme-fade::view-transition-old(root), :root.theme-fade::view-transition-new(root) { animation-duration: .35s; }
 @media (max-width: 560px) {
   .guidefig { margin: 16px -4px 18px; }
   .guidefig img { max-height: 62vh; border-radius: 12px; }
