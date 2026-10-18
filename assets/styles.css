@@ -374,26 +374,28 @@ p, li { text-wrap: pretty; }
   margin: 20px 5px 0; font-weight: 700;
 }
 .plumband .plumband-btn:hover { background: #fff; }
-/* Theme switch (Auto follows the system, like the app). */
-.theme-seg { display: inline-flex; border: 1px solid var(--border); border-radius: 999px; padding: 2px; gap: 1px; }
-.theme-seg button {
-  border: none; background: none; font: inherit; font-size: 12px; font-weight: 600;
-  padding: 4px 10px; border-radius: 999px; color: var(--muted); cursor: pointer;
+/* The theme button: light by default, a crescent moon turns dark on and is
+   filled while it is (the maintainer, 2026-10-18: no Auto). Small enough to
+   stay in the header at every width. */
+.theme-moon {
+  display: inline-flex; align-items: center; justify-content: center; flex: none;
+  width: 35px; height: 35px; padding: 0; border: 1px solid var(--border); border-radius: 999px;
+  background: none; color: var(--muted); cursor: pointer;
 }
-.theme-seg button.active { background: var(--primary); color: #fff; }
-/* On small screens the header is a tight single row, so the switch lives in
-   the footer instead (hidden there on wider screens). */
-.footer-theme { display: none; margin-top: 20px; }
+.theme-moon svg { width: 17px; height: 17px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linejoin: round; }
+.theme-moon:hover { border-color: var(--primary); color: var(--primary); }
+.theme-moon[aria-pressed="true"] { color: var(--primary); }
+.theme-moon[aria-pressed="true"] svg { fill: currentColor; }
 @media (max-width: 560px) {
   .guidefig { margin: 16px -4px 18px; }
   .guidefig img { max-height: 62vh; border-radius: 12px; }
-  .guidefig figcaption { font-size: 13px; max-width: none; } .footer-theme { display: block; } }
+  .guidefig figcaption { font-size: 13px; max-width: none; } }
 
-/* Dark theme tokens: chosen explicitly (data-theme="dark"), or system-dark
-   while on Auto (no data-theme). Most of the site follows via the variables;
+/* Dark theme tokens, when the moon is on (data-theme="dark"; light is the
+   default whatever the system says). Most of the site follows via the variables;
    the few solid-fill rules that need a fixed plum are pinned below. The dark
    background matches the app's dark theme so the dark screenshots sit
-   naturally. NOTE: keep both copies of this block identical. */
+   naturally. */
 :root[data-theme="dark"] {
   --bg: #1A1620; --surface: #241E2D; --surface-alt: #2B2436;
   --primary: #A98FC9; --primary-dark: #C7B3DE;
@@ -406,21 +408,6 @@ p, li { text-wrap: pretty; }
 :root[data-theme="dark"] .phoneframe, :root[data-theme="dark"] .ipadframe { background: #0E0B12; border: 1px solid rgba(255,255,255,.08); box-shadow: 0 26px 60px rgba(0,0,0,.5); }
 :root[data-theme="dark"] .shot .img-light { display: none; }
 :root[data-theme="dark"] .shot .img-dark { display: block; }
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --bg: #1A1620; --surface: #241E2D; --surface-alt: #2B2436;
-    --primary: #A98FC9; --primary-dark: #C7B3DE;
-    --text: #F4EFF2; --muted: #B5ABC0; --border: #3A3244; --success: #5FA986;
-  }
-  :root:not([data-theme="light"]) .btn-primary { background: #7C5E9B; border-color: #7C5E9B; color: #fff; }
-  :root:not([data-theme="light"]) .btn-primary:hover { background: #8D6FAE; }
-  :root:not([data-theme="light"]) .btn-primary small { color: rgba(255,255,255,0.8); }
-  :root:not([data-theme="light"]) .pagenav a[aria-current="page"] { background: #7C5E9B; border-color: #7C5E9B; color: #fff; }
-  :root:not([data-theme="light"]) .phoneframe, :root:not([data-theme="light"]) .ipadframe { background: #0E0B12; border: 1px solid rgba(255,255,255,.08); box-shadow: 0 26px 60px rgba(0,0,0,.5); }
-  :root:not([data-theme="light"]) .shot .img-light { display: none; }
-  :root:not([data-theme="light"]) .shot .img-dark { display: block; }
-}
-
 @media (max-width: 760px) {
   .lhero { flex-direction: column; padding-top: 12px; }
   .lhero-text h1 { font-size: 32px; }
@@ -436,19 +423,23 @@ p, li { text-wrap: pretty; }
   .points li { text-align: left; }
 }
 
+/* Two-row header below 640 px: the logo, the moon and the EN/NO pill on the
+   first row, the page links on the second. One row needs about 612 px with
+   the Norwegian links (it overflowed a 375 px phone once the moon came, and
+   the Norwegian links already did without it). */
+@media (max-width: 640px) {
+  .site-header { flex-wrap: wrap; gap: 4px; row-gap: 6px; padding: 10px 12px; }
+  .brand { margin-right: 0; flex: none; }
+  .theme-moon { margin-left: auto; }
+  .site-nav { order: 3; flex-basis: 100%; flex-wrap: nowrap; gap: 0; margin-left: -7px; }
+  .site-nav a { padding: 6px 7px; font-size: 14px; }
+  .lang { flex: none; margin-left: 3px; padding: 5px 8px; font-size: 12px; }
+}
+
 @media (max-width: 560px) {
   .cards { grid-template-columns: 1fr; }
   .features { grid-template-columns: 1fr; }
   .hero h1 { font-size: 33px; }
-  .theme-seg { display: none; }
-  /* Single-row header: logo only (no wordmark), page links, then the EN/NO
-     pill, all on one line. The pill's constant width makes this predictable. */
-  .site-header { flex-wrap: nowrap; gap: 4px; padding: 10px 12px; }
-  .brand { margin-right: 0; flex: none; }
-  .brand span { display: none; }
-  .site-nav { flex-wrap: nowrap; gap: 0; margin-left: auto; }
-  .site-nav a { padding: 6px 7px; font-size: 14px; }
-  .lang { flex: none; margin-left: 3px; padding: 5px 8px; font-size: 12px; }
   .wrap { padding: 30px 18px 52px; }
 }
 
