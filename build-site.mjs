@@ -173,7 +173,9 @@ function readArray(tsxRelPath, varName) {
 }
 
 // --- languages + resource links ------------------------------------------
-const NAVKEYS = ['home', 'guide', 'support', 'privacy'];
+// The top bar keeps Guide and Support; Privacy lives in the footer (the
+// maintainer, 2026-10-18).
+const NAVKEYS = ['home', 'guide', 'support'];
 const SLUGS = {
   home: '/', guide: '/guide/', support: '/support/', feedback: '/feedback/',
   privacy: '/privacy/', terms: '/terms/', press: '/press/',
