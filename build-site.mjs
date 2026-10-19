@@ -861,7 +861,7 @@ const GUIDE_PAGES = [
 ];
 
 const GUIDE_GROUPS = [
-  ['tasks', 'Do one thing', 'Slik gjør du'],
+  ['tasks', 'How to', 'Slik gjør du'],
   ['start', 'Start here', 'Start her'],
   ['tutorial', 'Tutorials', 'Veiledninger'],
   ['reference', 'Reference', 'Oppslag'],
