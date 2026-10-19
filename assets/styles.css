@@ -317,9 +317,10 @@ p, li { text-wrap: pretty; }
 .lhero .btn-row { justify-content: flex-start; margin: 0 0 6px; }
 .hero-note { color: var(--muted); font-size: 14px; margin: 8px 0 0; }
 /* "120 knitters used Purl in the last 24 hours": filled in on load, hidden
-   until then and whenever there is no number. */
-.live-count { display: flex; align-items: center; gap: 9px; margin: 14px 0 0; font-size: 14px; font-weight: 600; color: var(--text); }
-.live-count[hidden] { display: none; }
+   until then and whenever there is no number. Hidden keeps its line, so the
+   hero text does not move when the number arrives; it fades in instead. */
+.live-count { display: flex; align-items: center; gap: 9px; margin: 14px 0 0; min-height: 1.6em; font-size: 14px; font-weight: 600; color: var(--text); transition: opacity .4s ease-out; }
+.live-count[hidden] { display: flex; visibility: hidden; opacity: 0; }
 .live-dot { position: relative; flex: none; width: 8px; height: 8px; border-radius: 50%; background: var(--success); }
 .live-dot::after { content: ""; position: absolute; inset: -4px; border-radius: 50%; border: 2px solid var(--success); opacity: 0; animation: live-pulse 2.4s ease-out infinite; }
 @keyframes live-pulse { 0% { transform: scale(.5); opacity: .6; } 100% { transform: scale(1.3); opacity: 0; } }
@@ -330,6 +331,9 @@ p, li { text-wrap: pretty; }
   box-shadow: 0 26px 60px rgba(44, 38, 48, .22);
 }
 .phoneframe img { display: block; width: 100%; border-radius: 31px; }
+/* The hero shots are all 640 x 1387: the frame has its height before the
+   image loads, so the hero text does not jump. */
+.lhero-shot .phoneframe img { aspect-ratio: 640 / 1387; }
 .shot { display: block; }
 .shot .img-dark { display: none; }
 .pillars { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin: 26px 0 8px; }
