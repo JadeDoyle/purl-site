@@ -453,9 +453,8 @@ function downloadRow(lang) {
 // A screenshot pair: the light image shows by default, CSS flips to the dark
 // one together with the palette. Files live in assets/landing/ (committed
 // static assets): 640 px WebP captured from the current app on an emulator,
-// with an iPhone status bar drawn in, the maintainer's agent's scripts
-// compose.cjs and install.sh in the Purl repo's gitignored
-// screenshots/site-shots/.
+// with an iPhone status bar drawn in. The scripts and the steps are in the
+// Purl repo's tools/site-shots/ (README.md there).
 // Alt text describes the SCREENSHOT, not the heading next to it. A slogan
 // ("Never forget what you have.") tells a screen reader nothing about the
 // image and repeats text already on the page. The descriptions live in
@@ -829,10 +828,19 @@ ${shots}
 
 // --- user guide (bilingual: user-guide/ + user-guide/no/) -----------------
 // [basename, EN title, NO title, isIndex, group]
-// The guide is three groups: where a newcomer starts, the short illustrated
+// The guide is four groups: eight short task pages (a few numbered steps, a
+// ringed picture each), where a newcomer starts, the short illustrated
 // tutorials, and the reference pages they lead into. The order here is the
 // order of the nav.
 const GUIDE_PAGES = [
+  ['task-yarn', 'Add a yarn', 'Legg til et garn', false, 'tasks'],
+  ['task-pdf', 'Import a PDF pattern', 'Importer en PDF-oppskrift', false, 'tasks'],
+  ['task-project', 'Start a project', 'Start et prosjekt', false, 'tasks'],
+  ['task-count', 'Count rows', 'Tell rader', false, 'tasks'],
+  ['task-row', 'Mark your row', 'Marker raden din', false, 'tasks'],
+  ['task-chart', 'Follow a chart', 'Følg et diagram', false, 'tasks'],
+  ['task-colour', 'Make a colour chart', 'Lag et fargediagram', false, 'tasks'],
+  ['task-backup', 'Back up your data', 'Ta sikkerhetskopi av dataene dine', false, 'tasks'],
   ['README', 'User guide', 'Brukerveiledning', true, 'start'],
   ['getting-started', 'Getting started', 'Kom i gang', false, 'start'],
   ['tutorial-first-project', 'Your first project', 'Ditt første prosjekt', false, 'tutorial'],
@@ -853,6 +861,7 @@ const GUIDE_PAGES = [
 ];
 
 const GUIDE_GROUPS = [
+  ['tasks', 'Do one thing', 'Slik gjør du'],
   ['start', 'Start here', 'Start her'],
   ['tutorial', 'Tutorials', 'Veiledninger'],
   ['reference', 'Reference', 'Oppslag'],
@@ -874,7 +883,11 @@ const GUIDE_GROUPS = [
 // guide is a 404 inside every installed copy of Purl.
 //
 // TO PUBLISH THE REWRITE: set this to false and delete guide-frozen/.
-const GUIDE_DRAFT = true;
+//
+// PURL_GUIDE_PREVIEW=1 builds the rewrite instead, for a local look only:
+// rebuild without it before anything is committed, or the worktree's
+// guide/*.html are the unreviewed rewrite.
+const GUIDE_DRAFT = process.env.PURL_GUIDE_PREVIEW !== '1';
 const GUIDE_FROZEN = join(HERE, 'guide-frozen');
 
 const GUIDE_FLAGS = { garment: false };
