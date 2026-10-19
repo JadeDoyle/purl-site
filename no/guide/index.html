@@ -13,8 +13,8 @@
 <link rel="icon" href="/assets/favicon-32.png" sizes="32x32" type="image/png" />
 <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png" />
 <link rel="stylesheet" href="/assets/styles.css" />
-<meta name="color-scheme" content="light dark" />
-<script>try{var t=localStorage.getItem('purl-theme');if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t);}catch(e){}</script>
+<meta name="color-scheme" content="light" />
+<script>try{var q=/[?&]theme=(light|dark)/.exec(location.search);var d=(q?q[1]:localStorage.getItem('purl-theme'))==='dark';}catch(e){}document.documentElement.setAttribute('data-theme',d?'dark':'light');document.documentElement.style.colorScheme=d?'dark':'light';</script>
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content="Purl" />
 <meta property="og:locale" content="nb_NO" />
@@ -31,12 +31,8 @@
 <body>
 <header class="site-header">
   <a class="brand" href="/no/"><img src="/logo.png" alt="" width="30" height="30" /><span>Purl.</span></a>
-  <nav class="site-nav"><a href="/no/">Hjem</a><a href="/no/guide/" aria-current="page">Guide</a><a href="/no/support/">Support</a><a href="/no/privacy/">Personvern</a></nav>
-  <div class="theme-seg" role="group" aria-label="Tema">
-    <button type="button" data-mode="">Auto</button>
-    <button type="button" data-mode="light">Lys</button>
-    <button type="button" data-mode="dark">Mørk</button>
-  </div>
+  <nav class="site-nav"><a href="/no/">Hjem</a><a href="/no/guide/" aria-current="page">Guide</a><a href="/no/support/">Support</a></nav>
+  <button type="button" class="theme-moon" aria-pressed="false" aria-label="Mørk" title="Mørk"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 14.2A8.5 8.5 0 1 1 9.8 3.5a6.8 6.8 0 0 0 10.7 10.7z" /></svg></button>
   <a class="lang" href="/guide/" hreflang="en" aria-label="Switch to English / Bytt til engelsk">EN<span aria-hidden="true">/</span><b>NO</b></a>
 </header>
 <main class="wrap">
@@ -72,32 +68,57 @@
 </main>
 <footer class="site-footer"><div class="footer-inner">
   <div class="footer-cols"><div class="footer-col"><h2>Purl.</h2><ul><li><a href="/no/">Hjem</a></li><li><a href="/no/guide/">Brukerveiledning</a></li><li><a href="/no/support/">Støtte</a></li><li><a href="/no/feedback/">Send tilbakemelding</a></li></ul></div><div class="footer-col"><h2>Oppdateringer</h2><ul><li><a href="/changelog/">Nyheter (engelsk)</a></li><li><a href="/roadmap/">Veikart (engelsk)</a></li></ul></div><div class="footer-col"><h2>Juridisk</h2><ul><li><a href="/no/privacy/">Personvern</a></li><li><a href="/no/terms/">Vilkår for bruk</a></li></ul></div><div class="footer-col"><h2>Mer</h2><ul><li><a href="/no/press/">Pressemateriell</a></li></ul></div></div>
-  <div class="footer-theme"><div class="theme-seg" role="group" aria-label="Tema">
-    <button type="button" data-mode="">Auto</button>
-    <button type="button" data-mode="light">Lys</button>
-    <button type="button" data-mode="dark">Mørk</button>
-  </div></div>
   <p class="footer-note">Purl, en følgesvenn for strikking og hekling. Dataene dine blir på enheten din. &copy; 2026 Purl.</p>
 </div></footer>
 <script>
 (function () {
   var KEY = 'purl-theme';
   var root = document.documentElement;
-  function store(v) { try { if (v) localStorage.setItem(KEY, v); else localStorage.removeItem(KEY); } catch (e) {} }
-  function apply(mode) {
-    if (mode === 'light' || mode === 'dark') root.setAttribute('data-theme', mode);
-    else root.removeAttribute('data-theme');
-    root.style.colorScheme = mode || '';
-    var btns = document.querySelectorAll('.theme-seg button');
-    for (var i = 0; i < btns.length; i++) {
-      btns[i].classList.toggle('active', (btns[i].getAttribute('data-mode') || '') === (mode || ''));
+  function apply(dark) {
+    root.setAttribute('data-theme', dark ? 'dark' : 'light');
+    root.style.colorScheme = dark ? 'dark' : 'light';
+    var b = document.querySelectorAll('.theme-moon');
+    for (var i = 0; i < b.length; i++) b[i].setAttribute('aria-pressed', dark ? 'true' : 'false');
+  }
+  // Each screenshot has a light and a dark picture, and the hidden one is
+  // lazy, so a browser never fetched it and the first switch popped it in
+  // (the maintainer, 2026-10-18). Both pictures of a shot load once it comes
+  // near the screen, unless the visitor saves data. The watch starts after
+  // the page has loaded, so the hero's hidden twin never competes with the
+  // hero picture itself, the largest thing a visitor waits for.
+  var c = navigator.connection, frugal = c && (c.saveData || /(^|-)2g$/.test(c.effectiveType || ''));
+  function warm(shot) { var im = shot.querySelectorAll('img'); for (var j = 0; j < im.length; j++) im[j].loading = 'eager'; }
+  function watch() {
+    var io = new IntersectionObserver(function (es) {
+      for (var k = 0; k < es.length; k++) if (es[k].isIntersecting) { warm(es[k].target); io.unobserve(es[k].target); }
+    }, { rootMargin: '600px 0px' });
+    var shots = document.querySelectorAll('.shot');
+    for (var s = 0; s < shots.length; s++) io.observe(shots[s]);
+  }
+  if (!frugal && 'IntersectionObserver' in window) {
+    if (document.readyState === 'complete') watch(); else window.addEventListener('load', watch);
+  }
+  // A switch waits for the new theme's pictures on screen (at most 0.4 s),
+  // then the page cross-fades from one theme to the other.
+  function swap(dark) {
+    var wait = [], im = document.querySelectorAll('.shot .' + (dark ? 'img-dark' : 'img-light'));
+    for (var j = 0; j < im.length; j++) {
+      var r = im[j].parentNode.getBoundingClientRect();
+      if (r.bottom > -200 && r.top < innerHeight + 200 && im[j].decode) { im[j].loading = 'eager'; wait.push(im[j].decode().catch(function () {})); }
     }
+    Promise.race([Promise.all(wait), new Promise(function (ok) { setTimeout(ok, 400); })]).then(function () {
+      if (!document.startViewTransition) return apply(dark);
+      root.classList.add('theme-fade');
+      document.startViewTransition(function () { apply(dark); }).finished.then(function () { root.classList.remove('theme-fade'); }, function () { root.classList.remove('theme-fade'); });
+    });
   }
-  var btns = document.querySelectorAll('.theme-seg button');
-  for (var i = 0; i < btns.length; i++) {
-    btns[i].addEventListener('click', function () { var m = this.getAttribute('data-mode') || ''; store(m); apply(m); });
-  }
-  apply(root.getAttribute('data-theme') || '');
+  var b = document.querySelectorAll('.theme-moon');
+  for (var i = 0; i < b.length; i++) b[i].addEventListener('click', function () {
+    var dark = root.getAttribute('data-theme') !== 'dark';
+    try { if (dark) localStorage.setItem(KEY, 'dark'); else localStorage.removeItem(KEY); } catch (e) {}
+    swap(dark);
+  });
+  apply(root.getAttribute('data-theme') === 'dark');
 })();
 </script>
 <script>
