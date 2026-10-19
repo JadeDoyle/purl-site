@@ -243,9 +243,12 @@ function themeMoon(lang) {
   const t = COPY[lang].theme;
   return `<button type="button" class="theme-moon" aria-pressed="false" aria-label="${escAttr(t.dark)}" title="${escAttr(t.dark)}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 14.2A8.5 8.5 0 1 1 9.8 3.5a6.8 6.8 0 0 0 10.7 10.7z" /></svg></button>`;
 }
-// Head snippet: sets the theme before first paint (no flash).
+// Head snippet: sets the theme before first paint (no flash). It sets
+// data-theme even when storage throws, since the stylesheet hides the moon on
+// a page without it (JavaScript off). The Professional preview build finds
+// this snippet by its opening `<script>try{var q=`: keep that start.
 const THEME_HEAD = `<meta name="color-scheme" content="light" />
-<script>try{var q=/[?&]theme=(light|dark)/.exec(location.search);var d=(q?q[1]:localStorage.getItem('purl-theme'))==='dark';document.documentElement.setAttribute('data-theme',d?'dark':'light');document.documentElement.style.colorScheme=d?'dark':'light';}catch(e){}</script>`;
+<script>try{var q=/[?&]theme=(light|dark)/.exec(location.search);var d=(q?q[1]:localStorage.getItem('purl-theme'))==='dark';}catch(e){}document.documentElement.setAttribute('data-theme',d?'dark':'light');document.documentElement.style.colorScheme=d?'dark':'light';</script>`;
 // Body-end snippet: wires the moon and remembers dark (light is the default,
 // so turning dark off forgets the choice).
 const THEME_SCRIPT = `<script>
@@ -261,15 +264,20 @@ const THEME_SCRIPT = `<script>
   // Each screenshot has a light and a dark picture, and the hidden one is
   // lazy, so a browser never fetched it and the first switch popped it in
   // (the maintainer, 2026-10-18). Both pictures of a shot load once it comes
-  // near the screen, unless the visitor saves data.
+  // near the screen, unless the visitor saves data. The watch starts after
+  // the page has loaded, so the hero's hidden twin never competes with the
+  // hero picture itself, the largest thing a visitor waits for.
   var c = navigator.connection, frugal = c && (c.saveData || /(^|-)2g$/.test(c.effectiveType || ''));
   function warm(shot) { var im = shot.querySelectorAll('img'); for (var j = 0; j < im.length; j++) im[j].loading = 'eager'; }
-  if (!frugal && 'IntersectionObserver' in window) {
+  function watch() {
     var io = new IntersectionObserver(function (es) {
       for (var k = 0; k < es.length; k++) if (es[k].isIntersecting) { warm(es[k].target); io.unobserve(es[k].target); }
     }, { rootMargin: '600px 0px' });
     var shots = document.querySelectorAll('.shot');
     for (var s = 0; s < shots.length; s++) io.observe(shots[s]);
+  }
+  if (!frugal && 'IntersectionObserver' in window) {
+    if (document.readyState === 'complete') watch(); else window.addEventListener('load', watch);
   }
   // A switch waits for the new theme's pictures on screen (at most 0.4 s),
   // then the page cross-fades from one theme to the other.
@@ -450,11 +458,14 @@ function downloadRow(lang) {
 // image and repeats text already on the page. The descriptions live in
 // copy.json (shotAlt) so they are reviewed like the rest of the copy; the
 // heading stays as a fallback for a key that has not been written yet.
-function shotPair(lang, key, fallbackAlt) {
+// The hero's light picture is the largest thing on the first screen: it loads
+// at once, ahead of everything else, while its dark twin waits as before.
+function shotPair(lang, key, fallbackAlt, hero = false) {
   const alt = COPY[lang].shotAlt?.[key] || fallbackAlt;
   const file = `${lang}_${key}.png`;
   const darkFile = `${lang}_${key}_dark.png`;
-  return `<span class="shot"><img class="img-light" src="${u('/assets/landing/' + file)}" alt="${escAttr(alt)}" loading="lazy" /><img class="img-dark" src="${u('/assets/landing/' + darkFile)}" alt="" loading="lazy" aria-hidden="true" /></span>`;
+  const first = hero ? 'loading="eager" fetchpriority="high"' : 'loading="lazy"';
+  return `<span class="shot"><img class="img-light" src="${u('/assets/landing/' + file)}" alt="${escAttr(alt)}" ${first} /><img class="img-dark" src="${u('/assets/landing/' + darkFile)}" alt="" loading="lazy" aria-hidden="true" /></span>`;
 }
 // Which screenshot illustrates each landing feature, by index (structure
 // stays in code; the editable text lives in copy.json's landing.feat).
@@ -526,7 +537,7 @@ ${points}
     <p class="hero-note">${line(h.note)}</p>
     ${liveLine(lang)}
   </div>
-  <div class="lhero-shot"><div class="phoneframe">${shotPair(lang, 'stash', plain(h.h1))}</div></div>
+  <div class="lhero-shot"><div class="phoneframe">${shotPair(lang, 'stash', plain(h.h1), true)}</div></div>
 </section>
 
 <div class="pillars">
