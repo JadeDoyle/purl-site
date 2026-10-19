@@ -173,7 +173,9 @@ function readArray(tsxRelPath, varName) {
 }
 
 // --- languages + resource links ------------------------------------------
-const NAVKEYS = ['home', 'guide', 'support', 'privacy'];
+// The top bar keeps Guide and Support; Privacy lives in the footer (the
+// maintainer, 2026-10-18).
+const NAVKEYS = ['home', 'guide', 'support'];
 const SLUGS = {
   home: '/', guide: '/guide/', support: '/support/', feedback: '/feedback/',
   privacy: '/privacy/', terms: '/terms/', press: '/press/',
@@ -226,44 +228,70 @@ function header(lang, activeKey, altHref) {
   return `<header class="site-header">
   <a class="brand" href="${link(lang, 'home')}"><img src="${u('/logo.png')}" alt="" width="30" height="30" /><span>Purl.</span></a>
   <nav class="site-nav">${nav}</nav>
-  ${themeSeg(lang)}
+  ${themeMoon(lang)}
   ${toggle}
 </header>`;
 }
 
-// Theme switch: Auto follows the system (like the app's own setting, with
-// Auto first); a manual pick sets data-theme on <html> and is remembered.
-function themeSeg(lang) {
+// Theme: light by default, whatever the system says; a crescent moon in the
+// header turns dark on, is filled while it is, and the choice is remembered
+// (the maintainer, 2026-10-18: no Auto, one small button). ?theme=light|dark
+// forces a theme, for screenshots. The Professional page's preview build
+// (purl-site-pro, pro/build-pro.mjs) carries the same three pieces and
+// takes these from the live page once they are here: keep them identical.
+function themeMoon(lang) {
   const t = COPY[lang].theme;
-  return `<div class="theme-seg" role="group" aria-label="${escAttr(t.label)}">
-    <button type="button" data-mode="">${t.auto}</button>
-    <button type="button" data-mode="light">${t.light}</button>
-    <button type="button" data-mode="dark">${t.dark}</button>
-  </div>`;
+  return `<button type="button" class="theme-moon" aria-pressed="false" aria-label="${escAttr(t.dark)}" title="${escAttr(t.dark)}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 14.2A8.5 8.5 0 1 1 9.8 3.5a6.8 6.8 0 0 0 10.7 10.7z" /></svg></button>`;
 }
-// Head snippet: applies a stored manual theme before first paint (no flash).
-const THEME_HEAD = `<meta name="color-scheme" content="light dark" />
-<script>try{var t=localStorage.getItem('purl-theme');if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t);}catch(e){}</script>`;
-// Body-end snippet: wires the switch buttons and persists the choice.
+// Head snippet: sets the theme before first paint (no flash).
+const THEME_HEAD = `<meta name="color-scheme" content="light" />
+<script>try{var q=/[?&]theme=(light|dark)/.exec(location.search);var d=(q?q[1]:localStorage.getItem('purl-theme'))==='dark';document.documentElement.setAttribute('data-theme',d?'dark':'light');document.documentElement.style.colorScheme=d?'dark':'light';}catch(e){}</script>`;
+// Body-end snippet: wires the moon and remembers dark (light is the default,
+// so turning dark off forgets the choice).
 const THEME_SCRIPT = `<script>
 (function () {
   var KEY = 'purl-theme';
   var root = document.documentElement;
-  function store(v) { try { if (v) localStorage.setItem(KEY, v); else localStorage.removeItem(KEY); } catch (e) {} }
-  function apply(mode) {
-    if (mode === 'light' || mode === 'dark') root.setAttribute('data-theme', mode);
-    else root.removeAttribute('data-theme');
-    root.style.colorScheme = mode || '';
-    var btns = document.querySelectorAll('.theme-seg button');
-    for (var i = 0; i < btns.length; i++) {
-      btns[i].classList.toggle('active', (btns[i].getAttribute('data-mode') || '') === (mode || ''));
+  function apply(dark) {
+    root.setAttribute('data-theme', dark ? 'dark' : 'light');
+    root.style.colorScheme = dark ? 'dark' : 'light';
+    var b = document.querySelectorAll('.theme-moon');
+    for (var i = 0; i < b.length; i++) b[i].setAttribute('aria-pressed', dark ? 'true' : 'false');
+  }
+  // Each screenshot has a light and a dark picture, and the hidden one is
+  // lazy, so a browser never fetched it and the first switch popped it in
+  // (the maintainer, 2026-10-18). Both pictures of a shot load once it comes
+  // near the screen, unless the visitor saves data.
+  var c = navigator.connection, frugal = c && (c.saveData || /(^|-)2g$/.test(c.effectiveType || ''));
+  function warm(shot) { var im = shot.querySelectorAll('img'); for (var j = 0; j < im.length; j++) im[j].loading = 'eager'; }
+  if (!frugal && 'IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (es) {
+      for (var k = 0; k < es.length; k++) if (es[k].isIntersecting) { warm(es[k].target); io.unobserve(es[k].target); }
+    }, { rootMargin: '600px 0px' });
+    var shots = document.querySelectorAll('.shot');
+    for (var s = 0; s < shots.length; s++) io.observe(shots[s]);
+  }
+  // A switch waits for the new theme's pictures on screen (at most 0.4 s),
+  // then the page cross-fades from one theme to the other.
+  function swap(dark) {
+    var wait = [], im = document.querySelectorAll('.shot .' + (dark ? 'img-dark' : 'img-light'));
+    for (var j = 0; j < im.length; j++) {
+      var r = im[j].parentNode.getBoundingClientRect();
+      if (r.bottom > -200 && r.top < innerHeight + 200 && im[j].decode) { im[j].loading = 'eager'; wait.push(im[j].decode().catch(function () {})); }
     }
+    Promise.race([Promise.all(wait), new Promise(function (ok) { setTimeout(ok, 400); })]).then(function () {
+      if (!document.startViewTransition) return apply(dark);
+      root.classList.add('theme-fade');
+      document.startViewTransition(function () { apply(dark); }).finished.then(function () { root.classList.remove('theme-fade'); }, function () { root.classList.remove('theme-fade'); });
+    });
   }
-  var btns = document.querySelectorAll('.theme-seg button');
-  for (var i = 0; i < btns.length; i++) {
-    btns[i].addEventListener('click', function () { var m = this.getAttribute('data-mode') || ''; store(m); apply(m); });
-  }
-  apply(root.getAttribute('data-theme') || '');
+  var b = document.querySelectorAll('.theme-moon');
+  for (var i = 0; i < b.length; i++) b[i].addEventListener('click', function () {
+    var dark = root.getAttribute('data-theme') !== 'dark';
+    try { if (dark) localStorage.setItem(KEY, 'dark'); else localStorage.removeItem(KEY); } catch (e) {}
+    swap(dark);
+  });
+  apply(root.getAttribute('data-theme') === 'dark');
 })();
 </script>`;
 
@@ -301,7 +329,6 @@ function footer(lang) {
   }</ul></div>`).join('');
   return `<footer class="site-footer"><div class="footer-inner">
   <div class="footer-cols">${cols}</div>
-  <div class="footer-theme">${themeSeg(lang)}</div>
   <p class="footer-note">${resolveTokens(t.footerNote, lang)}</p>
 </div></footer>`;
 }
