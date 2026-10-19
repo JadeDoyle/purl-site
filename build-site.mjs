@@ -452,7 +452,10 @@ function downloadRow(lang) {
 }
 // A screenshot pair: the light image shows by default, CSS flips to the dark
 // one together with the palette. Files live in assets/landing/ (committed
-// static assets, regenerated from the current App Store screenshots).
+// static assets): 640 px WebP captured from the current app on an emulator,
+// with an iPhone status bar drawn in, the maintainer's agent's scripts
+// compose.cjs and install.sh in the Purl repo's gitignored
+// screenshots/site-shots/.
 // Alt text describes the SCREENSHOT, not the heading next to it. A slogan
 // ("Never forget what you have.") tells a screen reader nothing about the
 // image and repeats text already on the page. The descriptions live in
@@ -462,8 +465,8 @@ function downloadRow(lang) {
 // at once, ahead of everything else, while its dark twin waits as before.
 function shotPair(lang, key, fallbackAlt, hero = false) {
   const alt = COPY[lang].shotAlt?.[key] || fallbackAlt;
-  const file = `${lang}_${key}.png`;
-  const darkFile = `${lang}_${key}_dark.png`;
+  const file = `${lang}_${key}.webp`;
+  const darkFile = `${lang}_${key}_dark.webp`;
   const first = hero ? 'loading="eager" fetchpriority="high"' : 'loading="lazy"';
   return `<span class="shot"><img class="img-light" src="${u('/assets/landing/' + file)}" alt="${escAttr(alt)}" ${first} /><img class="img-dark" src="${u('/assets/landing/' + darkFile)}" alt="" loading="lazy" aria-hidden="true" /></span>`;
 }
@@ -472,9 +475,28 @@ function shotPair(lang, key, fallbackAlt, hero = false) {
 // Stash goes LAST: the hero already shows the stash screen, so the feature
 // tour runs patterns, projects, then closes on the stash + no-paywall punch.
 const FEAT_IMGS = ['patterns', 'projects', 'stash'];
-// The compact tools grid after the features, same idea: images by index,
-// text in copy.json's landing.tools.items.
-const TOOL_IMGS = ['chartmaker', 'terminology', 'timeline', 'calculator'];
+
+// A fanned band (the maintainer, 2026-10-18 22:09): three phones over each
+// other, the middle one in front and the two beside it tilted back, with a
+// caption under each. The text and each item's screenshot key live in
+// copy.json (landing.pdftools, landing.makers); the second item is the one in
+// front. The compact tools grid after the bands takes its screenshot keys
+// from copy.json the same way (landing.toolsGrid.items[].img).
+function fanBand(lang, band) {
+  const phones = band.items.map((it) => `    <div class="phoneframe">${shotPair(lang, it.img, plain(it.title))}</div>`).join('\n');
+  const caps = band.items.map((it) => `    <li><b>${line(it.title)}</b><span>${line(it.desc)}</span></li>`).join('\n');
+  return `<section class="fanband">
+  <p class="eyebrow">${line(band.eyebrow)}</p>
+  <h2>${line(band.h2)}</h2>
+  <p class="lsub">${line(band.sub)}</p>
+  <div class="fan">
+${phones}
+  </div>
+  <ul class="fancaps">
+${caps}
+  </ul>
+</section>`;
+}
 
 // The "120 knitters used Purl in the last 24 hours" line (2026-10-17). The
 // page is static, so the number arrives on load: the editor server answers
@@ -546,16 +568,17 @@ ${pillars}
 
 ${features}
 
+${fanBand(lang, c.pdftools)}
+
+${fanBand(lang, c.makers)}
+
 <section class="toolsband">
-  <h2>${line(c.tools.title)}</h2>
+  <h2>${line(c.toolsGrid.title)}</h2>
   <div class="toolsgrid">
-${c.tools.items.map((it, i) => {
-    const img = TOOL_IMGS[i] || 'calculator';
-    return `    <figure class="toolcard">
-      <div class="phoneframe">${shotPair(lang, img, plain(it.title))}</div>
+${c.toolsGrid.items.map((it) => `    <figure class="toolcard">
+      <div class="phoneframe">${shotPair(lang, it.img, plain(it.title))}</div>
       <figcaption><b>${line(it.title)}</b><span>${line(it.desc)}</span></figcaption>
-    </figure>`;
-  }).join('\n')}
+    </figure>`).join('\n')}
   </div>
 </section>
 
@@ -563,7 +586,7 @@ ${c.tools.items.map((it, i) => {
   <p class="eyebrow">${line(c.ipad.eyebrow)}</p>
   <h2>${line(c.ipad.h2)}</h2>
   <p class="lsub">${line(c.ipad.sub)}</p>
-  <div class="ipadframe"><span class="shot"><img class="img-light" src="${u('/assets/landing/ipad.jpg')}" alt="${escAttr(COPY[lang].shotAlt?.ipad || plain(c.ipad.h2))}" loading="lazy" /><img class="img-dark" src="${u('/assets/landing/ipad_dark.jpg')}" alt="" loading="lazy" aria-hidden="true" /></span></div>
+  <div class="ipadframe"><span class="shot"><img class="img-light" src="${u(`/assets/landing/${lang}_ipad.webp`)}" alt="${escAttr(COPY[lang].shotAlt?.ipad || plain(c.ipad.h2))}" loading="lazy" /><img class="img-dark" src="${u(`/assets/landing/${lang}_ipad_dark.webp`)}" alt="" loading="lazy" aria-hidden="true" /></span></div>
 </section>
 
 <section class="plumband">

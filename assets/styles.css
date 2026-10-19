@@ -331,9 +331,9 @@ p, li { text-wrap: pretty; }
   box-shadow: 0 26px 60px rgba(44, 38, 48, .22);
 }
 .phoneframe img { display: block; width: 100%; border-radius: 31px; }
-/* The hero shots are all 640 x 1387: the frame has its height before the
+/* The phone shots are all 640 x 1435: the frame has its height before the
    image loads, so the hero text does not jump. */
-.lhero-shot .phoneframe img { aspect-ratio: 640 / 1387; }
+.lhero-shot .phoneframe img { aspect-ratio: 640 / 1435; }
 .shot { display: block; }
 .shot .img-dark { display: none; }
 .pillars { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin: 26px 0 8px; }
@@ -349,6 +349,24 @@ p, li { text-wrap: pretty; }
 .points li::before { content: ''; position: absolute; left: 0; top: 8px; width: 10px; height: 10px; border-radius: 50%; background: var(--primary); }
 .lfeature-shot { flex: 0.8; display: flex; justify-content: center; }
 .lfeature-shot .phoneframe { width: min(250px, 70vw); }
+/* A fanned band (fanBand() in build-site.mjs): three phones over each other,
+   the middle one in front, the two beside it smaller and tilted back, a
+   caption under each. Sizes are shares of the band, so it holds its shape
+   from 375 px up. */
+.fanband { text-align: center; padding: 34px 0 8px; }
+.fanband h2 { font-size: clamp(26px, 3.4vw, 34px); line-height: 1.15; margin: 4px 0 10px; }
+.fanband .lsub { margin: 0 auto 18px; }
+.fan { display: flex; justify-content: center; align-items: flex-end; max-width: 680px; margin: 0 auto; padding: 10px 0 20px; }
+.fan .phoneframe { flex: none; width: 36%; padding: 1.2%; border-radius: 13% / 6%; box-shadow: 0 20px 44px rgba(44, 38, 48, .2); }
+.fan .phoneframe img { aspect-ratio: 640 / 1435; border-radius: 11% / 5%; }
+.fan .phoneframe:nth-child(1) { margin-right: -7%; transform: rotate(-7deg) scale(.88); transform-origin: 50% 100%; }
+.fan .phoneframe:nth-child(2) { position: relative; z-index: 2; }
+.fan .phoneframe:nth-child(3) { margin-left: -7%; transform: rotate(7deg) scale(.88); transform-origin: 50% 100%; }
+.fancaps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; overflow-wrap: anywhere; max-width: 600px; margin: 0 auto; padding: 0; list-style: none; font-size: 14px; line-height: 1.4; }
+.fancaps b { display: block; }
+.fancaps span { display: block; color: var(--muted); font-size: 13px; text-wrap: balance; }
+/* The longest Norwegian title, "Strikkediagram", needs about 109 px at 14 px. */
+@media (max-width: 359px) { .fancaps { gap: 4px; font-size: 12px; } .fancaps span { font-size: 12px; } }
 .toolsband { text-align: center; padding: 30px 0 8px; }
 .toolsband > h2 { font-size: clamp(24px, 3vw, 30px); margin: 0 0 22px; }
 .toolsgrid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
