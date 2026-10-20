@@ -851,18 +851,18 @@ const GUIDE_PAGES = [
   ['getting-started', 'Getting started', 'Kom i gang', false, 'start'],
   ['tutorial-first-project', 'Your first project', 'Ditt første prosjekt', false, 'tutorial'],
   ['tutorial-read-a-pattern', 'Read a pattern', 'Les en oppskrift', false, 'tutorial'],
-  ['tutorial-stash', 'Get your yarn in', 'Garnet ditt, inn og ut', false, 'tutorial'],
-  ['tutorial-charts', 'Make a chart', 'Lag et diagram', false, 'tutorial'],
+  ['tutorial-stash', 'Your yarn, in and out', 'Garnet ditt, inn og ut', false, 'tutorial'],
+  ['tutorial-charts', 'Draw a chart', 'Lag et diagram', false, 'tutorial'],
   ['yarn-stash', 'Yarn stash', 'Stash', false, 'reference'],
   ['patterns', 'Patterns', 'Oppskrifter', false, 'reference'],
   ['projects', 'Projects', 'Prosjekter', false, 'reference'],
   ['pdf-tools', 'PDF tools', 'PDF-verktøy', false, 'reference'],
-  ['chart-maker', 'Chart maker', 'Diagramverksted', false, 'reference'],
+  ['chart-maker', 'Colour charts', 'Fargediagram', false, 'reference'],
   ['crochet-charts', 'Crochet charts', 'Heklediagram', false, 'reference'],
   ['barcode-templates', 'Barcodes and the yarn library', 'Strekkoder og garnbiblioteket', false, 'reference'],
   ['backups', 'Backups and recovery', 'Sikkerhetskopier og gjenoppretting', false, 'reference'],
-  ['terminology', 'Terminology glossary', 'Terminologiordlisten', false, 'reference'],
-  ['calculator', 'Calculator', 'Strikkekalkulator', false, 'reference'],
+  ['terminology', 'Terminology glossary', 'Terminologiordliste', false, 'reference'],
+  ['calculator', 'Calculator', 'Kalkulator', false, 'reference'],
   ['faq', 'FAQ', 'FAQ', false, 'reference'],
 ];
 
@@ -1072,15 +1072,33 @@ ${guideNav(lang, slug, t)}</div>
 <script src="${u('/assets/guide.js')}" defer></script>`;
 }
 
+// A WebP file's pixel size from its header (lossy VP8, lossless VP8L or the
+// extended VP8X), or null for anything else.
+function webpSize(file) {
+  let b;
+  try { b = readFileSync(file); } catch { return null; }
+  if (b.length < 30 || b.toString('ascii', 0, 4) !== 'RIFF' || b.toString('ascii', 8, 12) !== 'WEBP') return null;
+  const kind = b.toString('ascii', 12, 16);
+  if (kind === 'VP8 ') return { w: b.readUInt16LE(26) & 0x3fff, h: b.readUInt16LE(28) & 0x3fff };
+  if (kind === 'VP8L') { const n = b.readUInt32LE(21); return { w: (n & 0x3fff) + 1, h: ((n >>> 14) & 0x3fff) + 1 }; }
+  if (kind === 'VP8X') return { w: b.readUIntLE(24, 3) + 1, h: b.readUIntLE(27, 3) + 1 };
+  return null;
+}
+
 // Turn "image paragraph followed by an italic paragraph" into a real figure
 // with a caption, and make every guide image lazy and full width. Markdown has
 // no figure syntax, so the guide's convention (spec'd for the writers) is the
 // image on its own line with the caption in italics under it.
 function guideFigures(html, lang) {
   const dir = lang === 'no' ? '/no' : '';
-  const haveImage = (src) => {
-    const name = src.split('/').pop();
-    return existsSync(join(PURL, 'user-guide', lang === 'no' ? 'no' : '', 'images', name));
+  const imagePath = (src) => join(PURL, 'user-guide', lang === 'no' ? 'no' : '', 'images', src.split('/').pop());
+  const haveImage = (src) => existsSync(imagePath(src));
+  // A lazy picture is 0 px tall until it loads, so a jump to a section far
+  // down lands short while the pictures above it grow. Its size, written in
+  // at build time, lets styles.css hold the final box from the start.
+  const sized = (src) => {
+    const s = webpSize(imagePath(src));
+    return s ? ` width="${s.w}" height="${s.h}" style="--w:${s.w};--h:${s.h}"` : '';
   };
   const fig = (src, alt, cap) =>
     !haveImage(src)
@@ -1088,7 +1106,7 @@ function guideFigures(html, lang) {
         ? `<p class="figpending">${cap}</p>`
         : ''
       :
-    `<figure class="guidefig"><img src="${src}" alt="${alt}" loading="lazy" decoding="async" />` +
+    `<figure class="guidefig"><img src="${src}" alt="${alt}"${sized(src)} loading="lazy" decoding="async" />` +
     (cap ? `<figcaption>${cap}</figcaption>` : '') +
     `</figure>`;
   // Inside a numbered step, marked keeps the image and its caption in one

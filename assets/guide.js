@@ -112,10 +112,18 @@
     var piece = text.slice(at[from], to < at.length ? at[to] : text.length).trim();
     return (from > 0 ? '… ' : '') + marked(piece, terms) + (to < at.length ? ' …' : '');
   }
+  // Returns the count line, which wire() hands to a screen reader through a
+  // live region outside the list; inside the list it is hidden from them.
   function render(box, q, res) {
-    var n = res.list.length;
-    if (!n) { box.innerHTML = '<p class="gn-count">' + esc(String(ui.none).replace('{q}', q.trim())) + '</p>'; return; }
-    var html = '<p class="gn-count">' + esc(n === 1 ? ui.one : String(ui.many).replace('{n}', n)) + '</p>';
+    var n = res.list.length, said;
+    if (!n) {
+      // A function, so a typed $' or $& stays as typed.
+      said = String(ui.none).replace('{q}', function () { return q.trim(); });
+      box.innerHTML = '<p class="gn-count" aria-hidden="true">' + esc(said) + '</p>';
+      return said;
+    }
+    said = n === 1 ? ui.one : String(ui.many).replace('{n}', n);
+    var html = '<p class="gn-count" aria-hidden="true">' + esc(said) + '</p>';
     res.list.slice(0, 20).forEach(function (r, k) {
       var s = r.s;
       html += '<a class="gn-hit" role="option" id="' + box.id + '-' + k + '" href="' + esc(s.p.u + (s.a ? '#' + s.a : '')) + '">' +
@@ -123,14 +131,19 @@
         '<span class="gn-hit-head">' + marked(s.h || s.p.t, res.terms) + '</span>' +
         '<span class="gn-hit-text">' + snippet(s.x, res.terms) + '</span></a>';
     });
-    if (n > 20) html += '<p class="gn-more">' + esc(ui.more) + '</p>';
+    if (n > 20) { html += '<p class="gn-more" aria-hidden="true">' + esc(ui.more) + '</p>'; said += ' ' + ui.more; }
     box.innerHTML = html;
+    return said;
   }
 
   var searches = [];
   function wire(wrap) {
     var input = wrap.querySelector('input'), box = wrap.querySelector('.gn-results');
     var active = -1, timer = 0;
+    var live = document.createElement('p');
+    live.className = 'gn-live';
+    live.setAttribute('aria-live', 'polite');
+    wrap.appendChild(live);
     function hits() { return box.querySelectorAll('.gn-hit'); }
     function show(on) {
       box.hidden = !on;
@@ -150,15 +163,27 @@
       var q = input.value;
       active = -1;
       input.removeAttribute('aria-activedescendant');
-      if (!q.trim()) { show(false); box.innerHTML = ''; return; }
-      if (!data) { box.innerHTML = '<p class="gn-count">' + esc(ui.loading) + '</p>'; show(true); }
+      if (!q.trim()) { show(false); box.innerHTML = ''; live.textContent = ''; return; }
+      if (!data) { box.innerHTML = '<p class="gn-count" aria-hidden="true">' + esc(ui.loading) + '</p>'; show(true); }
       load().then(function () {
         if (input.value !== q) return;
-        render(box, q, find(q));
+        live.textContent = render(box, q, find(q));
         box.scrollTop = 0;
         show(true);
-      }, function () { box.innerHTML = '<p class="gn-count">' + esc(ui.failed) + '</p>'; show(true); });
+      }, function () {
+        box.innerHTML = '<p class="gn-count" aria-hidden="true">' + esc(ui.failed) + '</p>';
+        live.textContent = ui.failed;
+        show(true);
+      });
     }
+    // Keyboard focus moving on past the search closes its results, so they
+    // do not cover what is focused next. A tap gives no element to move to
+    // (a tapped link takes no focus on iOS), and closing then would swallow
+    // the tap on a result, so taps are left to the pointerdown handler below.
+    wrap.addEventListener('focusout', function (e) {
+      var to = e.relatedTarget;
+      if (to && !wrap.contains(to)) show(false);
+    });
     input.addEventListener('focus', function () {
       load().catch(function () { /* said when a search runs */ });
       if (input.value.trim() && box.innerHTML) show(true);
@@ -202,6 +227,19 @@
     var top = item.getBoundingClientRect().top - box.getBoundingClientRect().top + box.scrollTop;
     box.scrollTop = Math.max(0, top - box.clientHeight / part);
   }
+  // While the drawer is open the page behind it takes no focus and no screen
+  // reader cursor: aria-modal alone does not stop Tab from leaving it.
+  var inerted = [];
+  function setInert(on) {
+    inerted.forEach(function (n) { n.removeAttribute('inert'); });
+    inerted = [];
+    if (!on) return;
+    for (var n = drawer; n && n.parentElement && n !== document.body; n = n.parentElement) {
+      for (var c = n.parentElement.firstElementChild; c; c = c.nextElementSibling) {
+        if (c !== n && c.tagName !== 'SCRIPT' && !c.hasAttribute('inert')) { c.setAttribute('inert', ''); inerted.push(c); }
+      }
+    }
+  }
   function openDrawer(from) {
     if (!drawer) return;
     back = from;
@@ -210,6 +248,7 @@
     if (pages) dbody.appendChild(copyOf(pages));
     spy(true);
     drawer.hidden = false;
+    setInert(true);
     root.classList.add('gn-lock');
     from.setAttribute('aria-expanded', 'true');
     var panel = drawer.querySelector('.gn-panel');
@@ -223,6 +262,7 @@
   function closeDrawer() {
     if (!drawer || drawer.hidden) return;
     drawer.hidden = true;
+    setInert(false);
     root.classList.remove('gn-lock');
     if (back) { back.setAttribute('aria-expanded', 'false'); back.focus({ preventScroll: true }); }
   }
@@ -231,8 +271,20 @@
     if (e.target === drawer || e.target.closest('.gn-x') || e.target.closest('.gn-dbody a')) closeDrawer();
   });
 
-  // Escape closes the drawer; "/" or Ctrl+K (Cmd+K) jumps to the search box.
+  // Tab wraps inside the open drawer (for browsers without inert); Escape
+  // closes it; "/" or Ctrl+K (Cmd+K) jumps to the search box.
   document.addEventListener('keydown', function (e) {
+    if (e.key === 'Tab' && drawer && !drawer.hidden) {
+      var f = Array.prototype.filter.call(drawer.querySelectorAll('a[href], button, input, [tabindex]'),
+        function (x) { return x.tabIndex >= 0 && x.getClientRects().length; });
+      var at = document.activeElement;
+      if (f.length) {
+        if (!drawer.contains(at)) { e.preventDefault(); f[0].focus(); }
+        else if (e.shiftKey && at === f[0]) { e.preventDefault(); f[f.length - 1].focus(); }
+        else if (!e.shiftKey && at === f[f.length - 1]) { e.preventDefault(); f[0].focus(); }
+      }
+      return;
+    }
     if (e.key === 'Escape') { closeDrawer(); return; }
     var t = e.target;
     if (e.altKey || (t && (/^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName) || t.isContentEditable))) return;

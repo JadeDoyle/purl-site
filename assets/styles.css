@@ -182,6 +182,18 @@ a { color: var(--primary); }
   border: 1px solid var(--border);
   border-radius: 14px;
   background: var(--surface);
+  --figmax: 520px;
+}
+/* The build writes each picture's pixel size as --w and --h, so its box has
+   its final size before the lazy file arrives and a jump to a section lands
+   where it should. The width is what width:auto under the two maxima gives
+   once loaded: the column, the file's own width, or the height cap. */
+@supports (width: min(1px, 2px)) and (aspect-ratio: 1) {
+  .guidefig img[style] {
+    width: min(100%, calc(var(--w) * 1px), calc(var(--figmax) * var(--w) / var(--h)));
+    aspect-ratio: var(--w) / var(--h);
+    max-height: none;
+  }
 }
 .guidefig figcaption {
   color: var(--muted);
@@ -415,7 +427,7 @@ p, li { text-wrap: pretty; }
 :root.theme-fade::view-transition-old(root), :root.theme-fade::view-transition-new(root) { animation-duration: .35s; }
 @media (max-width: 560px) {
   .guidefig { margin: 16px -4px 18px; }
-  .guidefig img { max-height: 62vh; border-radius: 12px; }
+  .guidefig img { max-height: 62vh; border-radius: 12px; --figmax: 62vh; }
   .guidefig figcaption { font-size: 13px; max-width: none; } }
 
 /* Dark theme tokens, when the moon is on (data-theme="dark"; light is the
@@ -569,6 +581,8 @@ p, li { text-wrap: pretty; }
   box-shadow: 0 18px 44px rgba(30, 20, 40, .18);
 }
 .gn-results[hidden] { display: none; }
+/* The result count for screen readers (guide.js); not drawn. */
+.gn-live { position: absolute; width: 1px; height: 1px; margin: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 .gn-count { margin: 0; padding: 6px 10px 4px; font-size: 13px; color: var(--muted); }
 .gn-more { margin: 0; padding: 8px 10px 6px; font-size: 13px; color: var(--muted); border-top: 1px solid var(--border); }
 .gn-hit { display: block; padding: 9px 10px; border-radius: 10px; color: var(--text); text-decoration: none; }
