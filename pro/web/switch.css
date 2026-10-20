@@ -1,0 +1,117 @@
+/* The Purl and Professional switch and the flip between the two halves.
+   Loads after the site's styles.css and uses its tokens. Nothing else lives
+   here, so the Purl home page can load it, once it gets its half of the
+   switch, and keep its look. */
+
+/* The switch, as in the app's More tab: two halves of one pill, the chosen
+   one filled. It sits in the top bar just right of the logo, and the links
+   move to the far right. Each half is a link to its page. Both halves draw
+   purl.no's own top bar (header() in build-site.mjs), so nothing in it moves
+   on a flip. */
+.site-header .brand { margin-right: 0; }
+.site-header .site-nav { margin-left: auto; }
+.pill {
+  display: grid; grid-template-columns: auto auto; flex: none; background: var(--surface-alt);
+  border: 1px solid var(--border); border-radius: 999px; padding: 3px;
+}
+.pill a {
+  display: inline-flex; align-items: center; min-height: 34px; padding: 0 14px; border-radius: 999px;
+  font-size: 14px; font-weight: 700; color: var(--muted); text-decoration: none;
+}
+.pill a { grid-row: 1; position: relative; }
+.pill a:first-of-type { grid-column: 1; }
+.pill a:last-of-type { grid-column: 2; }
+.pill a.on { color: #fff; }
+/* The filled part is its own element, first in the pill and in the chosen
+   half's cell, so a flip can slide it from one half to the other under both
+   words (below; a moving part is drawn in page order). */
+.pill-thumb { grid-row: 1; border-radius: 999px; background: var(--primary); }
+.pill-thumb.on-purl { grid-column: 1; }
+.pill-thumb.on-pro { grid-column: 2; }
+/* Narrow screens: a slightly smaller pill. "Professional" is always spelled
+   out (the maintainer, 2026-10-18 16:55: no Pro short form). */
+@media (max-width: 640px) {
+  .pill { padding: 2px; }
+  .pill a { min-height: 32px; padding: 0 11px; font-size: 13px; }
+}
+/* The theme button (the moon) is styles.css's own. A theme switch cross-fades the whole page in 0.35 s (the root fade below),
+   so the phone and the switch's filled part fade with it instead of moving. */
+.theme-fade * { view-transition-name: none !important; }
+/* Both pages' top bars wrap below 640 px: the logo and the switch on the
+   first row, the links on the second, since the spelled-out switch, Guide,
+   Support, the moon and EN/NO need about 615 px in one row (iPads and
+   phones held sideways keep one row). The break is an empty span the build
+   adds after the switch; wide screens hide it. */
+.hdr-break { display: none; }
+@media (max-width: 640px) {
+  .site-header-wrap { flex-wrap: wrap; row-gap: 8px; }
+  .site-header-wrap .hdr-break { display: block; flex-basis: 100%; height: 0; }
+  .site-header-wrap .site-nav { margin-left: 0; }
+}
+
+/* A flip without a snap (the maintainer, 2026-10-18; switch.js has the
+   rest). Both halves opt in to cross-document view transitions.
+   - The first phone on the Purl half and the small phone on the
+     Professional half are one shot in one frame under one name, so the
+     browser moves and shrinks one phone into the other in 0.75 s (his
+     choice). Their shapes match, so nothing stretches.
+   - The switch's filled part slides from one half to the other with the
+     phone, and its two words change colour over the same time.
+   - The text cross-fades in 0.35 s. The Professional hero's Mac and iPad
+     fade in over the last 0.35 s of the move and settle on the same frame
+     as the phone; on the way back they fade out first, so the phone moves
+     alone (his notes, 2026-10-18).
+   --purl-vt-slow stretches every timing for a slowed-down check. */
+@view-transition { navigation: auto; }
+:root { --purl-vt-move: calc(.75s * var(--purl-vt-slow, 1)); --purl-vt-fade: calc(.35s * var(--purl-vt-slow, 1)); }
+.lhero-shot .phoneframe, .dev-phone .phoneframe { view-transition-name: purl-phone; }
+.pill-thumb { view-transition-name: purl-pill; }
+.pill a:first-of-type { view-transition-name: purl-pill-purl; }
+.pill a:last-of-type { view-transition-name: purl-pill-pro; }
+.dev-mac { view-transition-name: purl-dev-mac; }
+.dev-ipad { view-transition-name: purl-dev-ipad; }
+::view-transition-group(purl-phone), ::view-transition-group(purl-pill) {
+  animation-duration: var(--purl-vt-move);
+  animation-timing-function: cubic-bezier(.3, 0, .2, 1);
+}
+::view-transition-group(purl-pill-purl), ::view-transition-group(purl-pill-pro),
+::view-transition-old(purl-phone), ::view-transition-new(purl-phone),
+::view-transition-old(purl-pill-purl), ::view-transition-new(purl-pill-purl),
+::view-transition-old(purl-pill-pro), ::view-transition-new(purl-pill-pro) {
+  animation-duration: var(--purl-vt-move);
+}
+/* The filled part is drawn by the moving box itself, purple with fully
+   round ends, and its snapshots are hidden: the box changes length and
+   slides, so the ends stay perfect half circles (a stretched snapshot
+   squashed them; the maintainer, 2026-10-18). */
+::view-transition-group(purl-pill) { background: var(--primary); border-radius: 999px; }
+::view-transition-old(purl-pill), ::view-transition-new(purl-pill) { animation: none; opacity: 0; }
+::view-transition-old(root), ::view-transition-new(root) { animation-duration: var(--purl-vt-fade); }
+/* Mac and iPad: they fade in over the end of the phone's move and settle on
+   the same frame as it (the maintainer, 2026-10-18); out before it moves. */
+::view-transition-group(purl-dev-mac), ::view-transition-group(purl-dev-ipad) { animation-duration: var(--purl-vt-move); }
+::view-transition-new(purl-dev-mac):only-child, ::view-transition-new(purl-dev-ipad):only-child {
+  animation: purl-vt-in var(--purl-vt-fade) ease-out calc(var(--purl-vt-move) - var(--purl-vt-fade)) both;
+}
+::view-transition-old(purl-dev-mac):only-child, ::view-transition-old(purl-dev-ipad):only-child {
+  animation: purl-vt-out calc(var(--purl-vt-fade) * .6) ease-in both;
+}
+@keyframes purl-vt-in { from { opacity: 0; } }
+@keyframes purl-vt-out { to { opacity: 0; } }
+/* Less motion asked for: nothing moves, the whole page only cross-fades. */
+@media (prefers-reduced-motion: reduce) {
+  .lhero-shot .phoneframe, .dev-phone .phoneframe, .pill-thumb, .pill a, .dev-mac, .dev-ipad { view-transition-name: none; }
+}
+/* No view transitions (Firefox): the new half fades in from the shared
+   background, the Professional hero's Mac and iPad just after. */
+.flip-fade body { animation: purl-flip-in calc(.3s * var(--purl-vt-slow, 1)) ease-out both; }
+.flip-fade .dev-mac, .flip-fade .dev-ipad { animation: purl-flip-in calc(.3s * var(--purl-vt-slow, 1)) ease-out calc(.25s * var(--purl-vt-slow, 1)) both; }
+@keyframes purl-flip-in { from { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .flip-fade .dev-mac, .flip-fade .dev-ipad { animation: none; } }
+/* The small phone holds the home page's shot shape (640 by 1435, as
+   styles.css holds it for the home hero) before the shot arrives, so the two
+   phones match through a flip. */
+.dev-phone .phoneframe img { aspect-ratio: 640 / 1435; }
+img.late { opacity: 0; transition: opacity .3s ease-out; }
+img.late.in { opacity: 1; }
+@media (prefers-reduced-motion: reduce) { img.late { transition-duration: .15s; } }

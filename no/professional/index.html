@@ -1,0 +1,345 @@
+<!doctype html>
+<html lang="no">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex, nofollow" />
+<title>Purl Professional | Purl.</title>
+<meta name="description" content="Purl Professional, kommer snart: designerverktøy for strikke- og heklediagrammer og plagg i 3D. Prøv fire av verktøyene i nettleseren." />
+<link rel="canonical" href="https://purl.no/no/professional/" />
+<link rel="alternate" hreflang="en" href="https://purl.no/professional/" />
+<link rel="alternate" hreflang="no" href="https://purl.no/no/professional/" />
+<link rel="alternate" hreflang="x-default" href="https://purl.no/professional/" />
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml" />
+<link rel="icon" href="/assets/favicon-32.png" sizes="32x32" type="image/png" />
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png" />
+<link rel="stylesheet" href="/assets/styles.css" />
+<meta name="color-scheme" content="light" />
+<script>try{var q=/[?&]theme=(light|dark)/.exec(location.search);var d=(q?q[1]:localStorage.getItem('purl-theme'))==='dark';}catch(e){}document.documentElement.setAttribute('data-theme',d?'dark':'light');document.documentElement.style.colorScheme=d?'dark':'light';</script>
+<link rel="stylesheet" href="/assets/pro/switch.css" />
+<link rel="stylesheet" href="/assets/pro/pro.css" />
+<script>(function () {
+  var html = document.documentElement;
+  var PHONE = '.lhero-shot .phoneframe, .dev-phone .phoneframe';
+  var FLIP = 'purl-flip';
+  var vt = 'CSSViewTransitionRule' in window;
+  try {
+    if (sessionStorage.getItem(FLIP)) {
+      sessionStorage.removeItem(FLIP);
+      html.classList.add('flip');
+      if (!vt) html.classList.add('flip-fade');
+    }
+  } catch (e) {}
+
+  function phoneTakesPart() {
+    var el = document.querySelector(PHONE);
+    if (!el) return;
+    var b = el.getBoundingClientRect();
+    var still = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (still || b.bottom <= 0 || b.top >= innerHeight || !b.width) el.style.viewTransitionName = 'none';
+  }
+  function quiet(t) { if (t.ready) t.ready.catch(function () {}); }
+  function flips(path) {
+    var pill = document.querySelector('.pill[data-flip]');
+    if (!pill) return true;
+    try { return new RegExp(pill.getAttribute('data-flip')).test(path); } catch (x) { return true; }
+  }
+  window.addEventListener('pageswap', function (e) {
+    if (!e.viewTransition) return;
+    quiet(e.viewTransition);
+    var to = e.activation && e.activation.entry && e.activation.entry.url;
+    if (!to || flips(new URL(to).pathname)) phoneTakesPart(); else e.viewTransition.skipTransition();
+  });
+  window.addEventListener('pagereveal', function (e) { if (e.viewTransition) { quiet(e.viewTransition); phoneTakesPart(); } });
+
+  function fadeLatePictures() {
+    [].forEach.call(document.images, function (im) {
+      if (im.complete) return;
+      im.classList.add('late');
+      var done = function () { im.classList.add('in'); };
+      im.addEventListener('load', done);
+      im.addEventListener('error', done);
+      if (im.complete) done();
+    });
+  }
+
+  function prefetch(off) {
+    var c = navigator.connection;
+    if (c && (c.saveData || /(^|-)2g$/.test(c.effectiveType || ''))) return;
+    var dark = html.getAttribute('data-theme') === 'dark';
+    var canLink = document.createElement('link').relList.supports('prefetch');
+    function get(url) {
+      if (/\.(webp|png|jpe?g|svg)$/i.test(url)) { new Image().src = url; return; }
+      if (canLink) {
+        var l = document.createElement('link');
+        l.rel = 'prefetch';
+        l.href = url;
+        document.head.appendChild(l);
+      } else if (window.fetch) {
+        fetch(url, { mode: 'no-cors', credentials: 'same-origin' }).catch(function () {});
+      }
+    }
+    get(off.href);
+    (off.getAttribute('data-prefetch') || '').split(/\s+/).forEach(function (u) {
+      if (!u) return;
+      var pair = u.split('|');
+      get(new URL(dark && pair[1] ? pair[1] : pair[0], location.href).href);
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    if (html.classList.contains('flip')) fadeLatePictures();
+    var off = document.querySelector('.pill a:not(.on)');
+    if (!off) return;
+    off.addEventListener('click', function () { if (!flips(off.pathname)) return; try { sessionStorage.setItem(FLIP, '1'); } catch (e) {} });
+    var idle = function () { (window.requestIdleCallback || function (f) { setTimeout(f, 300); })(function () { prefetch(off); }); };
+    if (document.readyState === 'complete') idle();
+    else window.addEventListener('load', idle);
+  });
+})();
+</script>
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="Purl." />
+<meta property="og:locale" content="nb_NO" />
+<meta property="og:locale:alternate" content="en_GB" />
+<meta property="og:title" content="Purl Professional | Purl." />
+<meta property="og:description" content="Purl Professional, kommer snart: designerverktøy for strikke- og heklediagrammer og plagg i 3D. Prøv fire av verktøyene i nettleseren." />
+<meta property="og:url" content="https://purl.no/no/professional/" />
+<meta property="og:image" content="https://purl.no/assets/og.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="apple-itunes-app" content="app-id=6788513793" />
+</head>
+<body>
+<header class="site-header site-header-wrap">
+  <a class="brand" href="/no/"><img src="/logo.png" alt="" width="30" height="30" /><span>Purl.</span></a>
+  <nav class="pill" aria-label="Purl-modus" data-flip="^/(no/)?professional/">
+    <span class="pill-thumb on-pro" aria-hidden="true"></span>
+    <a href="/no/" data-prefetch="/assets/styles.css /logo.png /assets/landing/no_stash.webp|/assets/landing/no_stash_dark.webp">Purl</a>
+    <a href="/no/professional/" aria-current="page" class="on">Profesjonell</a>
+  </nav><span class="hdr-break" aria-hidden="true"></span>
+  <nav class="site-nav"><a href="/no/guide/">Guide</a><a href="/no/support/">Support</a></nav>
+  <button type="button" class="theme-moon" aria-pressed="false" aria-label="Mørk" title="Mørk"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 14.2A8.5 8.5 0 1 1 9.8 3.5a6.8 6.8 0 0 0 10.7 10.7z" /></svg></button>
+  <a class="lang" href="/professional/" hreflang="en" aria-label="Switch to English / Bytt til engelsk">EN<span aria-hidden="true">/</span><b>NO</b></a>
+</header>
+<main class="pro-main">
+<div class="pro-panel">
+<section class="phero">
+  <div class="phero-text">
+    <p class="soon-pill"><span>Kommer snart</span></p>
+    <h1><span class="ph">Design plagget,</span> <span class="ph">ikke bare diagrammet.</span></h1>
+    <p class="lsub">Purl Professional er designerverktøy som kommer til Purl: et plaggstudio med genseren din i 3D, maler du setter inn med et trykk, og strikkediagrammer med kabler opptil 8 masker. Fire av verktøyene virker allerede i nettleseren.</p>
+    <p class="soon-note">Purl Professional er ikke til salgs ennå. Det denne siden viser, er laget og testes nå, og de fire verktøyene nedenfor lar deg prøve det allerede.</p>
+  </div>
+  <div class="hero-stage" role="img" aria-label="En Mac som viser en genser i 3D i Plaggstudioet, en iPad med pennen på et heklediagram, og en telefon som viser et garnlager.">
+    <div class="devices">
+  <div class="dev dev-mac"><span class="shot"><img class="img-light" src="/assets/pro/shots/hero-mac.webp" alt="" /><img class="img-dark" src="/assets/pro/shots/hero-mac_dark.webp" alt="" loading="lazy" /></span></div>
+  <div class="dev dev-ipad"><span class="shot"><img class="img-light" src="/assets/pro/shots/hero-ipad.webp" alt="" /><img class="img-dark" src="/assets/pro/shots/hero-ipad_dark.webp" alt="" loading="lazy" /></span><img class="pencil" src="/assets/pro/pencil.svg" alt="" /></div>
+  <div class="dev dev-phone"><div class="phoneframe"><span class="shot"><img class="img-light" src="/assets/landing/no_stash.webp" alt="" loading="lazy" /><img class="img-dark" src="/assets/landing/no_stash_dark.webp" alt="" loading="lazy" /></span></div></div>
+</div>
+  </div>
+</section>
+<section class="wrap wrap-pro try" id="try">
+  <h2 class="section-title">Prøv det i nettleseren</h2>
+  <p class="try-lead">Hvert verktøy åpner seg i nettleservinduet, uten noe å installere og uten konto. Bilder og PDF-er du lagrer derfra, er små og merket som demo.</p>
+  <div class="trybtns"><a class="trybtn" href="https://demo.hbc3.no/make/garment">Plagg i 3D</a><a class="trybtn" href="https://demo.hbc3.no/make/colour">Fargediagram</a><a class="trybtn" href="https://demo.hbc3.no/make/knit">Strikkediagram</a><a class="trybtn" href="https://demo.hbc3.no/make/crochet">Heklediagram</a></div>
+</section>
+<section class="wrap wrap-pro">
+  <h2 class="section-title">Laget og under testing</h2>
+  <section class="pframe" id="f-studio">
+  <div class="pframe-text">
+    
+    <h3>Plaggstudioet, i 3D</h3>
+    <p>Start en genser fra en størrelse og en strikkefasthet, raglan eller rett skulder, eller et par votter fra en håndstørrelse. Mal hver del maske for maske og se plagget endre seg i 3D ved siden av diagrammet på en iPad, eller i et hjørne på telefonen.</p>
+    <ul class="points"><li>Pensel, viskelær, fyll og merk, med ett sett garn for hele plagget.</li><li>Koblede ermer: mal det ene, så følger det andre som speilbilde.</li><li>Vrangbord som ser ut som vrangbord, og tovede votter vist før og etter vask.</li><li>Pennemodus på iPad: bare pennen maler, en hvilende håndflate maler ingenting.</li><li>En PDF med hver del, og ett erme for et koblet par.</li></ul>
+    
+  </div>
+  <div class="pframe-shot"><span class="shot"><img class="img-light" src="/assets/pro/shots/frame-studio.webp" alt="Plaggstudioet, i 3D" loading="lazy" /><img class="img-dark" src="/assets/pro/shots/frame-studio_dark.webp" alt="Plaggstudioet, i 3D" loading="lazy" /></span></div>
+</section>
+<section class="pframe pframe-rev" id="f-mitten">
+  <div class="pframe-text">
+    
+    <h3>Votter i 3D</h3>
+    <p>Start et par votter fra en håndstørrelse og mal hånden og tommelen som to diagrammer. 3D-visningen viser votten i formen den har på hånden, med hver maske du maler, og kortet i Studio viser paret.</p>
+    
+    
+  </div>
+  <div class="pframe-shot"><span class="shot"><img class="img-light" src="/assets/pro/shots/frame-mitten.webp" alt="Votter i 3D" loading="lazy" /><img class="img-dark" src="/assets/pro/shots/frame-mitten_dark.webp" alt="Votter i 3D" loading="lazy" /></span></div>
+</section>
+<section class="pframe" id="f-studio-phone">
+  <div class="pframe-text">
+    
+    <h3>Studio på telefonen</h3>
+    <p>På telefonen sitter en liten 3D-modell av plagget i et hjørne av diagrammet og endrer seg mens du maler. Dra den unna, eller vis den stor.</p>
+    
+    
+  </div>
+  <div class="pframe-shot"><span class="shot"><img class="img-light" src="/assets/pro/shots/frame-phone-studio.webp" alt="Studio på telefonen" loading="lazy" /><img class="img-dark" src="/assets/pro/shots/frame-phone-studio_dark.webp" alt="Studio på telefonen" loading="lazy" /></span></div>
+</section>
+<section class="pframe pframe-rev" id="f-charts">
+  <div class="pframe-text">
+    
+    <h3>Alle diagrammer på ett sted</h3>
+    <p>Ett mapperutenett for farge-, strikke- og heklediagrammer. Trykk på et diagram, så åpnes detaljene på siden: størrelse, rapport, farger, mappe og Professional-verktøyene det bruker.</p>
+    <ul class="points"><li>Én mappeliste for alle diagramtyper.</li><li>Purls diagramverktøy ligger ved siden av Professional-verktøyene, så du designer fra ett sted.</li></ul>
+    
+  </div>
+  <div class="pframe-shot"><span class="shot"><img class="img-light" src="/assets/pro/shots/frame-charts.webp" alt="Alle diagrammer på ett sted" loading="lazy" /><img class="img-dark" src="/assets/pro/shots/frame-charts_dark.webp" alt="Alle diagrammer på ett sted" loading="lazy" /></span></div>
+</section>
+<section class="pframe" id="f-crochet">
+  <div class="pframe-text">
+    
+    <h3>Heklediagrammer med penn</h3>
+    <p>Rader, omganger, firkanter og ovaler, eller fritt i alle vinkler. Apple Pencil tegner og en finger flytter diagrammet. Purl skriver hver rad med amerikanske, britiske eller norske begreper.</p>
+    <ul class="points"><li>Tegn din egen maske én gang og finn den i alle diagrammer.</li></ul>
+    
+  </div>
+  <div class="pframe-shot"><span class="shot"><img class="img-light" src="/assets/pro/shots/frame-crochet.webp" alt="Heklediagrammer med penn" loading="lazy" /><img class="img-dark" src="/assets/pro/shots/frame-crochet_dark.webp" alt="Heklediagrammer med penn" loading="lazy" /></span></div>
+</section>
+<section class="pframe pframe-rev" id="f-knit">
+  <div class="pframe-text">
+    
+    <h3>Strikkediagrammer med ekte kabler</h3>
+    <p>Et større strikkebibliotek i Professional: 22 symboler til, kabler opptil 8 masker med vridde og vrange kryss, og brede fellinger tegnet over maskene de strikker.</p>
+    <ul class="points"><li>Rapportbokser og radklammer.</li><li>Dine egne masker delt mellom alle strikkediagrammer.</li></ul>
+    
+  </div>
+  <div class="pframe-shot"><span class="shot"><img class="img-light" src="/assets/pro/shots/frame-knit.webp" alt="Strikkediagrammer med ekte kabler" loading="lazy" /><img class="img-dark" src="/assets/pro/shots/frame-knit_dark.webp" alt="Strikkediagrammer med ekte kabler" loading="lazy" /></span></div>
+</section>
+<section class="pframe" id="f-yarn">
+  <div class="pframe-text">
+    
+    <h3><span class="ph">Strikkediagrammet ditt,</span> <span class="ph">strikket i 3D-garn</span></h3>
+    <p>Åpne 3D-visningen ved siden av et strikkediagram og se det som strikketøy på pinnen: kablene krysser, vrangmaskene ligger bak og hullmønsteret åpner seg. Det strikkes på nytt mens du tegner, og åpnes i fullskjerm med et trykk.</p>
+    <ul class="points"><li>Hver innebygde strikkemaske besto en 3D-sjekk før visningen åpnet.</li><li>I maskebiblioteket snurrer hver innebygde strikkemaske i 3D-garn under fingeren din.</li></ul>
+    
+  </div>
+  <div class="pframe-shot"><span class="shot"><img class="img-light" src="/assets/pro/shots/frame-yarn.webp" alt="Strikkediagrammet ditt, strikket i 3D-garn" loading="lazy" /><img class="img-dark" src="/assets/pro/shots/frame-yarn_dark.webp" alt="Strikkediagrammet ditt, strikket i 3D-garn" loading="lazy" /></span></div>
+</section>
+<section class="pframe pframe-rev" id="f-blueprints">
+  <div class="pframe-text">
+    
+    <h3>Maler, satt inn med et trykk</h3>
+    <p>Lagre hvilken som helst del av et diagram som en mal, en stjerne, en kabel eller omgangene du alltid starter med, og sett den inn i et annet diagram med et trykk. Purl gir deg startmaler for farge, strikk og hekl.</p>
+    <ul class="points"><li>Ett bibliotek for alle tre diagramtyper, sortert etter nylig, navn eller mest brukt.</li><li>Satt inn i: hvert diagram en mal står i, og hvor mange ganger.</li><li>Rediger en kopi av en startmal og behold originalen som den er.</li><li>Del et sett farge-, strikke- eller heklemaler som én .purlp-fil.</li></ul>
+    
+  </div>
+  <div class="pframe-shot"><span class="shot"><img class="img-light" src="/assets/pro/shots/frame-blueprints.webp" alt="Maler, satt inn med et trykk" loading="lazy" /><img class="img-dark" src="/assets/pro/shots/frame-blueprints_dark.webp" alt="Maler, satt inn med et trykk" loading="lazy" /></span></div>
+</section>
+<section class="pframe" id="f-stitches">
+  <div class="pframe-text">
+    
+    <h3>Et maskebibliotek du kan bla i</h3>
+    <p>Hver innebygde maske med amerikansk og britisk navn og diagrammene den står i, ved siden av maskene du har laget selv.</p>
+    
+    
+  </div>
+  <div class="pframe-shot"><span class="shot"><img class="img-light" src="/assets/pro/shots/frame-stitches.webp" alt="Et maskebibliotek du kan bla i" loading="lazy" /><img class="img-dark" src="/assets/pro/shots/frame-stitches_dark.webp" alt="Et maskebibliotek du kan bla i" loading="lazy" /></span></div>
+</section>
+<section class="pframe pframe-rev" id="f-sketch">
+  <div class="pframe-text">
+    
+    <h3>Skisseblokken, et tegnestudio</h3>
+    <p>En fullverdig tegneapp inne i Purl, for stemningsbrett, designark og oppskriftssider. Tegn på en tavle uten kanter eller i en bok med A4-sider. Når Apple Pencil først har rørt siden, tegner bare pennen, så en hvilende håndflate tegner ingenting.</p>
+    <ul class="points"><li>Fineliner, kulepenn, blyant, pensel, tusj og merkepenn, med trykk og helning fra Apple Pencil, og penner du lagrer.</li><li>Opptil 20 lag, hvert med egen dekkevne, multipliser, skjul og lås.</li><li>Linjer, piler, rektangler, ellipser og mangekanter som fester seg til et rutenett, linjal og vinkelhake, og en fyllbøtte som lukker små glipper.</li><li>En lasso som flytter, skalerer, dreier, speiler og kopierer, bilder beskåret til hvilken som helst form, og tekst.</li><li>Rutenett i ruter, prikker eller din egen strikkefasthet, og 100 % i ekte størrelse på de fleste iPader og iPhoner.</li><li>Eksporter en bok som én PDF med skarpe vektorlinjer, klar til å selges som oppskrift, eller som PNG-bilder.</li></ul>
+    
+  </div>
+  <div class="pframe-shot"><span class="shot"><img class="img-light" src="/assets/pro/shots/frame-sketch.webp" alt="Skisseblokken, et tegnestudio" loading="lazy" /><img class="img-dark" src="/assets/pro/shots/frame-sketch_dark.webp" alt="Skisseblokken, et tegnestudio" loading="lazy" /></span></div>
+</section>
+<section class="pframe" id="f-export">
+  <div class="pframe-text">
+    
+    <h3><span class="ph">Eksport:</span> <span class="ph">SVG, PNG, PDF og Purls egne filer</span></h3>
+    <p>SVG fra alle diagramverktøyene, for designprogrammer, med de samme fargevalgene som PNG og PDF. Purls egne filer bringer arbeidet ditt helt over til en annen Purl.</p>
+    <ul class="points"><li>.purlp: ett diagram, én oppskrift eller et sett maler, til å dele.</li><li>.purl: en sikkerhetskopi av alt, eller av det du krysser av, med skisser, plagg og masker.</li><li>Begge formatene er dokumentert, så du kan lese dataene dine med egne verktøy.</li></ul>
+    <p class="pframe-link"><a href="/no/professional/file-types/">Slik virker Purls filer</a></p>
+  </div>
+  <div class="pframe-shot"><div class="svgcard" aria-hidden="true"><span>SVG</span><span>PNG</span><span>PDF</span><span>.purlp</span><span>.purl</span></div></div>
+</section>
+  <h2 class="section-title">På vei</h2>
+  <ul class="ccards"><li class="ccard"><span class="badge badge-coming">Kommer</span><h3>Plagget ditt på en kropp</h3><p>Genseren du designer, sydd sammen og drapert på en 3D-figur, så du ser passformen før du strikker.</p></li><li class="ccard"><span class="badge badge-coming">Kommer</span><h3>Amigurumi-verktøy</h3><p>Omgang for omgang, med et maskenett du kan redigere og formen det gir i 3D, for både venstre- og høyrehendte.</p></li><li class="ccard"><span class="badge badge-coming">Kommer</span><h3>Flere plaggtyper</h3><p>Luer først, så flere former i Garment Studio, hver med egne størrelser og 3D-visning.</p></li><li class="ccard"><span class="badge badge-coming">Kommer</span><h3>Fargevarianter</h3><p>Prøv det samme diagrammet i andre farger side om side, og ta vare på dem du liker.</p></li><li class="ccard"><span class="badge badge-coming">Kommer</span><h3>Strikk i ekte garn</h3><p>3D-visningen av diagrammet ditt strikket med garn som bøyer seg og trekker som det ekte, sjekket mot strikkede prøvelapper.</p></li><li class="ccard"><span class="badge badge-coming">Kommer</span><h3>Skriftlige rader for strikk</h3><p>Diagrammet skriver sine egne radinstruksjoner med amerikanske, britiske eller norske begreper, og finner rapportene for deg.</p></li><li class="ccard"><span class="badge badge-coming">Kommer</span><h3>Diagramsjekk</h3><p>Maskeantall sjekket rad for rad, tegnforklaringen sjekket, farger talt per rad, og flotteringer lengre enn grensen din markert.</p></li><li class="ccard"><span class="badge badge-coming">Kommer</span><h3>Størrelser</h3><p>Ett diagram for alle størrelser, størrelsestabellen, parentestekst og garn per størrelse.</p></li><li class="ccard"><span class="badge badge-coming">Kommer</span><h3>Oppskriftsark</h3><p>Diagram, tegnforklaring og skriftlige rader i én PDF, med et stort diagram fordelt over flere sider.</p></li><li class="ccard"><span class="badge badge-coming">Kommer</span><h3>Versjoner og rettelser</h3><p>Ta vare på versjoner av en oppskrift og send rettelser til testerne dine.</p></li><li class="ccard"><span class="badge badge-coming">Kommer</span><h3>Purl på Mac</h3><p>iPad-appen på en Mac med Apple-brikke, med mus og tastatur.</p></li></ul>
+  <h2 class="section-title">Arbeidet ditt forblir ditt</h2>
+  <ul class="tcards"><li class="tcard"><h3>Uten nett</h3><p>Ingen konto og ingen server. Diagrammene dine ligger på enheten din.</p></li><li class="tcard"><h3>Dine filer</h3><p>Ta sikkerhetskopi av alt i én .purl-fil og del diagrammer og oppskrifter som .purlp-filer. Formatene er dokumentert, så du kan lese dine egne data med andre verktøy.</p></li><li class="tcard"><h3>Delte diagrammer åpnes alltid</h3><p>Diagrammer laget med Professional-verktøy åpnes og spores fortsatt uten Professional, så et delt diagram alltid virker.</p></li></ul>
+  <p class="files-link"><a href="/no/professional/file-types/">Slik virker Purls filer</a></p>
+</section>
+</div>
+</main>
+<footer class="site-footer"><div class="footer-inner">
+  <div class="footer-cols"><div class="footer-col"><h2>Purl.</h2><ul><li><a href="/no/">Hjem</a></li><li><a href="/no/guide/">Brukerveiledning</a></li><li><a href="/no/support/">Støtte</a></li><li><a href="/no/feedback/">Send tilbakemelding</a></li></ul></div><div class="footer-col"><h2>Oppdateringer</h2><ul><li><a href="/changelog/">Nyheter (engelsk)</a></li><li><a href="/roadmap/">Veikart (engelsk)</a></li></ul></div><div class="footer-col"><h2>Juridisk</h2><ul><li><a href="/no/privacy/">Personvern</a></li><li><a href="/no/terms/">Vilkår for bruk</a></li></ul></div><div class="footer-col"><h2>Mer</h2><ul><li><a href="/no/press/">Pressemateriell</a></li></ul></div></div>
+  <p class="footer-note">Purl, en følgesvenn for strikking og hekling. Dataene dine blir på enheten din. &copy; 2026 Purl.</p>
+</div></footer>
+<script>
+(function () {
+  var KEY = 'purl-theme';
+  var root = document.documentElement;
+  function apply(dark) {
+    root.setAttribute('data-theme', dark ? 'dark' : 'light');
+    root.style.colorScheme = dark ? 'dark' : 'light';
+    var b = document.querySelectorAll('.theme-moon');
+    for (var i = 0; i < b.length; i++) b[i].setAttribute('aria-pressed', dark ? 'true' : 'false');
+  }
+  // Each screenshot has a light and a dark picture, and the hidden one is
+  // lazy, so a browser never fetched it and the first switch popped it in
+  // (the maintainer, 2026-10-18). Both pictures of a shot load once it comes
+  // near the screen, unless the visitor saves data. The watch starts after
+  // the page has loaded, so the hero's hidden twin never competes with the
+  // hero picture itself, the largest thing a visitor waits for.
+  var c = navigator.connection, frugal = c && (c.saveData || /(^|-)2g$/.test(c.effectiveType || ''));
+  function warm(shot) { var im = shot.querySelectorAll('img'); for (var j = 0; j < im.length; j++) im[j].loading = 'eager'; }
+  function watch() {
+    var io = new IntersectionObserver(function (es) {
+      for (var k = 0; k < es.length; k++) if (es[k].isIntersecting) { warm(es[k].target); io.unobserve(es[k].target); }
+    }, { rootMargin: '600px 0px' });
+    var shots = document.querySelectorAll('.shot');
+    for (var s = 0; s < shots.length; s++) io.observe(shots[s]);
+  }
+  if (!frugal && 'IntersectionObserver' in window) {
+    if (document.readyState === 'complete') watch(); else window.addEventListener('load', watch);
+  }
+  // A switch waits for the new theme's pictures on screen (at most 0.4 s),
+  // then the page cross-fades from one theme to the other.
+  function swap(dark) {
+    var wait = [], im = document.querySelectorAll('.shot .' + (dark ? 'img-dark' : 'img-light'));
+    for (var j = 0; j < im.length; j++) {
+      var r = im[j].parentNode.getBoundingClientRect();
+      if (r.bottom > -200 && r.top < innerHeight + 200 && im[j].decode) { im[j].loading = 'eager'; wait.push(im[j].decode().catch(function () {})); }
+    }
+    Promise.race([Promise.all(wait), new Promise(function (ok) { setTimeout(ok, 400); })]).then(function () {
+      if (!document.startViewTransition) return apply(dark);
+      root.classList.add('theme-fade');
+      document.startViewTransition(function () { apply(dark); }).finished.then(function () { root.classList.remove('theme-fade'); }, function () { root.classList.remove('theme-fade'); });
+    });
+  }
+  var b = document.querySelectorAll('.theme-moon');
+  for (var i = 0; i < b.length; i++) b[i].addEventListener('click', function () {
+    var dark = root.getAttribute('data-theme') !== 'dark';
+    try { if (dark) localStorage.setItem(KEY, 'dark'); else localStorage.removeItem(KEY); } catch (e) {}
+    swap(dark);
+  });
+  apply(root.getAttribute('data-theme') === 'dark');
+})();
+</script>
+<script>
+(function () {
+  try {
+    var p = location.pathname, now = new Date(), key = 'purl-visit';
+    var day = now.getFullYear() + '-' + (now.getMonth() + 1) + '-' + now.getDate();
+    var seen = null;
+    try { seen = JSON.parse(sessionStorage.getItem(key) || 'null'); } catch (e) {}
+    if (!seen || seen.d !== day || !seen.p) seen = { d: day, p: [] };
+    if (seen.p.indexOf(p) >= 0) return;
+    var r = '';
+    try { var h = document.referrer ? new URL(document.referrer).hostname : ''; if (h && h !== location.hostname) r = h; } catch (e) {}
+    var body = JSON.stringify({ p: p, r: r }), url = "https://editor.hbc3.no/api/public/visit";
+    var sent = false;
+    try { sent = !!(navigator.sendBeacon && navigator.sendBeacon(url, new Blob([body], { type: 'text/plain' }))); } catch (e) {}
+    if (!sent && window.fetch) fetch(url, { method: 'POST', body: body, keepalive: true, credentials: 'omit', headers: { 'content-type': 'text/plain' } }).catch(function () {});
+    seen.p.push(p);
+    try { sessionStorage.setItem(key, JSON.stringify(seen)); } catch (e) {}
+  } catch (e) {}
+})();
+</script>
+<script src="/assets/pro/pro.js" defer></script>
+</body>
+</html>

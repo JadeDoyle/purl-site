@@ -1,0 +1,19 @@
+{
+  "raw": "raw",
+  "out": "out",
+  "devices": {
+    "tablet": { "sb": 56, "nb": 0, "scale": 2.0, "status": false },
+    "tablet-nobar": { "sb": 0, "nb": 0, "scale": 2.0 },
+    "tablet-full": { "sb": 0, "nb": 0, "scale": 2.0, "status": false },
+    "phone": { "sb": 140, "nb": 0, "scale": 3.0, "home": 30 }
+  },
+  "jobs": [
+    { "src": "tablet-studio-3d.png", "device": "tablet-nobar", "as": "mac", "clock": [65, 46], "aspect": 1.6, "frame": "frame-studio", "frameKind": "laptop" },
+    { "src": "tablet-crochet-chart-lace.png", "device": "tablet-full", "as": "ipad", "frame": "frame-crochet" },
+    { "src": "tablet-charts-home.png", "device": "tablet-full", "as": "ipad", "clock": [65, 46], "frame": "frame-charts" },
+    { "src": "tablet-stitches.png", "device": "tablet-full", "as": "ipad", "clock": [65, 46], "frame": "frame-stitches" },
+    { "src": "tablet-knit-chart.png", "device": "tablet-full", "as": "ipad", "frame": "frame-knit" },
+    { "src": "tablet-sketchpad.png", "device": "tablet-full", "as": "ipad", "frame": "frame-sketch" },
+    { "src": "phone-studio.png", "device": "phone", "as": "iphone", "frame": "frame-phone-studio", "frameKind": "phone" }
+  ]
+}

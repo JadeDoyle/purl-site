@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1660 89">
+  <!-- An Apple Pencil seen from the side, at its real proportions: 166 mm
+       long and 8.9 mm across, 10 units a mm. The tip points left. -->
+  <defs>
+    <linearGradient id="body" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="0.35" stop-color="#fbfbfc"/>
+      <stop offset="0.75" stop-color="#e6e6e9"/>
+      <stop offset="1" stop-color="#c8c8cd"/>
+    </linearGradient>
+    <linearGradient id="cone" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fdfdfd"/>
+      <stop offset="0.7" stop-color="#e3e3e6"/>
+      <stop offset="1" stop-color="#c3c3c8"/>
+    </linearGradient>
+    <linearGradient id="nib" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#d9d9dc"/>
+      <stop offset="1" stop-color="#9c9ca2"/>
+    </linearGradient>
+  </defs>
+  <!-- Body with a gently rounded flat end. -->
+  <rect x="190" y="0" width="1470" height="89" rx="14" ry="14" fill="url(#body)"/>
+  <!-- The flat side catches the light as a thin band. -->
+  <rect x="200" y="9" width="1440" height="7" rx="3" fill="#ffffff" opacity="0.9"/>
+  <!-- The cone to the tip, then the grey nib. -->
+  <path d="M196 0 L46 30 Q40 44.5 46 59 L196 89 Z" fill="url(#cone)"/>
+  <path d="M48 31 L14 38 Q2 44.5 14 51 L48 58 Q42 44.5 48 31 Z" fill="url(#nib)"/>
+  <!-- A faint seam where the cone meets the body. -->
+  <rect x="190" y="2" width="2" height="85" fill="#d4d4d8"/>
+</svg>

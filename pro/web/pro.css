@@ -1,0 +1,121 @@
+/* The Purl Professional page (build-site.mjs, /professional/). Loads after
+   the site's styles.css and uses its tokens, light and dark. */
+
+/* The preview bar and the Hobby and Professional switch are in switch.css. */
+
+/* Hero ------------------------------------------------------------------ */
+.phero { max-width: 1180px; margin: 0 auto; padding: 28px 16px 10px; text-align: center; }
+.phero h1 { font-size: clamp(30px, 5vw, 50px); line-height: 1.1; margin: 6px 0 12px; letter-spacing: -0.01em; }
+.phero .lsub { max-width: 680px; margin: 0 auto; }
+.hero-stage { position: relative; margin: 26px auto 0; width: 100%; max-width: 1100px; aspect-ratio: 16 / 8.2; }
+
+/* Coming soon: a filled plum pill above the title and the not-on-sale note
+   in bold under the lead (the maintainer, 2026-10-18, look A of three). The
+   pill keeps its plum in both themes, like the plum band on purl.no. */
+.soon-pill { margin: 0 0 14px; }
+.soon-pill span {
+  display: inline-block; background: linear-gradient(160deg, #5E4478, #7C5E9B); color: #FBF8F5;
+  font-size: 15px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase;
+  padding: 9px 20px; border-radius: 999px; box-shadow: 0 6px 18px rgba(94, 68, 120, .25);
+}
+.soon-note { color: var(--text); font-size: 15px; font-weight: 600; max-width: 600px; margin: 16px auto 0; }
+
+/* The flat hero: each device is one picture with its own screen, corners
+   and transparent surround (pro/shots/devices.py), so nothing here crops or
+   rounds a screen. Positions are in % of the stage so the group scales as
+   one picture. */
+.devices { position: absolute; inset: 0; }
+.dev { position: absolute; filter: drop-shadow(0 18px 24px rgba(44,38,48,.18)); }
+.dev > img { display: block; width: 100%; height: auto; }
+/* A light and dark pair (span.shot): styles.css shows one by theme, so no display here. */
+.dev > .shot img, .pframe-shot .shot img { width: 100%; height: auto; vertical-align: top; }
+
+.dev-mac { left: 22%; top: 2%; width: 56%; }
+.dev-ipad { left: 6%; bottom: 8%; width: 36%; }   /* room for the pencil below it */
+/* The Apple Pencil (pencil.svg, drawn at its real 166 by 8.9 mm): 166 mm
+   of the iPad Air's 247.6 mm body is 67% of the iPad picture's width. */
+.dev > .pencil {
+  position: absolute; width: 67%; height: auto; right: -6%; bottom: -7%;
+  transform: rotate(-7deg); transform-origin: right center;
+  filter: drop-shadow(0 5px 4px rgba(44,38,48,.22));
+}
+
+/* The phone is the Purl home page's own first phone: the same shot from
+   purl.no in the same frame (styles.css .phoneframe, 290 px wide there),
+   drawn small. Every size is in cqw of the phone's box, the 290 px frame's
+   proportions, so a flip between the halves moves one phone and never shows
+   two (switch.css; the maintainer, 2026-10-18). Its shadow is the frame's
+   own, scaled, in place of the device pictures' drop shadow. */
+.dev-phone { right: 9%; bottom: 2%; width: 12.5%; container-type: inline-size; filter: none; }
+.dev-phone .phoneframe { width: 100%; padding: 3.45cqw; border-radius: 13.79cqw; box-shadow: 0 8.97cqw 20.69cqw rgba(44, 38, 48, .22); }
+.dev-phone .phoneframe img { border-radius: 10.69cqw; }
+:root[data-theme="dark"] .dev-phone .phoneframe { box-shadow: 0 8.97cqw 20.69cqw rgba(0, 0, 0, .5); }
+
+/* Try it in your browser: four maker buttons to the web demo (DEMO_BASE in
+   build-site.mjs); .trybtn-soon is the look for a maker not live yet. */
+.try { text-align: center; }
+.try .section-title { margin-top: 40px; }
+.try-lead { color: var(--muted); max-width: 620px; margin: 0 auto 18px; }
+.trybtns { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; max-width: 860px; margin: 0 auto; }
+.trybtn { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; min-height: 56px;
+  padding: 12px 14px; border-radius: 12px; font-weight: 700; text-decoration: none; box-sizing: border-box;
+  background: var(--primary); color: #fff; border: 2px solid var(--primary); }
+a.trybtn:hover { background: var(--primary-dark); border-color: var(--primary-dark); }
+.trybtn-soon { background: var(--surface); color: var(--muted); border-color: var(--border); cursor: default; }
+.trybtn-soon small { font-weight: 600; font-size: 12px; letter-spacing: .03em; text-transform: uppercase; }
+@media (max-width: 760px) { .trybtns { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+/* Feature frames ---------------------------------------------------------- */
+.wrap-pro { max-width: 1040px; }
+.section-title { margin-top: 56px; }
+.pframe { display: flex; align-items: center; gap: 44px; margin: 30px 0 46px; }
+.pframe-rev { flex-direction: row-reverse; }
+.pframe-text { flex: 1; text-align: left; }
+.pframe-text h3 { font-size: 24px; line-height: 1.25; margin: 8px 0 8px; }
+.pframe-shot { flex: 1.25; display: flex; justify-content: center; }
+.pframe-shot img { width: 100%; height: auto; max-height: 520px; object-fit: contain; }
+.pframe-shot .shot { width: 100%; }
+.badge { display: inline-block; font-size: 12px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; border-radius: 999px; padding: 2px 10px; }
+.badge-ready { background: #E4F1EA; color: #2F6B4F; }
+.badge-coming { background: var(--surface-alt); color: var(--muted); border: 1px solid var(--border); }
+.svgcard { width: 70%; aspect-ratio: 4 / 3; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); justify-items: center; align-items: center; align-content: center; gap: 14px; padding: 20px; box-sizing: border-box; }
+.pframe-link { margin: 12px 0 0; }
+/* Three chips a row, each over two of six columns, so a row of two sits
+   centred under the three (the fourth chip starts in column 2). */
+.svgcard span { grid-column: span 2; font-weight: 700; color: var(--primary-dark); border: 2px solid var(--primary); border-radius: 10px; padding: 18px 14px; }
+.svgcard span:nth-child(4):nth-last-child(2) { grid-column: 2 / span 2; }
+.ccards, .tcards { list-style: none; padding: 0; margin: 18px 0 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px; }
+.ccard, .tcard { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 18px; }
+.ccard h3, .tcard h3 { margin: 8px 0 4px; font-size: 17px; }
+.ccard p, .tcard p { margin: 0; color: var(--muted); font-size: 15px; }
+.files-link { margin: 26px 0 60px; text-align: center; }
+
+@media (max-width: 760px) {
+  .pframe, .pframe-rev { flex-direction: column; gap: 14px; }
+  .hero-stage { aspect-ratio: 16 / 10; }
+}
+/* Phones: the site's styles.css already fits the header on one row (logo,
+   then the three links); only the gaps here shrink. */
+@media (max-width: 560px) {
+  .section-title { margin-top: 36px; }
+  .pframe { margin: 22px 0 34px; }
+  .svgcard { width: 100%; aspect-ratio: auto; gap: 10px; }
+  .svgcard span { padding: 12px 10px; }
+  .files-link { margin-bottom: 40px; }
+}
+
+/* File types page */
+.files-page h2 { margin-top: 40px; }
+.files-page pre { background: var(--surface-alt); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; overflow-x: auto; font-size: 13px; line-height: 1.5; }
+.files-page code { font-size: 0.92em; }
+.files-page table { border-collapse: collapse; width: 100%; font-size: 15px; margin: 12px 0; }
+.files-page th, .files-page td { border-bottom: 1px solid var(--border); text-align: left; padding: 6px 8px; vertical-align: top; }
+.files-page .tablewrap { overflow-x: auto; }
+
+/* Capture mode (?stage): only the hero stage, filling the window, for the
+   stills rendered for the morning pick. */
+body.stage-only > :not(main), body.stage-only .phero-text,
+body.stage-only .wrap-pro { display: none !important; }
+body.stage-only, body.stage-only main { background: #FBF8F5; }
+body.stage-only .phero { max-width: none; padding: 0; }
+body.stage-only .hero-stage { margin: 0; max-width: none; width: 100vw; height: 100vh; aspect-ratio: auto; }

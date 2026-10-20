@@ -1,0 +1,345 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex, nofollow" />
+<title>Purl Professional | Purl.</title>
+<meta name="description" content="Purl Professional, coming soon: designer tools for knit and crochet charts and garments in 3D. Try four of its makers in your browser." />
+<link rel="canonical" href="https://purl.no/professional/" />
+<link rel="alternate" hreflang="en" href="https://purl.no/professional/" />
+<link rel="alternate" hreflang="no" href="https://purl.no/no/professional/" />
+<link rel="alternate" hreflang="x-default" href="https://purl.no/professional/" />
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml" />
+<link rel="icon" href="/assets/favicon-32.png" sizes="32x32" type="image/png" />
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png" />
+<link rel="stylesheet" href="/assets/styles.css" />
+<meta name="color-scheme" content="light" />
+<script>try{var q=/[?&]theme=(light|dark)/.exec(location.search);var d=(q?q[1]:localStorage.getItem('purl-theme'))==='dark';}catch(e){}document.documentElement.setAttribute('data-theme',d?'dark':'light');document.documentElement.style.colorScheme=d?'dark':'light';</script>
+<link rel="stylesheet" href="/assets/pro/switch.css" />
+<link rel="stylesheet" href="/assets/pro/pro.css" />
+<script>(function () {
+  var html = document.documentElement;
+  var PHONE = '.lhero-shot .phoneframe, .dev-phone .phoneframe';
+  var FLIP = 'purl-flip';
+  var vt = 'CSSViewTransitionRule' in window;
+  try {
+    if (sessionStorage.getItem(FLIP)) {
+      sessionStorage.removeItem(FLIP);
+      html.classList.add('flip');
+      if (!vt) html.classList.add('flip-fade');
+    }
+  } catch (e) {}
+
+  function phoneTakesPart() {
+    var el = document.querySelector(PHONE);
+    if (!el) return;
+    var b = el.getBoundingClientRect();
+    var still = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (still || b.bottom <= 0 || b.top >= innerHeight || !b.width) el.style.viewTransitionName = 'none';
+  }
+  function quiet(t) { if (t.ready) t.ready.catch(function () {}); }
+  function flips(path) {
+    var pill = document.querySelector('.pill[data-flip]');
+    if (!pill) return true;
+    try { return new RegExp(pill.getAttribute('data-flip')).test(path); } catch (x) { return true; }
+  }
+  window.addEventListener('pageswap', function (e) {
+    if (!e.viewTransition) return;
+    quiet(e.viewTransition);
+    var to = e.activation && e.activation.entry && e.activation.entry.url;
+    if (!to || flips(new URL(to).pathname)) phoneTakesPart(); else e.viewTransition.skipTransition();
+  });
+  window.addEventListener('pagereveal', function (e) { if (e.viewTransition) { quiet(e.viewTransition); phoneTakesPart(); } });
+
+  function fadeLatePictures() {
+    [].forEach.call(document.images, function (im) {
+      if (im.complete) return;
+      im.classList.add('late');
+      var done = function () { im.classList.add('in'); };
+      im.addEventListener('load', done);
+      im.addEventListener('error', done);
+      if (im.complete) done();
+    });
+  }
+
+  function prefetch(off) {
+    var c = navigator.connection;
+    if (c && (c.saveData || /(^|-)2g$/.test(c.effectiveType || ''))) return;
+    var dark = html.getAttribute('data-theme') === 'dark';
+    var canLink = document.createElement('link').relList.supports('prefetch');
+    function get(url) {
+      if (/\.(webp|png|jpe?g|svg)$/i.test(url)) { new Image().src = url; return; }
+      if (canLink) {
+        var l = document.createElement('link');
+        l.rel = 'prefetch';
+        l.href = url;
+        document.head.appendChild(l);
+      } else if (window.fetch) {
+        fetch(url, { mode: 'no-cors', credentials: 'same-origin' }).catch(function () {});
+      }
+    }
+    get(off.href);
+    (off.getAttribute('data-prefetch') || '').split(/\s+/).forEach(function (u) {
+      if (!u) return;
+      var pair = u.split('|');
+      get(new URL(dark && pair[1] ? pair[1] : pair[0], location.href).href);
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    if (html.classList.contains('flip')) fadeLatePictures();
+    var off = document.querySelector('.pill a:not(.on)');
+    if (!off) return;
+    off.addEventListener('click', function () { if (!flips(off.pathname)) return; try { sessionStorage.setItem(FLIP, '1'); } catch (e) {} });
+    var idle = function () { (window.requestIdleCallback || function (f) { setTimeout(f, 300); })(function () { prefetch(off); }); };
+    if (document.readyState === 'complete') idle();
+    else window.addEventListener('load', idle);
+  });
+})();
+</script>
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="Purl." />
+<meta property="og:locale" content="en_GB" />
+<meta property="og:locale:alternate" content="nb_NO" />
+<meta property="og:title" content="Purl Professional | Purl." />
+<meta property="og:description" content="Purl Professional, coming soon: designer tools for knit and crochet charts and garments in 3D. Try four of its makers in your browser." />
+<meta property="og:url" content="https://purl.no/professional/" />
+<meta property="og:image" content="https://purl.no/assets/og.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="apple-itunes-app" content="app-id=6788513793" />
+</head>
+<body>
+<header class="site-header site-header-wrap">
+  <a class="brand" href="/"><img src="/logo.png" alt="" width="30" height="30" /><span>Purl.</span></a>
+  <nav class="pill" aria-label="Purl mode" data-flip="^/(no/)?professional/">
+    <span class="pill-thumb on-pro" aria-hidden="true"></span>
+    <a href="/" data-prefetch="/assets/styles.css /logo.png /assets/landing/en_stash.webp|/assets/landing/en_stash_dark.webp">Purl</a>
+    <a href="/professional/" aria-current="page" class="on">Professional</a>
+  </nav><span class="hdr-break" aria-hidden="true"></span>
+  <nav class="site-nav"><a href="/guide/">Guide</a><a href="/support/">Support</a></nav>
+  <button type="button" class="theme-moon" aria-pressed="false" aria-label="Dark" title="Dark"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 14.2A8.5 8.5 0 1 1 9.8 3.5a6.8 6.8 0 0 0 10.7 10.7z" /></svg></button>
+  <a class="lang" href="/no/professional/" hreflang="no" aria-label="Bytt til norsk / Switch to Norwegian"><b>EN</b><span aria-hidden="true">/</span>NO</a>
+</header>
+<main class="pro-main">
+<div class="pro-panel">
+<section class="phero">
+  <div class="phero-text">
+    <p class="soon-pill"><span>Coming soon</span></p>
+    <h1><span class="ph">Design the garment,</span> <span class="ph">not just the chart.</span></h1>
+    <p class="lsub">Purl Professional is a set of designer tools coming to Purl: a Garment Studio with your sweater in 3D, blueprints you place with a tap, and knit charts with cables up to 8 stitches. Four of its makers already run in your browser.</p>
+    <p class="soon-note">Purl Professional is not on sale yet. What this page shows is built and in testing, and the four makers below let you try it now.</p>
+  </div>
+  <div class="hero-stage" role="img" aria-label="A Mac showing a sweater in 3D in the Garment Studio, an iPad with a pencil on a crochet chart, and a phone showing a yarn stash.">
+    <div class="devices">
+  <div class="dev dev-mac"><span class="shot"><img class="img-light" src="/assets/pro/shots/hero-mac.webp" alt="" /><img class="img-dark" src="/assets/pro/shots/hero-mac_dark.webp" alt="" loading="lazy" /></span></div>
+  <div class="dev dev-ipad"><span class="shot"><img class="img-light" src="/assets/pro/shots/hero-ipad.webp" alt="" /><img class="img-dark" src="/assets/pro/shots/hero-ipad_dark.webp" alt="" loading="lazy" /></span><img class="pencil" src="/assets/pro/pencil.svg" alt="" /></div>
+  <div class="dev dev-phone"><div class="phoneframe"><span class="shot"><img class="img-light" src="/assets/landing/en_stash.webp" alt="" loading="lazy" /><img class="img-dark" src="/assets/landing/en_stash_dark.webp" alt="" loading="lazy" /></span></div></div>
+</div>
+  </div>
+</section>
+<section class="wrap wrap-pro try" id="try">
+  <h2 class="section-title">Try it in your browser</h2>
+  <p class="try-lead">Each maker opens in your browser window, with nothing to install and no account. Pictures and PDFs you save from it are small and marked as a demo.</p>
+  <div class="trybtns"><a class="trybtn" href="https://demo.hbc3.no/make/garment">3D garment</a><a class="trybtn" href="https://demo.hbc3.no/make/colour">Colour chart</a><a class="trybtn" href="https://demo.hbc3.no/make/knit">Knit chart</a><a class="trybtn" href="https://demo.hbc3.no/make/crochet">Crochet chart</a></div>
+</section>
+<section class="wrap wrap-pro">
+  <h2 class="section-title">Built and in testing</h2>
+  <section class="pframe" id="f-studio">
+  <div class="pframe-text">
+    
+    <h3><span class="ph">Garment Studio,</span> <span class="ph">in 3D</span></h3>
+    <p>Start a sweater from a size and a gauge, raglan or drop shoulder, or a pair of mittens from a hand size. Paint each part stitch by stitch and watch the garment change in 3D beside the chart on an iPad, or in a corner on a phone.</p>
+    <ul class="points"><li>Brush, eraser, fill and select, in one set of yarns for the whole garment.</li><li>Linked sleeves: paint one, the other follows as its mirror.</li><li>Ribbing that looks like ribbing, and felted mittens shown before and after washing.</li><li>Pen mode on the iPad: only the pencil paints, a resting palm paints nothing.</li><li>A PDF with every part, and one sleeve for a linked pair.</li></ul>
+    
+  </div>
+  <div class="pframe-shot"><span class="shot"><img class="img-light" src="/assets/pro/shots/frame-studio.webp" alt="Garment Studio, in 3D" loading="lazy" /><img class="img-dark" src="/assets/pro/shots/frame-studio_dark.webp" alt="Garment Studio, in 3D" loading="lazy" /></span></div>
+</section>
+<section class="pframe pframe-rev" id="f-mitten">
+  <div class="pframe-text">
+    
+    <h3>Mittens in 3D</h3>
+    <p>Start a pair of mittens from a hand size and paint the hand and the thumb as two charts. The 3D shows the mitten in the shape it has when worn, with every stitch you paint, and its card in the Studio shows the pair.</p>
+    
+    
+  </div>
+  <div class="pframe-shot"><span class="shot"><img class="img-light" src="/assets/pro/shots/frame-mitten.webp" alt="Mittens in 3D" loading="lazy" /><img class="img-dark" src="/assets/pro/shots/frame-mitten_dark.webp" alt="Mittens in 3D" loading="lazy" /></span></div>
+</section>
+<section class="pframe" id="f-studio-phone">
+  <div class="pframe-text">
+    
+    <h3>The Studio on a phone</h3>
+    <p>On a phone a small 3D of the garment sits in a corner of the chart and changes as you paint. Drag it out of the way, or show it large.</p>
+    
+    
+  </div>
+  <div class="pframe-shot"><span class="shot"><img class="img-light" src="/assets/pro/shots/frame-phone-studio.webp" alt="The Studio on a phone" loading="lazy" /><img class="img-dark" src="/assets/pro/shots/frame-phone-studio_dark.webp" alt="The Studio on a phone" loading="lazy" /></span></div>
+</section>
+<section class="pframe pframe-rev" id="f-charts">
+  <div class="pframe-text">
+    
+    <h3>Every chart in one place</h3>
+    <p>One folder grid for colour, knit and crochet charts. Tap a chart and its facts open at the side: size, repeat, colours, folder, and the Professional tools it uses.</p>
+    <ul class="points"><li>One folder list for every chart kind.</li><li>Purl's chart makers sit beside the Professional tools, so you design from one place.</li></ul>
+    
+  </div>
+  <div class="pframe-shot"><span class="shot"><img class="img-light" src="/assets/pro/shots/frame-charts.webp" alt="Every chart in one place" loading="lazy" /><img class="img-dark" src="/assets/pro/shots/frame-charts_dark.webp" alt="Every chart in one place" loading="lazy" /></span></div>
+</section>
+<section class="pframe" id="f-crochet">
+  <div class="pframe-text">
+    
+    <h3>Crochet charts with a pencil</h3>
+    <p>Rows, rounds, squares and ovals, or freeform at any angle. The Apple Pencil draws and a finger moves the chart. Purl writes each row in US, UK or Norwegian terms.</p>
+    <ul class="points"><li>Draw your own stitch once and find it in every chart.</li></ul>
+    
+  </div>
+  <div class="pframe-shot"><span class="shot"><img class="img-light" src="/assets/pro/shots/frame-crochet.webp" alt="Crochet charts with a pencil" loading="lazy" /><img class="img-dark" src="/assets/pro/shots/frame-crochet_dark.webp" alt="Crochet charts with a pencil" loading="lazy" /></span></div>
+</section>
+<section class="pframe pframe-rev" id="f-knit">
+  <div class="pframe-text">
+    
+    <h3>Knit charts with real cables</h3>
+    <p>A larger knit library in Professional: 22 more symbols, cables up to 8 stitches with twisted and purl crosses, and wide decreases drawn over the stitches they work.</p>
+    <ul class="points"><li>Repeat boxes and row brackets.</li><li>Your own stitches shared across every knit chart.</li></ul>
+    
+  </div>
+  <div class="pframe-shot"><span class="shot"><img class="img-light" src="/assets/pro/shots/frame-knit.webp" alt="Knit charts with real cables" loading="lazy" /><img class="img-dark" src="/assets/pro/shots/frame-knit_dark.webp" alt="Knit charts with real cables" loading="lazy" /></span></div>
+</section>
+<section class="pframe" id="f-yarn">
+  <div class="pframe-text">
+    
+    <h3><span class="ph">Your knit chart,</span> <span class="ph">knitted in 3D yarn</span></h3>
+    <p>Open the 3D view beside a knit chart and see it as fabric on the needle: cables cross, purls sit back and lace opens. It knits again as you draw, and opens full screen with a tap.</p>
+    <ul class="points"><li>Every built-in knit stitch passed a 3D check before the view opened.</li><li>In the stitch library, each built-in knit stitch turns in 3D yarn under your finger.</li></ul>
+    
+  </div>
+  <div class="pframe-shot"><span class="shot"><img class="img-light" src="/assets/pro/shots/frame-yarn.webp" alt="Your knit chart, knitted in 3D yarn" loading="lazy" /><img class="img-dark" src="/assets/pro/shots/frame-yarn_dark.webp" alt="Your knit chart, knitted in 3D yarn" loading="lazy" /></span></div>
+</section>
+<section class="pframe pframe-rev" id="f-blueprints">
+  <div class="pframe-text">
+    
+    <h3>Blueprints, placed with a tap</h3>
+    <p>Save any part of a chart as a blueprint, a star, a cable or the rounds you always start with, and place it in another chart with a tap. Purl starts you off with motifs for colour, knit and crochet.</p>
+    <ul class="points"><li>One library for all three chart kinds, sorted by recent, name or most used.</li><li>Placed in: every chart a blueprint sits in, and how many times.</li><li>Edit a copy of a starter and keep the original as it is.</li><li>Share a set of colour, knit or crochet blueprints as one .purlp file.</li></ul>
+    
+  </div>
+  <div class="pframe-shot"><span class="shot"><img class="img-light" src="/assets/pro/shots/frame-blueprints.webp" alt="Blueprints, placed with a tap" loading="lazy" /><img class="img-dark" src="/assets/pro/shots/frame-blueprints_dark.webp" alt="Blueprints, placed with a tap" loading="lazy" /></span></div>
+</section>
+<section class="pframe" id="f-stitches">
+  <div class="pframe-text">
+    
+    <h3>A stitch library you can browse</h3>
+    <p>Every built-in stitch with its US and UK names and the charts it sits on, beside the stitches you made yourself.</p>
+    
+    
+  </div>
+  <div class="pframe-shot"><span class="shot"><img class="img-light" src="/assets/pro/shots/frame-stitches.webp" alt="A stitch library you can browse" loading="lazy" /><img class="img-dark" src="/assets/pro/shots/frame-stitches_dark.webp" alt="A stitch library you can browse" loading="lazy" /></span></div>
+</section>
+<section class="pframe pframe-rev" id="f-sketch">
+  <div class="pframe-text">
+    
+    <h3>Sketchpad, a drawing studio</h3>
+    <p>A full drawing app inside Purl, for mood boards, design sheets and pattern pages. Draw on an endless board or in a book of A4 pages. Once the Apple Pencil touches the page, only the pencil draws, so a resting palm draws nothing.</p>
+    <ul class="points"><li>Fine liner, ballpoint, pencil, brush, marker and highlighter, with pressure and tilt from the Apple Pencil, and pens you save.</li><li>Up to 20 layers, each with its own opacity, Multiply, hide and lock.</li><li>Lines, arrows, rectangles, ellipses and polygons that snap to a grid, a ruler and a set square, and a bucket fill that closes small gaps.</li><li>A lasso that moves, scales, turns, flips and copies, photos cropped to any shape, and text.</li><li>Grids in squares, dots or your knitting gauge, and 100% at true size on most iPads and iPhones.</li><li>Export a book as one PDF with sharp vector lines, ready to sell as a pattern, or as PNG pictures.</li></ul>
+    
+  </div>
+  <div class="pframe-shot"><span class="shot"><img class="img-light" src="/assets/pro/shots/frame-sketch.webp" alt="Sketchpad, a drawing studio" loading="lazy" /><img class="img-dark" src="/assets/pro/shots/frame-sketch_dark.webp" alt="Sketchpad, a drawing studio" loading="lazy" /></span></div>
+</section>
+<section class="pframe" id="f-export">
+  <div class="pframe-text">
+    
+    <h3><span class="ph">Export:</span> <span class="ph">SVG, PNG, PDF and Purl's own files</span></h3>
+    <p>SVG from every chart maker, for design programs, with the same colour choices as the PNG and PDF. Purl's own files carry your work whole to another Purl.</p>
+    <ul class="points"><li>.purlp: one chart, one pattern or a set of blueprints, to share.</li><li>.purl: a backup of everything, or of what you tick, sketches, garments and stitches included.</li><li>Both formats are documented, so you can read your data with your own tools.</li></ul>
+    <p class="pframe-link"><a href="/professional/file-types/">How Purl's files work</a></p>
+  </div>
+  <div class="pframe-shot"><div class="svgcard" aria-hidden="true"><span>SVG</span><span>PNG</span><span>PDF</span><span>.purlp</span><span>.purl</span></div></div>
+</section>
+  <h2 class="section-title">On the way</h2>
+  <ul class="ccards"><li class="ccard"><span class="badge badge-coming">Coming</span><h3>Your garment on a body</h3><p>The sweater you design, sewn together and draped on a 3D figure, so you see the fit before you knit.</p></li><li class="ccard"><span class="badge badge-coming">Coming</span><h3>Amigurumi creator</h3><p>Round by round, with a stitch net to edit and the shape it makes in 3D, for left and right hands.</p></li><li class="ccard"><span class="badge badge-coming">Coming</span><h3>More garment kinds</h3><p>Beanies first, then more shapes in the Garment Studio, each with its own sizes and 3D view.</p></li><li class="ccard"><span class="badge badge-coming">Coming</span><h3>Colourways</h3><p>Try the same chart in other colours side by side and keep the ones you like.</p></li><li class="ccard"><span class="badge badge-coming">Coming</span><h3>Knitting in real yarn</h3><p>The 3D view of your chart knitted with yarn that bends and pulls like the real thing, checked against knitted swatches.</p></li><li class="ccard"><span class="badge badge-coming">Coming</span><h3>Written rows for knit</h3><p>The chart writes its own row instructions in US, UK or Norwegian terms, with repeats found for you.</p></li><li class="ccard"><span class="badge badge-coming">Coming</span><h3>Chart check</h3><p>Stitch counts checked row to row, the legend checked, colours counted per row, and floats longer than your limit flagged.</p></li><li class="ccard"><span class="badge badge-coming">Coming</span><h3>Sizes</h3><p>One chart for every size, the size table, bracket text and yarn per size.</p></li><li class="ccard"><span class="badge badge-coming">Coming</span><h3>Pattern sheet</h3><p>Chart, key and written rows in one PDF, with a big chart tiled over pages.</p></li><li class="ccard"><span class="badge badge-coming">Coming</span><h3>Versions and errata</h3><p>Keep versions of a pattern and send corrections to your testers.</p></li><li class="ccard"><span class="badge badge-coming">Coming</span><h3>Purl on a Mac</h3><p>The iPad app on a Mac with Apple silicon, with mouse and keyboard.</p></li></ul>
+  <h2 class="section-title">Your work stays yours</h2>
+  <ul class="tcards"><li class="tcard"><h3>Offline</h3><p>No account and no server. Your charts live on your device.</p></li><li class="tcard"><h3>Your files</h3><p>Back up everything to one .purl file and share charts and patterns as .purlp files. The formats are documented, so you can read your own data with other tools.</p></li><li class="tcard"><h3>Shared charts always open</h3><p>Charts made with Professional tools still open and track without Professional, so a shared chart always works.</p></li></ul>
+  <p class="files-link"><a href="/professional/file-types/">How Purl's files work</a></p>
+</section>
+</div>
+</main>
+<footer class="site-footer"><div class="footer-inner">
+  <div class="footer-cols"><div class="footer-col"><h2>Purl.</h2><ul><li><a href="/">Home</a></li><li><a href="/guide/">User guide</a></li><li><a href="/support/">Support</a></li><li><a href="/feedback/">Send feedback</a></li></ul></div><div class="footer-col"><h2>Updates</h2><ul><li><a href="/changelog/">What's new</a></li><li><a href="/roadmap/">Roadmap</a></li></ul></div><div class="footer-col"><h2>Legal</h2><ul><li><a href="/privacy/">Privacy policy</a></li><li><a href="/terms/">Terms of use</a></li></ul></div><div class="footer-col"><h2>More</h2><ul><li><a href="/press/">Press kit</a></li></ul></div></div>
+  <p class="footer-note">Purl, a knitting and crochet companion. Your data stays on your device. &copy; 2026 Purl.</p>
+</div></footer>
+<script>
+(function () {
+  var KEY = 'purl-theme';
+  var root = document.documentElement;
+  function apply(dark) {
+    root.setAttribute('data-theme', dark ? 'dark' : 'light');
+    root.style.colorScheme = dark ? 'dark' : 'light';
+    var b = document.querySelectorAll('.theme-moon');
+    for (var i = 0; i < b.length; i++) b[i].setAttribute('aria-pressed', dark ? 'true' : 'false');
+  }
+  // Each screenshot has a light and a dark picture, and the hidden one is
+  // lazy, so a browser never fetched it and the first switch popped it in
+  // (the maintainer, 2026-10-18). Both pictures of a shot load once it comes
+  // near the screen, unless the visitor saves data. The watch starts after
+  // the page has loaded, so the hero's hidden twin never competes with the
+  // hero picture itself, the largest thing a visitor waits for.
+  var c = navigator.connection, frugal = c && (c.saveData || /(^|-)2g$/.test(c.effectiveType || ''));
+  function warm(shot) { var im = shot.querySelectorAll('img'); for (var j = 0; j < im.length; j++) im[j].loading = 'eager'; }
+  function watch() {
+    var io = new IntersectionObserver(function (es) {
+      for (var k = 0; k < es.length; k++) if (es[k].isIntersecting) { warm(es[k].target); io.unobserve(es[k].target); }
+    }, { rootMargin: '600px 0px' });
+    var shots = document.querySelectorAll('.shot');
+    for (var s = 0; s < shots.length; s++) io.observe(shots[s]);
+  }
+  if (!frugal && 'IntersectionObserver' in window) {
+    if (document.readyState === 'complete') watch(); else window.addEventListener('load', watch);
+  }
+  // A switch waits for the new theme's pictures on screen (at most 0.4 s),
+  // then the page cross-fades from one theme to the other.
+  function swap(dark) {
+    var wait = [], im = document.querySelectorAll('.shot .' + (dark ? 'img-dark' : 'img-light'));
+    for (var j = 0; j < im.length; j++) {
+      var r = im[j].parentNode.getBoundingClientRect();
+      if (r.bottom > -200 && r.top < innerHeight + 200 && im[j].decode) { im[j].loading = 'eager'; wait.push(im[j].decode().catch(function () {})); }
+    }
+    Promise.race([Promise.all(wait), new Promise(function (ok) { setTimeout(ok, 400); })]).then(function () {
+      if (!document.startViewTransition) return apply(dark);
+      root.classList.add('theme-fade');
+      document.startViewTransition(function () { apply(dark); }).finished.then(function () { root.classList.remove('theme-fade'); }, function () { root.classList.remove('theme-fade'); });
+    });
+  }
+  var b = document.querySelectorAll('.theme-moon');
+  for (var i = 0; i < b.length; i++) b[i].addEventListener('click', function () {
+    var dark = root.getAttribute('data-theme') !== 'dark';
+    try { if (dark) localStorage.setItem(KEY, 'dark'); else localStorage.removeItem(KEY); } catch (e) {}
+    swap(dark);
+  });
+  apply(root.getAttribute('data-theme') === 'dark');
+})();
+</script>
+<script>
+(function () {
+  try {
+    var p = location.pathname, now = new Date(), key = 'purl-visit';
+    var day = now.getFullYear() + '-' + (now.getMonth() + 1) + '-' + now.getDate();
+    var seen = null;
+    try { seen = JSON.parse(sessionStorage.getItem(key) || 'null'); } catch (e) {}
+    if (!seen || seen.d !== day || !seen.p) seen = { d: day, p: [] };
+    if (seen.p.indexOf(p) >= 0) return;
+    var r = '';
+    try { var h = document.referrer ? new URL(document.referrer).hostname : ''; if (h && h !== location.hostname) r = h; } catch (e) {}
+    var body = JSON.stringify({ p: p, r: r }), url = "https://editor.hbc3.no/api/public/visit";
+    var sent = false;
+    try { sent = !!(navigator.sendBeacon && navigator.sendBeacon(url, new Blob([body], { type: 'text/plain' }))); } catch (e) {}
+    if (!sent && window.fetch) fetch(url, { method: 'POST', body: body, keepalive: true, credentials: 'omit', headers: { 'content-type': 'text/plain' } }).catch(function () {});
+    seen.p.push(p);
+    try { sessionStorage.setItem(key, JSON.stringify(seen)); } catch (e) {}
+  } catch (e) {}
+})();
+</script>
+<script src="/assets/pro/pro.js" defer></script>
+</body>
+</html>

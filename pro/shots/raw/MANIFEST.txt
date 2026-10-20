@@ -1,0 +1,64 @@
+Purl Pro page raw screenshots, captured 2026-10-16 03:14 to 03:46 from headless emulators.
+
+Tablet: AVD Medium_Tablet, landscape, display override 2388x1668 at density 264 (iPad-like, aspect 1.43). Professional mode.
+  App: APK 1.1.0 (vc10100), OTA channel WIP, More header shows v0.4.44, WIP.
+Phone: AVD Pixel_10_Pro_XL, portrait, 1344x2992. Channel WIP, More header shows v0.4.47, WIP (wip moved on between the two runs).
+
+file | px | shows | flaw seen
+tablet-studio-3d.png | 2388x1668 | RETAKEN 18:31 on wip v0.4.70, see "Garment raws" below | none
+tablet-crochet-chart.png | 2388x1668 | Crochet chart editor, "Sample: flower" round motif, stitch palette and tools | none
+tablet-crochet-chart-lace.png | 2388x1668 | Alternate: crochet editor, "Sample: shell lace" | none
+tablet-charts-home.png | 2388x1668 | Professional Charts home, 5 chart thumbnails, "Cable panel" tapped, facts panel at right (Open, Track, Purl file, PDF, PNG, SVG) | only one row of charts, much empty space below; no folders
+tablet-stitches.png | 2388x1668 | Stitches tab, Built-in knit library (54), cables and stitch cards | bottom row of cards cut by the screen edge (scrollable list)
+tablet-stitches-crochet.png | 2388x1668 | Alternate: Built-in crochet library (57) | bottom row cut by the screen edge
+tablet-knit-chart.png | 2388x1668 | Knit editor, "Cable panel" 22 x 16 made for the shot: purl columns, 2/2 RC, 2/2 LC and 3/3 LC cables from the Pro palette | none
+tablet-sketchpad.png | 2388x1668 | Sketchpad, a sweater outline drawn with the pen, bucket-filled terracotta, cream brush stripes and zigzag | outline is blue while the fill is terracotta; title "Sketch 1"
+tablet-mitten-3d.png | 2388x1668 | Garment Studio mittens, hand chart with navy and cream checker band, 3D mitten on a hand showing the band | band has a checker look rather than a zigzag (some strokes dropped); garment named "Garment 3"
+phone-studio.png | 1344x2992 | RETAKEN 18:33 on wip v0.4.70, see "Garment raws" below | none
+
+Data: Purl's own samples (Sample charts) and things drawn for these shots. The 03:xx stash shots showed real yarn brands from the store demo backup and were removed on 2026-10-16.
+
+Hero raws, captured 2026-10-16 08:33 to 08:35 for the flat hero (pro/shots/devices.py), each at a real device's pixels and point scale. APK 1.1.0 (vc10100), channel WIP, More header shows v0.4.49 WIP on both AVDs.
+
+Feature frame raws, captured 2026-10-16 for pro/shots/frames.py, Medium_Tablet at wm size 2360x1600, density 320 (iPad Air 11-inch), Professional, the app restarted after the display change.
+
+file | px | wip version | shows
+ipad-air-knit-yarn.png | 2360x1600 | v0.4.64d | knit editor, "Cable panel", 3D yarn view beside the chart
+ipad-air-blueprints.png | 2360x1600 | v0.4.64d | Blueprints tab, "Selbu star" picked, Placed in and Edit a copy at the side
+ipad-air-mitten-3d.png | 2360x1600 | v0.4.70 | RETAKEN 18:22, see "Garment raws" below; replaces tablet-mitten-3d.png, which showed the forearm
+
+Hero raws, continued:
+
+file | px | device and setting | shows
+ipad-air-crochet-lace.png | 2360x1600 | iPad Air 11-inch, Medium_Tablet at wm size 2360x1600, density 320 (1180 x 800 dp; the 20 pt home strip is added by devices.py), Professional | crochet editor, "Sample: shell lace"
+mac-studio.png | 2940x1782 | MacBook Air 13-inch window, Medium_Tablet at wm size 2940x1782, density 320 (1470 x 891 dp), Professional | RETAKEN 18:29, see "Garment raws" below
+iphone-15-pro-stash.png | 1179x2433 | iPhone 15 Pro, Pixel_10_Pro_XL at wm size 1179x2433, density 480 (156 px status bar, navigation bar hidden), Hobby | Stash with invented yarns: install cleared (pm clear), then pro/shots/make-stash-backup.mjs output imported through Export & import
+
+Garment raws, retaken 2026-10-16 18:22 to 18:33 on wip v0.4.70, all on Medium_Tablet (the phone AVD was another session's), Professional, app restarted after each display change.
+The garments are painted by code, not by hand: pro/shots/make-garment-backup.mjs drafts them with the app's own starter code and paints mirror-symmetric diamond bands, then the .purl it writes is imported through Export & import. The hand-painted shots had stray squares and uneven zigzags.
+
+file | px | display | shows
+ipad-air-mitten-3d.png | 2360x1600 | density 320 | "Winter mittens", hand chart with one diamond band above the thumb gusset, 3D mitten
+mac-studio.png | 2940x1782 | density 320 | "Fjord raglan" (sleeves linked), front chart with yoke and chest diamond bands, 3D front
+tablet-studio-3d.png | 2388x1668 | density 264, no status bar (shots.json device tablet-nobar) | the same garment and view
+phone-studio.png | 1344x2992 | density 480 (the Pixel 10 Pro XL size), phone layout | the same garment, small 3D in the corner, More tab lit
+
+Light and dark pairs, all 12 raws above retaken 2026-10-18 22:34 to 23:15 on wip v0.4.121, Professional, each screen captured twice from one state: once in Light, once in Dark (More > Settings > Appearance). The light raws were retaken too, so a theme flip on the page swaps two pictures of the same screen; the 2026-10-16 light raws are in git history. Each dark raw sits beside its light one as <name>_dark.png, and dress.py, frames.py and devices.py write <frame>_dark.png beside each frame.
+AVD Shots_Dark (android-35 Play Store tablet image, made for this run, headless), APK 1.1.0 from releases/, channel WIP. The app hides the status bar at these sizes now, so the tablet raws have no band (shots.json device tablet-full).
+Data: garments from pro/shots/make-garment-backup.mjs; the "Cable panel" knit chart from pro/shots/make-chart-backup.mjs (the same 22 x 16 chart, written by code); Purl's samples from Studio "Add a sample garment" and the Sample charts; "Star yoke", a 40 x 20 colour chart with the Selbu star placed twice, so Blueprints shows "Placed in: Star yoke 2 times"; the sketch drawn again with scripted pen strokes (black outline, terracotta fill, cream stripes and zigzag).
+Caveat: Android 15 sometimes draws a 72 px desktop caption bar at large display sizes. A capture with it was thrown away; check with dumpsys window | grep type=captionBar before each capture.
+
+file | px | display | shows
+tablet-sketchpad.png | 2388x1668 | density 264 | "Sketch 1", sweater outline, terracotta fill, cream stripes and zigzag
+tablet-charts-home.png | 2388x1668 | density 264 | Charts home, 4 charts, "Cable panel" picked, facts panel
+tablet-stitches.png | 2388x1668 | density 264 | Stitches, Knit library, cable cards
+tablet-knit-chart.png | 2388x1668 | density 264 | knit editor, "Cable panel"
+tablet-crochet-chart-lace.png | 2388x1668 | density 264 | crochet editor, "Sample: shell lace"
+tablet-studio-3d.png | 2388x1668 | density 264 | "Fjord raglan", front chart, 3D front
+ipad-air-crochet-lace.png | 2360x1600 | density 320 | crochet editor, "Sample: shell lace" (hero iPad)
+ipad-air-knit-yarn.png | 2360x1600 | density 320 | knit editor, "Cable panel", 3D yarn view
+ipad-air-blueprints.png | 2360x1600 | density 320 | Blueprints, "Selbu star" picked, Placed in "Star yoke" 2 times
+ipad-air-mitten-3d.png | 2360x1600 | density 320 | "Winter mittens", hand chart with the cuff, 3D mitten; this pair is from wip v0.4.122 (23:31, the thumb crotch fix), captured on another throwaway AVD with the same garment backup
+mac-studio.png | 2940x1782 | density 320, no caption bar | "Fjord raglan" (hero Mac)
+phone-studio.png | 1344x2992 | density 480 | "Fjord raglan", phone layout, small 3D in the corner
+In Dark the app keeps the 3D stage light grey and the stitch symbol tiles white; that is the app, not the capture. Dark Blueprints shows its search placeholder wrapped to two clipped lines, an app bug.

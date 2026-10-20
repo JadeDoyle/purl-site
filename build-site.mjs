@@ -19,7 +19,7 @@
 //
 // Style rules, matching the app: no em dashes, no emojis in any output.
 
-import { readFileSync, writeFileSync, mkdirSync, existsSync, copyFileSync, readdirSync } from 'node:fs';
+import { readFileSync, writeFileSync, mkdirSync, existsSync, copyFileSync, readdirSync, statSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { marked } from 'marked';
@@ -236,17 +236,15 @@ function header(lang, activeKey, altHref) {
 // Theme: light by default, whatever the system says; a crescent moon in the
 // header turns dark on, is filled while it is, and the choice is remembered
 // (the maintainer, 2026-10-18: no Auto, one small button). ?theme=light|dark
-// forces a theme, for screenshots. The Professional page's preview build
-// (purl-site-pro, pro/build-pro.mjs) carries the same three pieces and
-// takes these from the live page once they are here: keep them identical.
+// forces a theme, for screenshots. The Professional pages (below) use the
+// same three pieces through shell().
 function themeMoon(lang) {
   const t = COPY[lang].theme;
   return `<button type="button" class="theme-moon" aria-pressed="false" aria-label="${escAttr(t.dark)}" title="${escAttr(t.dark)}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 14.2A8.5 8.5 0 1 1 9.8 3.5a6.8 6.8 0 0 0 10.7 10.7z" /></svg></button>`;
 }
 // Head snippet: sets the theme before first paint (no flash). It sets
 // data-theme even when storage throws, since the stylesheet hides the moon on
-// a page without it (JavaScript off). The Professional preview build finds
-// this snippet by its opening `<script>try{var q=`: keep that start.
+// a page without it (JavaScript off).
 const THEME_HEAD = `<meta name="color-scheme" content="light" />
 <script>try{var q=/[?&]theme=(light|dark)/.exec(location.search);var d=(q?q[1]:localStorage.getItem('purl-theme'))==='dark';}catch(e){}document.documentElement.setAttribute('data-theme',d?'dark':'light');document.documentElement.style.colorScheme=d?'dark':'light';</script>`;
 // Body-end snippet: wires the moon and remembers dark (light is the default,
@@ -343,7 +341,10 @@ function footer(lang) {
 
 // path is the site-relative logical path (e.g. '/no/support/'); pageKey names
 // the resource for the language toggle (omit for shared/no-toggle pages).
-function shell({ lang, pageKey, activeKey, path, title, description, body, wide, jsonLd, noCounterpart, wrapClass = '' }) {
+// The Professional pages (below) add a robots line, their own head lines and
+// scripts, a changed top bar (topBar receives the header and returns it) and
+// a body that brings its own <main> (bare); every other page passes none.
+function shell({ lang, pageKey, activeKey, path, title, description, body, wide, jsonLd, noCounterpart, wrapClass = '', robots, head, topBar, bare, scripts }) {
   const canonical = abs(path);
   // The name standing alone is the wordmark and carries its dot; in the home
   // title it opens a phrase and goes without (docs/conventions.md in the app).
@@ -373,7 +374,7 @@ function shell({ lang, pageKey, activeKey, path, title, description, body, wide,
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>${esc(pageTitle)}</title>
+${robots ? `<meta name="robots" content="${robots}" />\n` : ''}<title>${esc(pageTitle)}</title>
 <meta name="description" content="${d}" />
 <link rel="canonical" href="${canonical}" />
 ${hreflang}
@@ -381,7 +382,7 @@ ${hreflang}
 <link rel="icon" href="${u('/assets/favicon-32.png')}" sizes="32x32" type="image/png" />
 <link rel="apple-touch-icon" href="${u('/assets/apple-touch-icon.png')}" />
 <link rel="stylesheet" href="${u('/assets/styles.css')}" />
-${THEME_HEAD}
+${THEME_HEAD}${head ? `\n${head}` : ''}
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content="Purl." />
 <meta property="og:locale" content="${ogLocale}" />
@@ -396,13 +397,13 @@ ${THEME_HEAD}
 <meta name="apple-itunes-app" content="app-id=${APPLE_APP_ID}" />
 ${jsonLd ? ldJson(jsonLd) : ''}</head>
 <body>
-${header(lang, activeKey || pageKey, altHref)}
-<main class="wrap${wide ? ' wrap-wide' : ''}${wrapClass}">
+${(topBar || ((h) => h))(header(lang, activeKey || pageKey, altHref))}
+${bare ? body : `<main class="wrap${wide ? ' wrap-wide' : ''}${wrapClass}">
 ${body}
-</main>
+</main>`}
 ${footer(lang)}
 ${THEME_SCRIPT}
-${VISIT_SCRIPT}
+${VISIT_SCRIPT}${scripts ? `\n${scripts}` : ''}
 </body>
 </html>
 `;
@@ -830,6 +831,178 @@ ${swatches}
 ${shots}
 </div>`;
   return shell({ lang, pageKey: 'press', path: link(lang, 'press').slice(BASE.length), title: p.h1, description: p.desc, body, wide: true });
+}
+
+// --- Purl Professional, unlisted -------------------------------------------
+// The maintainer, 2026-10-20: the Professional page goes on purl.no before it
+// is announced, at /professional/ and /no/professional/, with its file types
+// page under each. Public by address only: noindex, out of the sitemap, and
+// no link to it from any other page, so a crawler that finds it anyway reads
+// the noindex (no robots.txt line, which would name the path). Its own switch
+// links back to the Purl home page; the home page gets its half of the switch
+// when the page is announced (docs/features/professional-page.md in the app
+// repo has the bar). Its words are en.pro, no.pro and fileTypes in copy.json;
+// its sources are pro/ (pro/README.md), copied to assets/pro/ on each build.
+const PRO_SLUG = '/professional/';
+// The "Try it in your browser" buttons open the web demo's makers at
+// DEMO_BASE/make/<key>, in the same tab: the demo's Back returns to the page's
+// #try (the demo server's PRO_SITE). Move DEMO_BASE to demo.purl.no once its
+// DNS record exists.
+const DEMO_BASE = 'https://demo.hbc3.no';
+// Coming soon (the maintainer, 2026-10-18): the plum pill and the not-on-sale
+// note, no Ready badges. Every built feature shows, the ones the demo does
+// not reach included, and the On the way cards follow them.
+const PRO_COMING_SOON = true;
+const PRO_SRC = join(HERE, 'pro');
+const PRO_ASSETS = '/assets/pro/';
+// The paths of the pages with the switch, which opt in to the flip between
+// them (pro/web/switch.js skips it for any other page). Add the home pages,
+// ^/(no/)?$, when they get their half of the switch.
+const FLIP_PAGES = '^/(no/)?professional/';
+const proAsset = (f) => u(PRO_ASSETS + f);
+const proPath = (lang) => (lang === 'no' ? '/no' : '') + PRO_SLUG;
+// The switch's script goes inline into the head: its pagereveal listener must
+// exist before the first frame (pro/web/switch.js). Its comment lines stay in
+// the source.
+const SWITCH_JS = readFileSync(join(PRO_SRC, 'web', 'switch.js'), 'utf8').replace(/^[ \t]*\/\/.*\r?\n/gm, '');
+if (/<\/script/i.test(SWITCH_JS)) throw new Error('pro/web/switch.js must not contain a closing script tag');
+
+// The shots the page shows, as WebP beside their PNG masters in
+// pro/shots/out (pro/shots/webp.py writes them). Only those the page names
+// are copied. A WebP missing stops the build; one older than its PNG stops a
+// local build, as it would show an old picture (a fresh checkout's times say
+// nothing, so CI skips that test).
+function proShots(lang) {
+  return ['hero-mac', 'hero-ipad', ...COPY[lang].pro.built.map((f) => f.shot).filter(Boolean)];
+}
+function copyProAssets() {
+  const to = join(HERE, 'assets', 'pro');
+  mkdirSync(join(to, 'shots'), { recursive: true });
+  for (const f of ['switch.css', 'pro.css', 'pro.js', 'pencil.svg']) copyFileSync(join(PRO_SRC, 'web', f), join(to, f));
+  copyFileSync(join(PRO_SRC, 'files', 'read_purl.py'), join(to, 'read_purl.py'));
+  const out = join(PRO_SRC, 'shots', 'out');
+  for (const name of new Set([...proShots('en'), ...proShots('no')].flatMap((s) => [s, `${s}_dark`]))) {
+    const webp = join(out, `${name}.webp`);
+    const png = join(out, `${name}.png`);
+    if (!existsSync(webp)) throw new Error(`pro/shots/out/${name}.webp is missing; run python pro/shots/webp.py`);
+    if (!process.env.CI && existsSync(png) && statSync(png).mtimeMs > statSync(webp).mtimeMs + 2000) {
+      throw new Error(`pro/shots/out/${name}.webp is older than its PNG; run python pro/shots/webp.py`);
+    }
+    copyFileSync(webp, join(to, 'shots', `${name}.webp`));
+  }
+}
+
+// The hero: the Mac and the iPad are each one picture drawn at its real
+// proportions (pro/shots/devices.py); the phone is the Purl home page's own
+// first phone, the same shot in the same frame, so a flip between the two
+// moves one phone (pro/web/switch.css). Both pictures of a shot are lazy
+// but the light hero ones, as on the home page.
+function proDevices(lang) {
+  const shot = (f, eager) => `<span class="shot"><img class="img-light" src="${proAsset(`shots/${f}.webp`)}" alt=""${eager ? '' : ' loading="lazy"'} /><img class="img-dark" src="${proAsset(`shots/${f}_dark.webp`)}" alt="" loading="lazy" /></span>`;
+  return `<div class="devices">
+  <div class="dev dev-mac">${shot('hero-mac', true)}</div>
+  <div class="dev dev-ipad">${shot('hero-ipad', true)}<img class="pencil" src="${proAsset('pencil.svg')}" alt="" /></div>
+  <div class="dev dev-phone"><div class="phoneframe"><span class="shot"><img class="img-light" src="${u(`/assets/landing/${lang}_stash.webp`)}" alt="" loading="lazy" /><img class="img-dark" src="${u(`/assets/landing/${lang}_stash_dark.webp`)}" alt="" loading="lazy" /></span></div></div>
+</div>`;
+}
+
+// The switch: two links in the top bar right of the logo, the page you are on
+// filled. The Purl half opens the home page and carries data-prefetch, what
+// that page shows first, which switch.js fetches after load so the flip opens
+// from the cache. With the switch, Home leaves the links: the logo and the
+// Purl half lead there (the maintainer, 2026-10-18).
+// The halves are links in a labelled nav, the filled one marked current: the
+// Professional page itself ("page"), or the mode on a page under it ("true").
+function proTopBar(lang, current = 'page') {
+  const t = COPY[lang].pro;
+  const home = link(lang, 'home');
+  const prefetch = [u('/assets/styles.css'), u('/logo.png'), `${u(`/assets/landing/${lang}_stash.webp`)}|${u(`/assets/landing/${lang}_stash_dark.webp`)}`];
+  const pill = `
+  <nav class="pill" aria-label="${lang === 'no' ? 'Purl-modus' : 'Purl mode'}" data-flip="${escAttr(FLIP_PAGES)}">
+    <span class="pill-thumb on-pro" aria-hidden="true"></span>
+    <a href="${home}" data-prefetch="${escAttr(prefetch.join(' '))}">${esc(t.switchHobby)}</a>
+    <a href="${u(proPath(lang))}" aria-current="${current}" class="on">${esc(t.switchPro)}</a>
+  </nav><span class="hdr-break" aria-hidden="true"></span>`;
+  return (h) => h
+    .replace('<header class="site-header">', '<header class="site-header site-header-wrap">')
+    .replace(/(<a class="brand"[\s\S]*?<\/a>)/, (b) => b + pill)
+    .replace(new RegExp(`(<nav class="site-nav">)<a href="${home}"[^>]*>[^<]*</a>`), '$1');
+}
+
+function proHead() {
+  return `<link rel="stylesheet" href="${proAsset('switch.css')}" />
+<link rel="stylesheet" href="${proAsset('pro.css')}" />
+<script>${SWITCH_JS}</script>`;
+}
+
+function professional(lang) {
+  const t = COPY[lang].pro;
+  const filesHref = u(proPath(lang) + 'file-types/');
+  const built = t.built.map((f, i) => `<section class="pframe${i % 2 ? ' pframe-rev' : ''}" id="f-${f.key}">
+  <div class="pframe-text">
+    ${PRO_COMING_SOON ? '' : `<span class="badge badge-ready">${esc(t.readyLabel)}</span>`}
+    <h3>${line(f.title)}</h3>
+    <p>${line(f.body)}</p>
+    ${f.points.length ? `<ul class="points">${f.points.map((p) => `<li>${line(p)}</li>`).join('')}</ul>` : ''}
+    ${f.link ? `<p class="pframe-link"><a href="${filesHref}">${line(t.filesLink)}</a></p>` : ''}
+  </div>
+  <div class="pframe-shot">${f.shot
+    ? `<span class="shot"><img class="img-light" src="${proAsset(`shots/${f.shot}.webp`)}" alt="${escAttr(plain(f.title))}" loading="lazy" /><img class="img-dark" src="${proAsset(`shots/${f.shot}_dark.webp`)}" alt="${escAttr(plain(f.title))}" loading="lazy" /></span>`
+    : `<div class="svgcard" aria-hidden="true">${(f.chips || ['SVG', 'PNG', 'PDF']).map((c) => `<span>${esc(c)}</span>`).join('')}</div>`}</div>
+</section>`).join('\n');
+  const coming = t.coming.map((c) => `<li class="ccard"><span class="badge badge-coming">${esc(t.comingLabel)}</span><h3>${line(c.title)}</h3><p>${line(c.body)}</p></li>`).join('');
+  const tryButtons = t.tryMakers.map((m) => `<a class="trybtn" href="${escAttr(`${DEMO_BASE}/make/${m.key}`)}">${esc(m.label)}</a>`).join('');
+  const trust = t.trust.map((c) => `<li class="tcard"><h3>${line(c.title)}</h3><p>${line(c.body)}</p></li>`).join('');
+  const body = `<main class="pro-main">
+<div class="pro-panel">
+<section class="phero">
+  <div class="phero-text">
+    ${PRO_COMING_SOON ? `<p class="soon-pill"><span>${esc(t.trySoon)}</span></p>` : ''}
+    <h1>${line(t.title)}</h1>
+    <p class="lsub">${line(t.lead)}</p>
+    ${PRO_COMING_SOON ? `<p class="soon-note">${line(t.heroNote)}</p>` : ''}
+  </div>
+  <div class="hero-stage" role="img" aria-label="${escAttr(plain(t.heroAlt))}">
+    ${proDevices(lang)}
+  </div>
+</section>
+<section class="wrap wrap-pro try" id="try">
+  <h2 class="section-title">${line(t.tryTitle)}</h2>
+  <p class="try-lead">${line(t.tryLead)}</p>
+  <div class="trybtns">${tryButtons}</div>
+</section>
+<section class="wrap wrap-pro">
+  <h2 class="section-title">${line(t.sectionBuilt)}</h2>
+  ${built}
+  <h2 class="section-title">${line(t.sectionComing)}</h2>
+  <ul class="ccards">${coming}</ul>
+  <h2 class="section-title">${line(t.sectionTrust)}</h2>
+  <ul class="tcards">${trust}</ul>
+  <p class="files-link"><a href="${filesHref}">${line(t.filesLink)}</a></p>
+</section>
+</div>
+</main>`;
+  return shell({
+    lang, pageKey: 'professional', path: proPath(lang), title: plain(t.metaTitle), description: plain(t.metaDesc), body,
+    robots: 'noindex, nofollow', head: proHead(), topBar: proTopBar(lang), bare: true,
+    scripts: `<script src="${proAsset('pro.js')}" defer></script>`,
+  });
+}
+
+// The file types page: its body is pro/files/file-types.htm, written in
+// English only, so the Norwegian page wraps it in lang="en" under its
+// Norwegian title and lead. Not .html, so the stale-page check passes it by.
+function professionalFiles(lang) {
+  const t = COPY[lang].fileTypes;
+  const md = readFileSync(join(PRO_SRC, 'files', 'file-types.htm'), 'utf8')
+    .replace(/href="read_purl\.py"/g, `href="${proAsset('read_purl.py')}"`);
+  const body = `<h1>${line(t.title)}</h1>
+<p class="lead">${line(t.lead)}</p>
+${lang === 'en' ? md : `<div lang="en">\n${md}</div>`}`;
+  return shell({
+    lang, pageKey: 'professional', path: proPath(lang) + 'file-types/', title: plain(t.metaTitle), description: plain(t.metaDesc), body,
+    wide: true, wrapClass: ' files-page', robots: 'noindex, nofollow', head: proHead(), topBar: proTopBar(lang, 'true'),
+  });
 }
 
 // --- user guide (bilingual: user-guide/ + user-guide/no/) -----------------
@@ -1348,7 +1521,9 @@ function verifyLinkGraph() {
   const alternates = new Map();
   for (const file of pages) {
     const html = readFileSync(file, 'utf8');
-    if (/<meta name="robots" content="noindex"/.test(html)) continue;
+    // A noindex page ("noindex" or "noindex, nofollow") is not advertised,
+    // so it has no place in the language graph or the sitemap.
+    if (/<meta name="robots" content="noindex[",]/.test(html)) continue;
     const canonical = html.match(/<link rel="canonical" href="([^"]+)"/)?.[1];
     if (!canonical) { problems.push(`${file}: no canonical`); continue; }
     if (fileFor(canonical) !== file) problems.push(`${file}: canonical ${canonical} does not resolve back to this file`);
@@ -1436,7 +1611,11 @@ async function main() {
     }));
     writePage(`${dir}/press/`, press(lang));
     writePage(`${dir}/feedback/`, feedbackRedirect(lang));
+    // Unlisted: written, never linked, never in the sitemap (above).
+    writePage(proPath(lang), professional(lang));
+    writePage(`${proPath(lang)}file-types/`, professionalFiles(lang));
   }
+  copyProAssets();
 
   // Shared English pages
   writePage('/changelog/', changelog());

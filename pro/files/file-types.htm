@@ -1,0 +1,133 @@
+<p>Purl has no server. Everything you make lives on your device, and leaves it in one of these files:</p>
+<div class="tablewrap"><table>
+<tr><th>Extension</th><th>What it holds</th><th>Inside</th></tr>
+<tr><td><code>.purl</code></td><td>A backup: everything, or what you ticked in Export &amp; import</td><td>A short binary header, a JSON manifest, then the raw files</td></tr>
+<tr><td><code>.purlp</code></td><td>One shared pattern or chart, or a set of blueprints</td><td>Plain JSON (rename it to <code>.json</code> to read it)</td></tr>
+<tr><td><code>.purlt</code></td><td>Your barcode templates, shared</td><td>Plain JSON</td></tr>
+</table></div>
+
+<h2 id="backup">The .purl backup</h2>
+<p>A backup is one file in three parts. Nothing is zipped and nothing is base64 encoded, so a 600 MB pattern PDF takes 600 MB in the backup, and any tool can find the start of the manifest without unpacking anything.</p>
+<div class="tablewrap"><table>
+<tr><th>Bytes</th><th>What</th></tr>
+<tr><td>0 to 3</td><td>The text <code>PURL</code></td></tr>
+<tr><td>4 to 7</td><td>The format version, a 32 bit little endian number: <code>3</code></td></tr>
+<tr><td>8 to 23</td><td>The length of the manifest in bytes, written as 16 hexadecimal characters, for example <code>000000000001a2f4</code></td></tr>
+<tr><td>24 onward</td><td>The manifest: UTF-8 JSON, as long as the header says</td></tr>
+<tr><td>After the manifest</td><td>The files, one after another, in the order the manifest lists them</td></tr>
+</table></div>
+
+<h3>The manifest</h3>
+<pre><code>{
+  "_purl": "purl-backup",
+  "version": 3,
+  "exportedAt": 1792008320092,
+  "appVersion": "0.4.18",
+  "data": {
+    "purl:stash": "[{\"id\":\"y-1\",\"brand\":\"...\", ...}]",
+    "purl:projects": "[...]",
+    ...
+  },
+  "files": [
+    { "uri": "file:///.../p1a2b3c4.pdf", "dir": "patterns", "size": 48211 },
+    { "uri": "file:///.../ph5k6l7m.jpg", "dir": "photos", "size": 9180 },
+    { "uri": "file:///.../cc-ring.json", "dir": "crochet-in", "size": 2044, "cc": { "id": "cc-ring" } }
+  ]
+}</code></pre>
+<ul>
+<li><code>exportedAt</code> is the time of the backup in milliseconds since 1970. <code>appVersion</code> is the Purl version that wrote it; older backups may leave it out.</li>
+<li><code>data</code> holds Purl's saved records. Each key starts with <code>purl:</code>, and each value is itself a JSON text, so parse it a second time. <code>purl:stash</code> is your yarn, <code>purl:projects</code> your projects, <code>purl:patterns</code> and <code>purl:userpatterns</code> your patterns.</li>
+<li><code>files</code> lists the raw files. <code>size</code> is the length in bytes. A file's place in the backup is not stored: the first file starts right after the manifest, and each next file starts where the one before it ends. <code>uri</code> is where the file sat on the device that made the backup; a restore gives it a new place.</li>
+<li><code>dir</code> says what the file is: <code>patterns</code> (a pattern PDF), <code>photos</code> (a picture), <code>crochet-in</code> (a crochet chart), <code>blueprints-in</code> (a blueprint), <code>studio-in</code> (a Garment Studio garment) or <code>sketchpad-in</code> (one file of a Sketchpad sketch). Chart, blueprint, garment and sketch files are JSON.</li>
+<li>Since October 2026 an entry for a chart, blueprint, garment or sketch may also carry its <code>name</code> and the time it was last edited (<code>at</code>), so a list can show it without opening the file.</li>
+</ul>
+
+<h3>Read one with Python</h3>
+<p>This script, with Python's standard library only, prints what a backup holds and can unpack it into a folder: the manifest, one JSON file per record list, and every raw file. <a href="read_purl.py" download>Download read_purl.py</a>.</p>
+<pre><code>python read_purl.py my-backup.purl            # summary
+python read_purl.py my-backup.purl unpacked   # unpack into ./unpacked</code></pre>
+<p>The core of it is short enough to write in any language:</p>
+<pre><code>head = f.read(24)                       # b"PURL", version, 16 hex chars
+version = struct.unpack("&lt;I", head[4:8])[0]
+manifest_len = int(head[8:24], 16)
+manifest = json.loads(f.read(manifest_len))
+offset = 24 + manifest_len
+for entry in manifest["files"]:
+    f.seek(offset); data = f.read(entry["size"])
+    offset += entry["size"]
+stash = json.loads(manifest["data"]["purl:stash"])</code></pre>
+<p>A sound backup ends exactly where its last file ends. If the file is shorter than the header, manifest and listed sizes add up to, the backup was cut short, for example by a copy that did not finish; Purl tells you so before you restore.</p>
+
+<h3>Older backups</h3>
+<p>Purl still reads two older kinds. A version 2 backup is text, one JSON object per line: a first line with <code>"_purl": "purl-backup"</code> and <code>"version": 2</code>, then a line per saved record (<code>{"t":"kv","k":...,"v":...}</code>), a line naming each file (<code>{"t":"f","u":...,"d":...}</code>) followed by its bytes in base64 lines (<code>{"t":"c","b":...}</code>) and <code>{"t":"e"}</code>, and <code>{"t":"done"}</code> at the end. A version 1 backup is one JSON object with <code>data</code> and the files in base64. Purl writes only version 3 today.</p>
+
+<h2 id="shared">The .purlp shared file</h2>
+<p>When you share a pattern, a chart or blueprints, Purl writes one <code>.purlp</code> file. It is plain JSON. The first key, <code>_purl</code>, says which of the three it is:</p>
+<div class="tablewrap"><table>
+<tr><th><code>_purl</code></th><th>What</th><th>Main fields</th></tr>
+<tr><td><code>purl-pattern</code></td><td>A pattern</td><td><code>version</code> (2), <code>pattern</code>, and when they apply <code>cover</code>, <code>photosLeft</code>, <code>crochet</code>, <code>knit</code></td></tr>
+<tr><td><code>purl-chart</code></td><td>A colour, knit or crochet chart</td><td><code>version</code> (1), <code>kind</code> (<code>colour</code>, <code>knit</code> or <code>crochet</code>), <code>chart</code></td></tr>
+<tr><td><code>purl-blueprint</code></td><td>Blueprints, saved parts of a chart</td><td><code>version</code> (1), <code>maker</code> (the chart maker it was shared from), <code>blueprints</code> (a list)</td></tr>
+</table></div>
+
+<h3>A shared pattern</h3>
+<pre><code>{
+  "_purl": "purl-pattern",
+  "version": 2,
+  "pattern": { "title": "...", ... },
+  "cover": { "data": "&lt;base64&gt;", "ext": "jpg" },
+  "photosLeft": 2,
+  "crochet": [ { "version": 1, "kind": "crochet", "chart": { ... } } ],
+  "knit":    [ { "version": 1, "kind": "knit", "chart": { ... } } ]
+}</code></pre>
+<ul>
+<li><code>pattern</code> is the pattern as Purl stores it, without any path on the sender's device.</li>
+<li><code>cover</code> is the cover picture, base64 encoded, with its file type. It is left out when the pattern has none, or when it is too large (over 12 million base64 characters, about 9 MB).</li>
+<li><code>photosLeft</code> counts the pictures the sender had that the file does not carry.</li>
+<li><code>crochet</code> and <code>knit</code> are the pattern's own chart copies, each shaped like a shared chart without its <code>_purl</code> key.</li>
+</ul>
+
+<h3>A shared chart</h3>
+<pre><code>{ "_purl": "purl-chart", "version": 1, "kind": "crochet", "chart": { ... } }</code></pre>
+<p><code>chart</code> is the chart exactly as Purl stores it, so a field a newer Purl adds still travels. A crochet chart carries the drawings of the stitches its maker drew by hand (<code>own</code>), only those the chart uses; a built stitch needs nothing extra, since its name, such as <code>tr.puff.6</code>, is its definition. Importing a chart never overwrites one you have: it arrives as a new chart, and a name you already use gets a number, such as "Rose (2)".</p>
+
+<h2 id="yarn">A yarn record</h2>
+<p>Your stash is the list under <code>purl:stash</code> in a backup. Each yarn is one JSON object. Only <code>id</code>, <code>skeins</code> and <code>createdAt</code> are always there; every other field is left out when it is empty.</p>
+<div class="tablewrap"><table>
+<tr><th>Field</th><th>Type</th><th>Meaning</th></tr>
+<tr><td><code>id</code></td><td>text</td><td>Purl's own id for the yarn</td></tr>
+<tr><td><code>brand</code>, <code>name</code></td><td>text</td><td>Maker and yarn name</td></tr>
+<tr><td><code>color</code></td><td>text</td><td>The colour's name</td></tr>
+<tr><td><code>colorHex</code></td><td>text</td><td>The colour as <code>#rrggbb</code></td></tr>
+<tr><td><code>colorHexes</code></td><td>list of text</td><td>2 to 10 colours for a striping or multicoloured yarn; the first is also in <code>colorHex</code></td></tr>
+<tr><td><code>dyeLot</code></td><td>text</td><td>Dye lot</td></tr>
+<tr><td><code>fibers</code></td><td>list</td><td>The blend, each <code>{ "name": "Alpaca", "percent": 100 }</code></td></tr>
+<tr><td><code>fiber</code></td><td>text</td><td>The blend as one line, kept for older readers</td></tr>
+<tr><td><code>weight</code></td><td>text</td><td>One of <code>Lace</code>, <code>Fingering</code>, <code>Sport</code>, <code>DK</code>, <code>Worsted</code>, <code>Aran</code>, <code>Bulky</code>, <code>Super Bulky</code>, <code>Other</code></td></tr>
+<tr><td><code>skeins</code></td><td>number</td><td>How many skeins, halves allowed (3.5)</td></tr>
+<tr><td><code>lengthPerSkein</code></td><td>number</td><td>Metres per skein. Always stored in metres; Purl shows yards when you choose imperial units</td></tr>
+<tr><td><code>gramsPerSkein</code></td><td>number</td><td>Grams per skein, always stored in grams</td></tr>
+<tr><td><code>needleSize</code>, <code>gauge</code></td><td>text</td><td>Knitting needle and gauge from the ball band</td></tr>
+<tr><td><code>crochetHook</code>, <code>crochetGauge</code></td><td>text</td><td>Hook and gauge for crochet</td></tr>
+<tr><td><code>care</code></td><td>text</td><td>Washing and care</td></tr>
+<tr><td><code>barcodes</code></td><td>list of text</td><td>Barcodes scanned for this yarn</td></tr>
+<tr><td><code>pricePerSkein</code></td><td>number</td><td>Price per skein</td></tr>
+<tr><td><code>store</code></td><td>text</td><td>Where you bought it</td></tr>
+<tr><td><code>notes</code></td><td>text</td><td>Your notes</td></tr>
+<tr><td><code>rebuy</code></td><td>true</td><td>Marked to buy again</td></tr>
+<tr><td><code>createdAt</code></td><td>number</td><td>When it was added, in milliseconds since 1970</td></tr>
+</table></div>
+<pre><code>{
+  "id": "y-alpaca",
+  "brand": "Example Yarns",
+  "name": "Alpaca 4 ply",
+  "color": "Light grey",
+  "colorHex": "#bfbfbf",
+  "weight": "Fingering",
+  "skeins": 6,
+  "lengthPerSkein": 167,
+  "gramsPerSkein": 50,
+  "fibers": [ { "name": "Alpaca", "percent": 100 } ],
+  "createdAt": 1780304400000
+}</code></pre>
+<p>To turn your stash into a spreadsheet, unpack a backup with the script above and convert <code>purl_stash.json</code>, one row per yarn.</p>

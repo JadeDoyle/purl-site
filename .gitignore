@@ -1,2 +1,4 @@
 node_modules/
 package-lock.json
+# Chrome profiles left by the Professional page's shot scripts.
+pro/shots/raw/prof/

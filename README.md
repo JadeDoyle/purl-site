@@ -26,6 +26,7 @@ card), so nothing drifts:
 | Roadmap | `/roadmap/` | (English) | app data: `RoadmapScreen.tsx` `DONE`/`NEXT`/`LATER` |
 | Press kit | `/press/` | `/no/press/` | `build-site.mjs` + `../Purl/docs/release/screenshots` |
 | Send feedback | `/feedback/` | `/no/feedback/` | redirect to the Google Form |
+| Purl Professional, unlisted | `/professional/` | `/no/professional/` | `build-site.mjs` + `pro/` (noindex, out of the sitemap, no link from any other page; `pro/README.md`) |
 
 The guide, changelog and roadmap are English only, matching the app (the app's
 changelog and roadmap data are English strings, and the written guide is English
