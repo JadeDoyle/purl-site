@@ -71,8 +71,9 @@ demo.purl.no once its DNS record exists.
 `PRO_COMING_SOON` in `build-site.mjs`: a plum pill above the title, the
 not-on-sale note under the lead, no Ready badges. Every built feature shows,
 the ones the demo does not reach included, and the On the way cards follow.
-The switch reads Purl and Professional, spelled out at every width, so the
-top bar wraps onto two rows below 640 px.
+The switch reads Purl and Professional, spelled out at every width. The top
+bar stays one row down to 355 px: on phones the switch and links are a size
+smaller and, below 400 px, the logo steps aside (`pro/web/switch.css`).
 
 ## A fast switch (2026-10-18)
 
