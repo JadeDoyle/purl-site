@@ -35,10 +35,13 @@
   <button type="button" class="theme-moon" aria-pressed="false" aria-label="Dark" title="Dark"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 14.2A8.5 8.5 0 1 1 9.8 3.5a6.8 6.8 0 0 0 10.7 10.7z" /></svg></button>
   <a class="lang" href="/no/guide/backups.html" hreflang="no" aria-label="Bytt til norsk / Switch to Norwegian"><b>EN</b><span aria-hidden="true">/</span>NO</a>
 </header>
-<main class="wrap">
-<article class="prose"><h1>Backups and recovery</h1>
+<main class="wrap wrap-guide">
+<div class="gn" data-gn-index="/guide/search.json" data-gn-ui="{&quot;one&quot;:&quot;1 result&quot;,&quot;many&quot;:&quot;{n} results&quot;,&quot;none&quot;:&quot;Nothing found for “{q}”.&quot;,&quot;more&quot;:&quot;The best 20 are shown. Add a word to narrow it down.&quot;,&quot;loading&quot;:&quot;Loading the search&quot;,&quot;failed&quot;:&quot;The search could not load. Check your connection and try again.&quot;}">
+<div class="gn-bar"><button type="button" class="gn-cbtn" aria-expanded="false" aria-controls="gn-drawer"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6.5h16M4 12h16M4 17.5h10" /></svg><span>Contents</span></button><div class="gn-search gn-search-bar" role="search"><span class="gn-field"><svg class="gn-mag" viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" /><path d="M15.5 15.5 20 20" /></svg><input type="search" placeholder="Search the guide" aria-label="Search the guide" role="combobox" aria-expanded="false" aria-controls="gn-r-bar" aria-autocomplete="list" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="search" /></span><div class="gn-results" id="gn-r-bar" role="listbox" aria-label="Search the guide" hidden></div></div></div>
+<aside class="gn-side"><div class="gn-side-in"><div class="gn-search gn-search-side" role="search"><span class="gn-field"><svg class="gn-mag" viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" /><path d="M15.5 15.5 20 20" /></svg><input type="search" placeholder="Search the guide" aria-label="Search the guide" role="combobox" aria-expanded="false" aria-controls="gn-r-side" aria-autocomplete="list" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="search" /></span><div class="gn-results" id="gn-r-side" role="listbox" aria-label="Search the guide" hidden></div></div><nav class="gn-pages" aria-label="Guide pages"><p class="gn-group">How to</p><ul><li><a href="/guide/task-yarn.html">Add a yarn</a></li><li><a href="/guide/task-pdf.html">Import a PDF pattern</a></li><li><a href="/guide/task-project.html">Start a project</a></li><li><a href="/guide/task-count.html">Count rows</a></li><li><a href="/guide/task-row.html">Mark your row</a></li><li><a href="/guide/task-chart.html">Follow a chart</a></li><li><a href="/guide/task-colour.html">Make a colour chart</a></li><li><a href="/guide/task-backup.html">Back up your data</a></li></ul><p class="gn-group">Start here</p><ul><li><a href="/guide/">User guide</a></li><li><a href="/guide/getting-started.html">Getting started</a></li></ul><p class="gn-group">Tutorials</p><ul><li><a href="/guide/tutorial-first-project.html">Your first project</a></li><li><a href="/guide/tutorial-read-a-pattern.html">Read a pattern</a></li><li><a href="/guide/tutorial-stash.html">Your yarn, in and out</a></li><li><a href="/guide/tutorial-charts.html">Draw a chart</a></li></ul><p class="gn-group">Reference</p><ul><li><a href="/guide/yarn-stash.html">Yarn stash</a></li><li><a href="/guide/patterns.html">Patterns</a></li><li><a href="/guide/projects.html">Projects</a></li><li><a href="/guide/pdf-tools.html">PDF tools</a></li><li><a href="/guide/chart-maker.html">Colour charts</a></li><li><a href="/guide/crochet-charts.html">Crochet charts</a></li><li><a href="/guide/barcode-templates.html">Barcodes and the yarn library</a></li><li><a href="/guide/backups.html" aria-current="page">Backups and recovery</a></li><li><a href="/guide/terminology.html">Terminology glossary</a></li><li><a href="/guide/calculator.html">Calculator</a></li><li><a href="/guide/faq.html">FAQ</a></li></ul></nav></div></aside>
+<div class="gn-main"><article class="prose"><h1>Backups and recovery</h1>
 <p>Three layers of protection against losing your work.</p>
-<h2>The short version</h2>
+<details class="gn-toc-box"><summary>On this page <span class="gn-n">8</span></summary><ul><li><a href="#the-short-version">The short version</a></li><li><a href="#recently-deleted">Recently deleted</a></li><li><a href="#snapshots">Snapshots</a></li><li><a href="#backup-files">Backup files</a></li><li><a href="#sharing-patterns-and-libraries-separately">Sharing patterns and libraries separately</a></li><li><a href="#delete-all-data-on-this-device">Delete all data on this device</a></li><li><a href="#moving-everything-to-a-new-phone">Moving everything to a new phone</a></li><li><a href="#see-also">See also</a></li></ul></details><script>if(innerWidth>899)document.currentScript.previousElementSibling.open=true</script><h2 id="the-short-version">The short version</h2>
 <ul>
 <li><strong>Recently deleted</strong>: anything you delete sits in the trash for 30 days. One
 tap to restore.</li>
@@ -50,8 +53,8 @@ one.</li>
 </ul>
 <p>All three live on the <strong>More</strong> tab, under <strong>Your data</strong>: <strong>Backups &amp; history</strong>
 for the first two, <strong>Export &amp; import</strong> for the third.</p>
-<figure class="guidefig"><img src="./images/more-your-data.webp" alt="The Your data section of the More tab, with the Backups and history and Export and import tiles" loading="lazy" decoding="async" /><figcaption>Two tiles, under the heading Your data.</figcaption></figure>
-<h2>Recently deleted</h2>
+<figure class="guidefig"><img src="./images/more-your-data.webp" alt="The Your data section of the More tab, with the Backups and history and Export and import tiles" width="720" height="352" style="--w:720;--h:352" loading="lazy" decoding="async" /><figcaption>Two tiles, under the heading Your data.</figcaption></figure>
+<h2 id="recently-deleted">Recently deleted</h2>
 <p>Delete a yarn, a piece of equipment, a project or a pattern and it does not
 actually go away. It sits in the trash for 30 days.</p>
 <p>Open <strong>More</strong>, then <strong>Backups &amp; history</strong>. The first section is <strong>Recently
@@ -61,8 +64,8 @@ back with the files it had, or <strong>Delete forever</strong>, which does exact
 imported, restored and deleted lately, so you can see both directions of what
 you have been doing.</p>
 <p>After 30 days, trash entries are cleared out automatically.</p>
-<figure class="guidefig"><img src="./images/recover-screen.webp" alt="The Backups and history screen showing Recently deleted, Activity history and Snapshot history" loading="lazy" decoding="async" /><figcaption>Deleted items, your recent activity, and the snapshot dates, on one screen.</figcaption></figure>
-<h2>Snapshots</h2>
+<figure class="guidefig"><img src="./images/recover-screen.webp" alt="The Backups and history screen showing Recently deleted, Activity history and Snapshot history" width="720" height="1539" style="--w:720;--h:1539" loading="lazy" decoding="async" /><figcaption>Deleted items, your recent activity, and the snapshot dates, on one screen.</figcaption></figure>
+<h2 id="snapshots">Snapshots</h2>
 <p>Purl saves a snapshot of its whole state automatically, when you open the app
 and more than 24 hours have passed. Every yarn, every pattern, every project,
 every preference. Seven days are kept and older ones are pruned.</p>
@@ -77,10 +80,10 @@ since</strong> or <strong>Changed since</strong>. Tap <strong>Restore</strong> o
 version, so if you might want today&#39;s version back, take a snapshot first.</p>
 <p>The catch: snapshots are local-only. A factory reset of your phone wipes them
 too. For off-device safety, use backup files.</p>
-<h2>Backup files</h2>
+<h2 id="backup-files">Backup files</h2>
 <p>Open <strong>More</strong>, then <strong>Export &amp; import</strong>. The screen is headed <strong>Choose items</strong>
 and has two modes, <strong>Export</strong> and <strong>Import</strong>.</p>
-<h3>Exporting</h3>
+<h3 id="exporting">Exporting</h3>
 <ol>
 <li>Tap <strong>Export</strong>.</li>
 <li>Tick what you want to keep, section by section: <strong>Projects</strong>, <strong>PDF
@@ -99,8 +102,8 @@ it to Files.</li>
 <p>Your yarn library, saved colours, fibre list, categories and settings always
 travel along. They are small, they are shared across the whole app, and you
 would always want them.</p>
-<figure class="guidefig"><img src="./images/backup-export.webp" alt="The Choose items screen in Export mode with sections ticked and the Export button" loading="lazy" decoding="async" /><figcaption>Per-item ticks, with the size of each one, and the total on the button.</figcaption></figure>
-<h3>Importing</h3>
+<figure class="guidefig"><img src="./images/backup-export.webp" alt="The Choose items screen in Export mode with sections ticked and the Export button" width="720" height="1539" style="--w:720;--h:1539" loading="lazy" decoding="async" /><figcaption>Per-item ticks, with the size of each one, and the total on the button.</figcaption></figure>
+<h3 id="importing">Importing</h3>
 <p>Two ways in: <strong>Import</strong> inside <strong>Export &amp; import</strong>, then <strong>Choose backup
 file</strong>; or tap a <code>.purl</code> file in your file manager, which opens Purl on this
 screen with the file already loaded.</p>
@@ -110,8 +113,8 @@ backup&#39;s copy is more recent. Tick what you want and tap <strong>Import</str
 <p>New items are added. Items you already have keep their place and take their
 knitting progress from the backup: row counters, annotations, notes, reading
 position. Nothing you leave unticked is touched.</p>
-<figure class="guidefig"><img src="./images/backup-import.webp" alt="The Choose items screen in Import mode, with a loaded file and on-device tags" loading="lazy" decoding="async" /><figcaption>Nothing is imported until you have seen the list and ticked it.</figcaption></figure>
-<h2>Sharing patterns and libraries separately</h2>
+<figure class="guidefig"><img src="./images/backup-import.webp" alt="The Choose items screen in Import mode, with a loaded file and on-device tags" width="720" height="1539" style="--w:720;--h:1539" loading="lazy" decoding="async" /><figcaption>Nothing is imported until you have seen the list and ticked it.</figcaption></figure>
+<h2 id="sharing-patterns-and-libraries-separately">Sharing patterns and libraries separately</h2>
 <p>Two smaller formats, for sharing one thing rather than everything:</p>
 <ul>
 <li><strong>.purlp</strong>: a single hand-written pattern. Share it from the pattern&#39;s own
@@ -122,7 +125,7 @@ from nothing. Share it from the share icon in <strong>Yarn library</strong>. See
 </ul>
 <p>These are tiny files and do not include your yarn, projects, or photos. Just
 the named thing.</p>
-<h2>Delete all data on this device</h2>
+<h2 id="delete-all-data-on-this-device">Delete all data on this device</h2>
 <p>At the very bottom of the <strong>More</strong> tab is <strong>Delete all data on this device</strong>.
 It is the most dangerous thing in the app, so it asks twice, and offers you a
 way out in between.</p>
@@ -137,8 +140,8 @@ including the recently-deleted bin and the recovery snapshots, and cannot be
 undone.</li>
 </ol>
 <p>Take the backup. It costs one tap.</p>
-<figure class="guidefig"><img src="./images/reset-confirm.webp" alt="The Delete all data dialog offering Back up first, Skip backup and Cancel" loading="lazy" decoding="async" /><figcaption>The one dialog worth reading twice.</figcaption></figure>
-<h2>Moving everything to a new phone</h2>
+<figure class="guidefig"><img src="./images/reset-confirm.webp" alt="The Delete all data dialog offering Back up first, Skip backup and Cancel" width="720" height="401" style="--w:720;--h:401" loading="lazy" decoding="async" /><figcaption>The one dialog worth reading twice.</figcaption></figure>
+<h2 id="moving-everything-to-a-new-phone">Moving everything to a new phone</h2>
 <ol>
 <li>On the old device, open <strong>More</strong>, then <strong>Export &amp; import</strong>.</li>
 <li>Tap <strong>Export</strong>, then <strong>Select all</strong> on every section.</li>
@@ -152,14 +155,18 @@ reach from the new device: Drive, email, a USB transfer.</li>
 </ol>
 <p>The new device is empty, so nothing collides. PDFs, photos, drawings,
 bookmarks, dye lots and counters all travel.</p>
-<h2>See also</h2>
+<h2 id="see-also">See also</h2>
 <ul>
 <li><a href="/guide/yarn-stash.html">Yarn stash</a>: the stash that is being backed up.</li>
 <li><a href="/guide/barcode-templates.html">Barcodes and the yarn library</a>: the <code>.purlt</code> format.</li>
 <li><a href="/guide/patterns.html">Patterns</a>: the <code>.purlp</code> format.</li>
 </ul>
 </article>
-<nav class="pagenav pagenav-guide"><h2>All guide pages</h2><h3>How to</h3><ul><li><a href="/guide/task-yarn.html">Add a yarn</a></li><li><a href="/guide/task-pdf.html">Import a PDF pattern</a></li><li><a href="/guide/task-project.html">Start a project</a></li><li><a href="/guide/task-count.html">Count rows</a></li><li><a href="/guide/task-row.html">Mark your row</a></li><li><a href="/guide/task-chart.html">Follow a chart</a></li><li><a href="/guide/task-colour.html">Make a colour chart</a></li><li><a href="/guide/task-backup.html">Back up your data</a></li></ul><h3>Start here</h3><ul><li><a href="/guide/">User guide</a></li><li><a href="/guide/getting-started.html">Getting started</a></li></ul><h3>Tutorials</h3><ul><li><a href="/guide/tutorial-first-project.html">Your first project</a></li><li><a href="/guide/tutorial-read-a-pattern.html">Read a pattern</a></li><li><a href="/guide/tutorial-stash.html">Get your yarn in</a></li><li><a href="/guide/tutorial-charts.html">Make a chart</a></li></ul><h3>Reference</h3><ul><li><a href="/guide/yarn-stash.html">Yarn stash</a></li><li><a href="/guide/patterns.html">Patterns</a></li><li><a href="/guide/projects.html">Projects</a></li><li><a href="/guide/pdf-tools.html">PDF tools</a></li><li><a href="/guide/chart-maker.html">Chart maker</a></li><li><a href="/guide/crochet-charts.html">Crochet charts</a></li><li><a href="/guide/barcode-templates.html">Barcodes and the yarn library</a></li><li><a href="/guide/backups.html" aria-current="page">Backups and recovery</a></li><li><a href="/guide/terminology.html">Terminology glossary</a></li><li><a href="/guide/calculator.html">Calculator</a></li><li><a href="/guide/faq.html">FAQ</a></li></ul></nav>
+<nav class="pagenav pagenav-guide"><h2>All guide pages</h2><h3>How to</h3><ul><li><a href="/guide/task-yarn.html">Add a yarn</a></li><li><a href="/guide/task-pdf.html">Import a PDF pattern</a></li><li><a href="/guide/task-project.html">Start a project</a></li><li><a href="/guide/task-count.html">Count rows</a></li><li><a href="/guide/task-row.html">Mark your row</a></li><li><a href="/guide/task-chart.html">Follow a chart</a></li><li><a href="/guide/task-colour.html">Make a colour chart</a></li><li><a href="/guide/task-backup.html">Back up your data</a></li></ul><h3>Start here</h3><ul><li><a href="/guide/">User guide</a></li><li><a href="/guide/getting-started.html">Getting started</a></li></ul><h3>Tutorials</h3><ul><li><a href="/guide/tutorial-first-project.html">Your first project</a></li><li><a href="/guide/tutorial-read-a-pattern.html">Read a pattern</a></li><li><a href="/guide/tutorial-stash.html">Your yarn, in and out</a></li><li><a href="/guide/tutorial-charts.html">Draw a chart</a></li></ul><h3>Reference</h3><ul><li><a href="/guide/yarn-stash.html">Yarn stash</a></li><li><a href="/guide/patterns.html">Patterns</a></li><li><a href="/guide/projects.html">Projects</a></li><li><a href="/guide/pdf-tools.html">PDF tools</a></li><li><a href="/guide/chart-maker.html">Colour charts</a></li><li><a href="/guide/crochet-charts.html">Crochet charts</a></li><li><a href="/guide/barcode-templates.html">Barcodes and the yarn library</a></li><li><a href="/guide/backups.html" aria-current="page">Backups and recovery</a></li><li><a href="/guide/terminology.html">Terminology glossary</a></li><li><a href="/guide/calculator.html">Calculator</a></li><li><a href="/guide/faq.html">FAQ</a></li></ul></nav></div>
+<aside class="gn-rail"><div class="gn-rail-in"><nav class="gn-toc" aria-label="On this page"><p class="gn-toc-h">On this page</p><ul><li><a href="#the-short-version">The short version</a></li><li><a href="#recently-deleted">Recently deleted</a></li><li><a href="#snapshots">Snapshots</a></li><li><a href="#backup-files">Backup files</a></li><li><a href="#sharing-patterns-and-libraries-separately">Sharing patterns and libraries separately</a></li><li><a href="#delete-all-data-on-this-device">Delete all data on this device</a></li><li><a href="#moving-everything-to-a-new-phone">Moving everything to a new phone</a></li><li><a href="#see-also">See also</a></li></ul></nav></div></aside>
+</div>
+<div class="gn-drawer" id="gn-drawer" role="dialog" aria-modal="true" aria-label="Contents" hidden><div class="gn-panel"><div class="gn-phead"><p>Contents</p><button type="button" class="gn-x" aria-label="Close"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" /></svg></button></div><div class="gn-dbody"></div></div></div>
+<script src="/assets/guide.js" defer></script>
 </main>
 <footer class="site-footer"><div class="footer-inner">
   <div class="footer-cols"><div class="footer-col"><h2>Purl.</h2><ul><li><a href="/">Home</a></li><li><a href="/guide/">User guide</a></li><li><a href="/support/">Support</a></li><li><a href="/feedback/">Send feedback</a></li></ul></div><div class="footer-col"><h2>Updates</h2><ul><li><a href="/changelog/">What's new</a></li><li><a href="/roadmap/">Roadmap</a></li></ul></div><div class="footer-col"><h2>Legal</h2><ul><li><a href="/privacy/">Privacy policy</a></li><li><a href="/terms/">Terms of use</a></li></ul></div><div class="footer-col"><h2>More</h2><ul><li><a href="/press/">Press kit</a></li></ul></div></div>
