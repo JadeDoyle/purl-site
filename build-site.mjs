@@ -343,7 +343,7 @@ function footer(lang) {
 
 // path is the site-relative logical path (e.g. '/no/support/'); pageKey names
 // the resource for the language toggle (omit for shared/no-toggle pages).
-function shell({ lang, pageKey, activeKey, path, title, description, body, wide, jsonLd, noCounterpart }) {
+function shell({ lang, pageKey, activeKey, path, title, description, body, wide, jsonLd, noCounterpart, wrapClass = '' }) {
   const canonical = abs(path);
   // The name standing alone is the wordmark and carries its dot; in the home
   // title it opens a phrase and goes without (docs/conventions.md in the app).
@@ -397,7 +397,7 @@ ${THEME_HEAD}
 ${jsonLd ? ldJson(jsonLd) : ''}</head>
 <body>
 ${header(lang, activeKey || pageKey, altHref)}
-<main class="wrap${wide ? ' wrap-wide' : ''}">
+<main class="wrap${wide ? ' wrap-wide' : ''}${wrapClass}">
 ${body}
 </main>
 ${footer(lang)}
@@ -917,9 +917,9 @@ function guideSourceDir(lang) {
     : join(PURL, 'user-guide', lang === 'no' ? 'no' : '');
 }
 
-function guideNav(lang, currentSlug) {
+function guideNav(lang, currentSlug, t) {
   const dir = lang === 'no' ? '/no' : '';
-  const heading = lang === 'no' ? 'Alle sider i veiledningen' : 'All guide pages';
+  const heading = esc(t.allPages);
   const groups = GUIDE_GROUPS.map(([key, en, no]) => {
     const items = GUIDE_PAGES.filter((p) => p[4] === key)
       .filter(([base]) => existsSync(join(guideSourceDir(lang), `${base}.md`)))
@@ -932,6 +932,144 @@ function guideNav(lang, currentSlug) {
     return items ? `<h3>${lang === 'no' ? no : en}</h3><ul>${items}</ul>` : '';
   }).join('');
   return `<nav class="pagenav pagenav-guide"><h2>${heading}</h2>${groups}</nav>`;
+}
+
+// --- guide navigation: search, page list, On this page, phone Contents ----
+// Chosen from samples by the maintainer, 2026-10-20 (decision log in the Purl
+// repo, docs/project-status.md). On a wide screen: the page list on the left
+// with the search box above it, the page itself, and On this page in a column
+// on the right. Under 1240 px On this page becomes a box before the page's
+// first section. Under 900 px (a phone, an iPad held upright) a bar under the
+// header holds a Contents button, which opens On this page and the pages in a
+// drawer, and the search box.
+//
+// The search runs in the visitor's browser over an index this build writes
+// next to the pages (/guide/search.json, /no/guide/search.json). The page
+// fetches it from purl.no itself on the first search; the words typed are
+// never sent anywhere. assets/guide.js is the client side.
+//
+// The texts live in copy.json (COPY[lang].guideNav), so they are edited and
+// reviewed in the online editor like the rest of the site. These are the
+// fallback for a key copy.json does not have yet; the build says which.
+const GUIDE_NAV_TEXT = {
+  en: {
+    search: 'Search the guide', contents: 'Contents', onPage: 'On this page', pages: 'Guide pages',
+    allPages: 'All guide pages', close: 'Close',
+    one: '1 result', many: '{n} results', none: 'Nothing found for “{q}”.',
+    more: 'The best 20 are shown. Add a word to narrow it down.', loading: 'Loading the search',
+    failed: 'The search could not load. Check your connection and try again.',
+  },
+  no: {
+    search: 'Søk i veiledningen', contents: 'Innhold', onPage: 'På denne siden', pages: 'Sider i veiledningen',
+    allPages: 'Alle sider i veiledningen', close: 'Lukk',
+    one: '1 treff', many: '{n} treff', none: 'Ingen treff for «{q}».',
+    more: 'De 20 beste vises. Legg til et ord for å snevre inn.', loading: 'Laster søket',
+    failed: 'Søket kunne ikke lastes. Sjekk nettet og prøv igjen.',
+  },
+};
+const GUIDE_NAV_MISSING = new Set();
+function gnText(lang) {
+  const own = COPY[lang].guideNav || {};
+  const out = {};
+  for (const [key, fallback] of Object.entries(GUIDE_NAV_TEXT[lang])) {
+    if (typeof own[key] === 'string' && own[key].trim()) out[key] = own[key];
+    else { out[key] = fallback; GUIDE_NAV_MISSING.add(`${lang}.guideNav.${key}`); }
+  }
+  return out;
+}
+
+// Heading text as a reader sees it: inline tags dropped, block tags a space.
+const htmlText = (h) => String(h)
+  .replace(/<\/?(a|strong|em|code|span|b|i|kbd|mark|sup|sub)\b[^>]*>/g, '')
+  .replace(/<[^>]+>/g, ' ')
+  .replace(/&(amp|lt|gt|quot|#39|nbsp);/g, (m, e) => ({ amp: '&', lt: '<', gt: '>', quot: '"', '#39': "'", nbsp: ' ' })[e])
+  .replace(/\s+/g, ' ')
+  .trim();
+
+// An id for every h2 and h3, made the way GitHub makes them (lower case,
+// punctuation dropped, spaces to hyphens, a number on a repeat), so a guide
+// link written as page.md#heading works on GitHub and on purl.no alike.
+function guideHeadings(html) {
+  const used = new Set();
+  const heads = [];
+  const out = html.replace(/<h([23])>([\s\S]*?)<\/h\1>/g, (m, level, inner) => {
+    const text = htmlText(inner);
+    const base = text.toLowerCase().replace(/[^\p{L}\p{N}\s_-]/gu, '').trim().replace(/\s/g, '-') || 'section';
+    let id = base;
+    for (let n = 1; used.has(id); n++) id = `${base}-${n}`;
+    used.add(id);
+    heads.push({ level: Number(level), id, text });
+    return `<h${level} id="${escAttr(id)}">${inner}</h${level}>`;
+  });
+  return { html: out, heads };
+}
+
+// A page split at its h2 and h3 headings, as plain text, for the index. The
+// part before the first heading belongs to the page itself (no anchor).
+function guideSections(html) {
+  return html.split(/(?=<h[23] id=")/).map((chunk) => {
+    const m = /^<h([23]) id="([^"]*)">([\s\S]*?)<\/h\1>/.exec(chunk);
+    const body = m ? chunk.slice(m[0].length) : chunk.replace(/<h1>[\s\S]*?<\/h1>/, '');
+    return { a: m ? m[2] : '', h: m ? htmlText(m[3]) : '', x: htmlText(body) };
+  }).filter((s) => s.h || s.x);
+}
+
+const GN_ICON = {
+  mag: '<svg class="gn-mag" viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" /><path d="M15.5 15.5 20 20" /></svg>',
+  list: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6.5h16M4 12h16M4 17.5h10" /></svg>',
+  x: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" /></svg>',
+};
+// One search box: the one in the side column shows on a wide screen, the
+// one in the phone bar under 900 px.
+function gnSearchBox(t, where) {
+  return `<div class="gn-search gn-search-${where}" role="search"><span class="gn-field">${GN_ICON.mag}<input type="search" placeholder="${escAttr(t.search)}" aria-label="${escAttr(t.search)}" role="combobox" aria-expanded="false" aria-controls="gn-r-${where}" aria-autocomplete="list" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="search" /></span><div class="gn-results" id="gn-r-${where}" role="listbox" aria-label="${escAttr(t.search)}" hidden></div></div>`;
+}
+// The page list for the side column and the phone drawer: every page by
+// group, the current one marked.
+function gnPages(lang, currentSlug, t) {
+  const dir = lang === 'no' ? '/no' : '';
+  const groups = GUIDE_GROUPS.map(([key, en, no]) => {
+    const items = GUIDE_PAGES.filter((p) => p[4] === key)
+      .filter(([base]) => existsSync(join(guideSourceDir(lang), `${base}.md`)))
+      .map(([base, enT, noT]) => {
+        const slug = base === 'README' ? 'index' : base;
+        return `<li><a href="${u(guideHref(dir, slug))}"${slug === currentSlug ? ' aria-current="page"' : ''}>${lang === 'no' ? noT : enT}</a></li>`;
+      }).join('');
+    return items ? `<p class="gn-group">${lang === 'no' ? no : en}</p><ul>${items}</ul>` : '';
+  }).join('');
+  return `<nav class="gn-pages" aria-label="${escAttr(t.pages)}">${groups}</nav>`;
+}
+
+// The guide page around its article. A page with three sections or more gets
+// On this page: the right-hand column, and a box before its first section
+// (every intro is one to three short paragraphs), open from 900 px and folded
+// on a phone (the script after it decides before the box paints). The right
+// column is there on every page, empty on a short one, so the page list and
+// the text stay put when the reader moves between pages.
+function guideLayout(lang, slug, articleHtml, heads) {
+  const t = gnText(lang);
+  const dir = lang === 'no' ? '/no' : '';
+  const h2s = heads.filter((h) => h.level === 2);
+  const toc = h2s.length >= 3 ? h2s : [];
+  let article = articleHtml;
+  let rail = '';
+  if (toc.length) {
+    const list = `<ul>${toc.map((h) => `<li><a href="#${escAttr(h.id)}">${esc(h.text)}</a></li>`).join('')}</ul>`;
+    const box = `<details class="gn-toc-box"><summary>${esc(t.onPage)} <span class="gn-n">${toc.length}</span></summary>${list}</details><script>if(innerWidth>899)document.currentScript.previousElementSibling.open=true</script>`;
+    const at = article.indexOf('<h2 id=');
+    article = article.slice(0, at) + box + article.slice(at);
+    rail = `<nav class="gn-toc" aria-label="${escAttr(t.onPage)}"><p class="gn-toc-h">${esc(t.onPage)}</p>${list}</nav>`;
+  }
+  const ui = escAttr(JSON.stringify({ one: t.one, many: t.many, none: t.none, more: t.more, loading: t.loading, failed: t.failed }));
+  return `<div class="gn" data-gn-index="${u(`${dir}/guide/search.json`)}" data-gn-ui="${ui}">
+<div class="gn-bar"><button type="button" class="gn-cbtn" aria-expanded="false" aria-controls="gn-drawer">${GN_ICON.list}<span>${esc(t.contents)}</span></button>${gnSearchBox(t, 'bar')}</div>
+<aside class="gn-side"><div class="gn-side-in">${gnSearchBox(t, 'side')}${gnPages(lang, slug, t)}</div></aside>
+<div class="gn-main"><article class="prose">${article}</article>
+${guideNav(lang, slug, t)}</div>
+<aside class="gn-rail"><div class="gn-rail-in">${rail}</div></aside>
+</div>
+<div class="gn-drawer" id="gn-drawer" role="dialog" aria-modal="true" aria-label="${escAttr(t.contents)}" hidden><div class="gn-panel"><div class="gn-phead"><p>${esc(t.contents)}</p><button type="button" class="gn-x" aria-label="${escAttr(t.close)}">${GN_ICON.x}</button></div><div class="gn-dbody"></div></div></div>
+<script src="${u('/assets/guide.js')}" defer></script>`;
 }
 
 // Turn "image paragraph followed by an italic paragraph" into a real figure
@@ -1040,14 +1178,18 @@ function buildGuide(lang) {
   mkdirSync(join(HERE, `${dir}/guide`.replace(/^\//, '')), { recursive: true });
   let count = 0;
   copyGuideImages(lang);
-  for (const [base, enTitle, noTitle, isIndex] of GUIDE_PAGES) {
+  const index = { pages: [], s: [] };
+  for (const [base, enTitle, noTitle, isIndex, group] of GUIDE_PAGES) {
     const srcFile = join(src, `${base}.md`);
     if (!existsSync(srcFile)) { console.warn(`skip (missing ${lang}): ${base}.md`); continue; }
     const title = COPY[lang].guideMeta?.[isIndex ? 'index' : base]?.title
       || (lang === 'no' ? noTitle : enTitle);
     const md = guideLinkRewrite(stripFlagged(readFileSync(srcFile, 'utf8')), dir);
-    const bodyHtml = guideFigures(marked.parse(md), lang);
+    const { html: bodyHtml, heads } = guideHeadings(guideFigures(marked.parse(md), lang));
     const slug = isIndex ? 'index' : base;
+    const groupRow = GUIDE_GROUPS.find(([key]) => key === group);
+    index.pages.push({ t: lang === 'no' ? noTitle : enTitle, u: u(guideHref(dir, slug)), g: groupRow ? groupRow[lang === 'no' ? 2 : 1] : '' });
+    for (const s of guideSections(bodyHtml)) index.s.push([index.pages.length - 1, s.h, s.a, s.x]);
     // Does this page exist in the other language? If not, it must not claim a
     // translation it does not have.
     const noCounterpart = !existsSync(join(guideSourceDir(lang === 'no' ? 'en' : 'no'), `${base}.md`));
@@ -1062,13 +1204,19 @@ function buildGuide(lang) {
         || (lang === 'no'
           ? 'Hvordan du bruker Purl, i klarspråk: prosjekter, oppskrifter, stash, PDF-verktøyene og mer.'
           : 'How to use Purl, in plain language: projects, patterns, yarn stash, the PDF tools and more.'),
-      body: `<article class="prose">${bodyHtml}</article>\n${guideNav(lang, slug)}`,
+      body: guideLayout(lang, slug, bodyHtml, heads),
+      wrapClass: ' wrap-guide',
     });
     const outFile = join(HERE, `${dir}/guide`.replace(/^\//, ''), `${slug}.html`);
     writeFileSync(outFile, setHeadings(html), 'utf8');
     WRITTEN.add(outFile);
     count++;
   }
+  const indexFile = join(HERE, `${dir}/guide`.replace(/^\//, ''), 'search.json');
+  writeFileSync(indexFile, JSON.stringify(index), 'utf8');
+  WRITTEN.add(indexFile);
+  const missing = [...GUIDE_NAV_MISSING].filter((k) => k.startsWith(`${lang}.`));
+  if (missing.length) console.warn(`guide navigation: copy.json has no ${missing.join(', ')}; using the built-in text.`);
   return count;
 }
 
