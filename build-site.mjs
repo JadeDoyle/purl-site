@@ -879,21 +879,15 @@ const GUIDE_GROUPS = [
 // the released app (src/featureFlags.ts), so a reader on purl.no cannot open
 // it; documenting it publicly sends them looking for a screen that is not
 // there. Turn the flag on in the same change that ships the feature.
-// The user guide in the Purl repo has been rewritten (16 pages, illustrated,
-// both languages) and is under review before it goes public. While this is
-// true the site publishes the frozen copy in guide-frozen/ instead, which is
-// the guide that was live before the rewrite.
+// The rewritten guide (task pages, then reference pages, both languages) went
+// public on 2026-10-20 (the maintainer), Norwegian reviewed in place after.
+// Until then this was true and the site published a frozen copy of the older
+// guide from guide-frozen/, now deleted; git history keeps it.
 //
 // The app deep-links to https://purl.no/guide/ from More, in both languages
 // (MoreScreen.tsx), so this path must keep serving something: an unpublished
 // guide is a 404 inside every installed copy of Purl.
-//
-// TO PUBLISH THE REWRITE: set this to false and delete guide-frozen/.
-//
-// PURL_GUIDE_PREVIEW=1 builds the rewrite instead, for a local look only:
-// rebuild without it before anything is committed, or the worktree's
-// guide/*.html are the unreviewed rewrite.
-const GUIDE_DRAFT = process.env.PURL_GUIDE_PREVIEW !== '1';
+const GUIDE_DRAFT = false;
 const GUIDE_FROZEN = join(HERE, 'guide-frozen');
 
 const GUIDE_FLAGS = { garment: false };
