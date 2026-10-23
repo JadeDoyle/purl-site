@@ -1,4 +1,6 @@
-node_modules/
+# The site's own packages only: the web demo's build (professional/demo/)
+# keeps fonts from the app's packages, in a folder Expo may name node_modules.
+/node_modules/
 package-lock.json
 # Chrome profiles left by the Professional page's shot scripts.
 pro/shots/raw/prof/

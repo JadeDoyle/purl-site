@@ -845,10 +845,12 @@ ${shots}
 // its sources are pro/ (pro/README.md), copied to assets/pro/ on each build.
 const PRO_SLUG = '/professional/';
 // The "Try it in your browser" buttons open the web demo's makers at
-// DEMO_BASE/make/<key>, in the same tab: the demo's Back returns to the page's
-// #try (the demo server's PRO_SITE). Move DEMO_BASE to demo.purl.no once its
-// DNS record exists.
-const DEMO_BASE = 'https://demo.hbc3.no';
+// DEMO_PATH<key>/, in the same tab: the demo's Back returns to the page's
+// #try. The demo is the app's web build, copied into DEMO_PATH by the app
+// repo's `npm run demo:publish` (tools/web-demo/toSite.mjs) and committed
+// there alone; this build never writes it and the link check skips it
+// (2026-10-23, it was at demo.hbc3.no before).
+const DEMO_PATH = '/professional/demo/';
 // Coming soon (the maintainer, 2026-10-18): the plum pill and the not-on-sale
 // note, no Ready badges. Every built feature shows, the ones the demo does
 // not reach included, and the On the way cards follow them.
@@ -951,7 +953,7 @@ function professional(lang) {
     : `<div class="svgcard" aria-hidden="true">${(f.chips || ['SVG', 'PNG', 'PDF']).map((c) => `<span>${esc(c)}</span>`).join('')}</div>`}</div>
 </section>`).join('\n');
   const coming = t.coming.map((c) => `<li class="ccard"><span class="badge badge-coming">${esc(t.comingLabel)}</span><h3>${line(c.title)}</h3><p>${line(c.body)}</p></li>`).join('');
-  const tryButtons = t.tryMakers.map((m) => `<a class="trybtn" href="${escAttr(`${DEMO_BASE}/make/${m.key}`)}">${esc(m.label)}</a>`).join('');
+  const tryButtons = t.tryMakers.map((m) => `<a class="trybtn" href="${escAttr(u(`${DEMO_PATH}${m.key}/`))}">${esc(m.label)}</a>`).join('');
   const trust = t.trust.map((c) => `<li class="tcard"><h3>${line(c.title)}</h3><p>${line(c.body)}</p></li>`).join('');
   const body = `<main class="pro-main">
 <div class="pro-panel">
@@ -1512,6 +1514,8 @@ function verifyLinkGraph() {
     for (const entry of readdirSync(dir, { withFileTypes: true })) {
       if (entry.name === 'node_modules' || entry.name === '.git' || entry.name === 'guide-frozen') continue;
       const full = join(dir, entry.name);
+      // The web demo: the app's build, not this generator's pages (DEMO_PATH).
+      if (full === join(HERE, ...DEMO_PATH.split('/').filter(Boolean))) continue;
       if (entry.isDirectory()) walk(full);
       else if (entry.name.endsWith('.html')) pages.push(full);
     }

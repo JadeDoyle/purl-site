@@ -60,11 +60,13 @@ Stash shot in its `.phoneframe`, in the page's language.
 ## Try it in your browser
 
 The four maker buttons under the hero point at the web demo,
-`https://demo.hbc3.no/make/<garment|colour|knit|crochet>` (the app repo's
-docs/features/web-demo.md, WD-51), in the same tab: the demo has no page of
-its own, and its Back and `/` go to the page's `#try` (`PRO_SITE` in the
-app repo's demo-server/server.js). Move `DEMO_BASE` in `build-site.mjs` to
-demo.purl.no once its DNS record exists.
+`/professional/demo/<garment|colour|knit|crochet>/` on this site (the app
+repo's docs/features/web-demo.md, r0.7, 2026-10-23), in the same tab: the
+demo has no page of its own, and its Back and its folder's own page go to
+the page's `#try`. `DEMO_PATH` in `build-site.mjs` names the folder. The
+demo's files are the app's web build, put there and committed by the app
+repo's `npm run demo:publish`; this site's build never writes them. Both
+Professional pages, English and Norwegian, open the same demo.
 
 ## Coming soon (2026-10-18)
 

@@ -1,0 +1,4 @@
+# The web demo is the app's web build, committed by the app repo's
+# `npm run demo:publish` (tools/web-demo/toSite.mjs): kept byte for byte,
+# with no line ending changes, and no diffs of its 10 MB bundle in the log.
+professional/demo/** -text -diff

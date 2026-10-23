@@ -51,7 +51,7 @@
 .dev-phone .phoneframe img { border-radius: 10.69cqw; }
 :root[data-theme="dark"] .dev-phone .phoneframe { box-shadow: 0 8.97cqw 20.69cqw rgba(0, 0, 0, .5); }
 
-/* Try it in your browser: four maker buttons to the web demo (DEMO_BASE in
+/* Try it in your browser: four maker buttons to the web demo (DEMO_PATH in
    build-site.mjs); .trybtn-soon is the look for a maker not live yet. */
 .try { text-align: center; }
 .try .section-title { margin-top: 40px; }
