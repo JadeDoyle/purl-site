@@ -940,7 +940,13 @@ function proHead() {
 function professional(lang) {
   const t = COPY[lang].pro;
   const filesHref = u(proPath(lang) + 'file-types/');
-  const built = t.built.map((f, i) => `<section class="pframe${i % 2 ? ' pframe-rev' : ''}" id="f-${f.key}">
+  // A built feature with neither a shot nor chips is a text card, and text
+  // cards next to each other share one grid (2026-10-25: written rows, Chart
+  // check, sizes and others have no web picture yet). Frames alternate sides
+  // among themselves.
+  const ready = PRO_COMING_SOON ? '' : `<span class="badge badge-ready">${esc(t.readyLabel)}</span>`;
+  const textCard = (f) => `<li class="ccard" id="f-${f.key}">${ready}<h3>${line(f.title)}</h3><p>${line(f.body)}</p></li>`;
+  const frame = (f, i) => `<section class="pframe${i % 2 ? ' pframe-rev' : ''}" id="f-${f.key}">
   <div class="pframe-text">
     ${PRO_COMING_SOON ? '' : `<span class="badge badge-ready">${esc(t.readyLabel)}</span>`}
     <h3>${line(f.title)}</h3>
@@ -951,7 +957,16 @@ function professional(lang) {
   <div class="pframe-shot">${f.shot
     ? `<span class="shot"><img class="img-light" src="${proAsset(`shots/${f.shot}.webp`)}" alt="${escAttr(plain(f.title))}" loading="lazy" /><img class="img-dark" src="${proAsset(`shots/${f.shot}_dark.webp`)}" alt="${escAttr(plain(f.title))}" loading="lazy" /></span>`
     : `<div class="svgcard" aria-hidden="true">${(f.chips || ['SVG', 'PNG', 'PDF']).map((c) => `<span>${esc(c)}</span>`).join('')}</div>`}</div>
-</section>`).join('\n');
+</section>`;
+  const parts = [];
+  let frames = 0;
+  for (const f of t.built) {
+    const last = parts[parts.length - 1];
+    if (f.shot || f.chips) parts.push(frame(f, frames++));
+    else if (Array.isArray(last)) last.push(textCard(f));
+    else parts.push([textCard(f)]);
+  }
+  const built = parts.map((p) => (Array.isArray(p) ? `<ul class="ccards bcards">${p.join('')}</ul>` : p)).join('\n');
   const coming = t.coming.map((c) => `<li class="ccard"><span class="badge badge-coming">${esc(t.comingLabel)}</span><h3>${line(c.title)}</h3><p>${line(c.body)}</p></li>`).join('');
   const tryButtons = t.tryMakers.map((m) => `<a class="trybtn" href="${escAttr(u(`${DEMO_PATH}${m.key}/`))}">${esc(m.label)}</a>`).join('');
   const trust = t.trust.map((c) => `<li class="tcard"><h3>${line(c.title)}</h3><p>${line(c.body)}</p></li>`).join('');

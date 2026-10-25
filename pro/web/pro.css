@@ -88,6 +88,11 @@ a.trybtn:hover { background: var(--primary-dark); border-color: var(--primary-da
 .ccard, .tcard { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 18px; }
 .ccard h3, .tcard h3 { margin: 8px 0 4px; font-size: 17px; }
 .ccard p, .tcard p { margin: 0; color: var(--muted); font-size: 15px; }
+/* Built features without a picture: their cards fill the row between the
+   frames, and read in the body's ink, as the frames' text does. */
+.bcards { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); margin: 30px 0 46px; }
+.bcards .ccard h3:first-child { margin-top: 0; }
+.bcards .ccard p { color: var(--text); }
 .files-link { margin: 26px 0 60px; text-align: center; }
 
 @media (max-width: 760px) {
@@ -98,7 +103,7 @@ a.trybtn:hover { background: var(--primary-dark); border-color: var(--primary-da
    then the three links); only the gaps here shrink. */
 @media (max-width: 560px) {
   .section-title { margin-top: 36px; }
-  .pframe { margin: 22px 0 34px; }
+  .pframe, .bcards { margin: 22px 0 34px; }
   .svgcard { width: 100%; aspect-ratio: auto; gap: 10px; }
   .svgcard span { padding: 12px 10px; }
   .files-link { margin-bottom: 40px; }
