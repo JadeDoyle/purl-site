@@ -22,6 +22,12 @@ JOBS = [
     ('ipad-air-knit-yarn.png', 'frame-yarn.png', None, None),
     ('ipad-air-blueprints.png', 'frame-blueprints.png', [78, 56], 1586),
     ('ipad-air-mitten-3d.png', 'frame-mitten.png', [78, 56], None),
+    ('ipad-air-written.png', 'frame-written.png', [78, 56], None),
+    ('ipad-air-check.png', 'frame-check.png', None, None),
+    ('ipad-air-sizes.png', 'frame-sizes.png', None, None),
+    ('ipad-air-versions.png', 'frame-versions.png', None, None),
+    ('ipad-air-drape.png', 'frame-drape.png', [78, 56], None),
+    ('ipad-air-amigurumi.png', 'frame-amigurumi.png', None, None),
 ]
 
 

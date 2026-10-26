@@ -34,7 +34,9 @@ theme scripts, like every other page:
   Professional switch and the flip, so the home page can load it when it
   gets its half of the switch.
 - `shots/frames.py`: the iPad Air feature frames (yarn view, blueprints,
-  mitten), from raws taken at 2360 x 1600, density 320.
+  mitten, and the tool cards: written rows, chart check, sizes, versions,
+  drape, amigurumi), from raws taken at 2360 x 1600, density 320. The tool
+  cards' data comes from `shots/make-tools-backup.mjs`.
 - `files/`: the file types page body and `read_purl.py`, a reader for
   `.purl` backups checked against the app's data-safety corpus.
 - `shots/`: `raw/` holds emulator captures (`raw/MANIFEST.txt` says how

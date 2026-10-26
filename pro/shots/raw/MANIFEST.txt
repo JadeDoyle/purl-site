@@ -62,3 +62,13 @@ ipad-air-mitten-3d.png | 2360x1600 | density 320 | "Winter mittens", hand chart 
 mac-studio.png | 2940x1782 | density 320, no caption bar | "Fjord raglan" (hero Mac)
 phone-studio.png | 1344x2992 | density 480 | "Fjord raglan", phone layout, small 3D in the corner
 In Dark the app keeps the 3D stage light grey and the stitch symbol tiles white; that is the app, not the capture. Dark Blueprints shows its search placeholder wrapped to two clipped lines, an app bug.
+
+Tool card raws, captured 2026-10-26 00:03 to 00:55 for pro/shots/frames.py: AVD Shots_Dark from the shots kit (Purl's npm run shots -- boot tablet, headless, read-only snapshot), wm size 2360x1600, density 320 (iPad Air 11-inch, as the yarn, blueprints and mitten raws), wip v0.4.205b, Professional, Appearance System. Each pair is one state captured twice, the theme flipped with adb shell cmd uimode night yes/no; the drape is draped again after the flip, with the same zoom and turn.
+Data: the three Horseshoe knit charts, the Horseshoe pullover draft and the Bear toy from pro/shots/make-tools-backup.mjs; Fjord raglan from pro/shots/make-garment-backup.mjs. The History versions are seven saves made by hand in the creator on 2026-10-26, 00:18 to 00:43.
+file | px | display | shows
+ipad-air-written.png | 2360x1600 | density 320 | Write out the chart over the Purl side's knit charts list, "Horseshoe lace", US terms, rows with repeats found; Professional offers Write out only from that list, so the shot was taken there
+ipad-air-check.png | 2360x1600 | density 320 | knit editor, "Horseshoe scarf" with 3D, Check chart: "Row 11 works 22 sts, but row 10 leaves 21.", row 11 marked red; the 3D note that it draws 2 stitches loose is the app's own
+ipad-air-sizes.png | 2360x1600 | density 320 | pattern creator, "Horseshoe pullover", facts with size tokens, the preview printing 96 (104) 112 (120) cm and the hem chart's rows per size
+ipad-air-versions.png | 2360x1600 | density 320 | pattern creator History, 7 versions, 00:18 compared with 00:43: Needles, Gauge and Notions changed (words only)
+ipad-air-drape.png | 2360x1600 | density 320 | Garment Studio, "Fjord raglan" draped on a body of its own size, the 3D zoomed four mouse-wheel steps and turned slightly
+ipad-air-amigurumi.png | 2360x1600 | density 320 | amigurumi maker, "Bear", Whole toy in 3D, Assembly steps at the side
