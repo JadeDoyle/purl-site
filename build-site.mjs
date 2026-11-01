@@ -691,9 +691,12 @@ function changelog() {
   // As in the app's hasWayIn, `crochetOnly` is asked first: a crochet card
   // also carries `garmentOnly`. Its build history (`crochetHistory`, the
   // wip and dev cards before stable) is folded away in the app; this page
-  // has no fold, so it leaves them out.
+  // has no fold, so it leaves them out. A card about a store version
+  // (`minRuntime`, since 2026-11-01) shows in the app only on an install of
+  // that version; this page cannot tell which version the stores have, so it
+  // leaves those cards out too.
   const releases = readArray('src/screens/ChangelogScreen.tsx', 'RELEASES').filter((r) =>
-    r.crochetOnly ? CROCHET_LIVE && !r.crochetHistory : !r.garmentOnly);
+    !r.minRuntime && (r.crochetOnly ? CROCHET_LIVE && !r.crochetHistory : !r.garmentOnly));
   const eras = readArray('src/screens/ChangelogScreen.tsx', 'ERAS');
   // Mirror the app: the recent releases in full, and everything older folded
   // into era cards that say what the app became over that stretch. The page
