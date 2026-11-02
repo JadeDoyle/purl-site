@@ -28,7 +28,7 @@ jobs:
         run: |
           for i in 1 2 3; do
             code=$(curl -s -o /dev/null -w '%{http_code}' --max-time 20 \
-              -H 'expo-platform: android' -H 'expo-runtime-version: 1.0.0' \
+              -H 'expo-platform: android' -H 'expo-runtime-version: 1.3.0' \
               -H 'expo-channel-name: stable' \
               https://updates.hbc3.no/api/manifest || true)
             echo "attempt $i: $code"
