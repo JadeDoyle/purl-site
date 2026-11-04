@@ -857,9 +857,10 @@ const DEMO_PATH = '/professional/demo/';
 // The page goes public with the Pro launch (Purl rulings 106 to 108,
 // 2026-11-04): then it reads COPY.pro.launch, splits the built cards into
 // today and "Coming to Purl Professional" (`later`), and shows the Purl and
-// Purl Professional table at #compare. Until launch day this stays true;
-// PRO_PAGE_LAUNCH=1 builds the launch look locally, for a look only.
-const PRO_COMING_SOON = process.env.PRO_PAGE_LAUNCH !== '1';
+// Purl Professional table at #compare. Since Purl ruling 132 (2026-11-04)
+// the unlisted page shows the launch look as drafted, so the maintainer sees
+// changes as they land; PRO_PAGE_LAUNCH=0 builds the coming-soon look.
+const PRO_COMING_SOON = process.env.PRO_PAGE_LAUNCH === '0';
 const PRO_SRC = join(HERE, 'pro');
 const PRO_ASSETS = '/assets/pro/';
 // The paths of the pages with the switch, which opt in to the flip between
