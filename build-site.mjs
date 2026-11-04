@@ -854,7 +854,12 @@ const DEMO_PATH = '/professional/demo/';
 // Coming soon (the maintainer, 2026-10-18): the plum pill and the not-on-sale
 // note, no Ready badges. Every built feature shows, the ones the demo does
 // not reach included, and the On the way cards follow them.
-const PRO_COMING_SOON = true;
+// The page goes public with the Pro launch (Purl rulings 106 to 108,
+// 2026-11-04): then it reads COPY.pro.launch, splits the built cards into
+// today and "Coming to Purl Professional" (`later`), and shows the Purl and
+// Purl Professional table at #compare. Until launch day this stays true;
+// PRO_PAGE_LAUNCH=1 builds the launch look locally, for a look only.
+const PRO_COMING_SOON = process.env.PRO_PAGE_LAUNCH !== '1';
 const PRO_SRC = join(HERE, 'pro');
 const PRO_ASSETS = '/assets/pro/';
 // The paths of the pages with the switch, which opt in to the flip between
@@ -937,6 +942,37 @@ function proHead() {
 <script>${SWITCH_JS}</script>`;
 }
 
+// The Purl and Purl Professional table (Purl ruling 107): one row per thing
+// a person does, a tick or a dash in each column, or a short text where the
+// two differ by degree. Each group is a tbody headed by its own row. The
+// price row never says what Purl costs, only that it comes with the app
+// (gate ZU), and the thanks line under the store buttons tells the story.
+// Cells are escaped but not glued: in a column a third of a phone wide, a
+// short word glued to a long one ("av fargediagrammet") cannot fit.
+function proCompare(lang, L) {
+  const cell = (v) => (v === true
+    ? `<span class="tick" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3 8.5l3.2 3.2L13 4.8"/></svg></span><span class="sr">${esc(L.yes)}</span>`
+    : v === false
+      ? `<span class="dash" aria-hidden="true"></span><span class="sr">${esc(L.no)}</span>`
+      : `<span class="txt">${esc(v)}</span>`);
+  const groups = L.groups.map((g) => `<tbody>
+      <tr class="cgroup"><th scope="rowgroup" colspan="3">${line(g.title)}</th></tr>
+      ${g.rows.map((r) => `<tr><th scope="row">${esc(r.label)}</th><td>${cell(r.purl)}</td><td class="cpro">${cell(r.pro)}</td></tr>`).join('\n      ')}
+    </tbody>`).join('\n    ');
+  return `<section class="compare" id="compare">
+  <h2 class="section-title">${line(L.compareTitle)}</h2>
+  <p class="later-note">${line(L.compareLead)}</p>
+  <table class="ctable">
+    <thead><tr><th scope="col">${esc(L.featureCol)}</th><th scope="col">${esc(L.colPurl)}</th><th scope="col" class="cpro">${esc(L.colPro)}</th></tr></thead>
+    ${groups}
+    <tfoot><tr><th scope="row">${esc(L.priceLabel)}</th><td><span class="txt">${esc(L.pricePurl)}</span></td><td class="cpro"><span class="txt">${esc(L.pricePro)}</span></td></tr></tfoot>
+  </table>
+  <p class="compare-buy">${line(L.buyPro)}</p>
+  ${downloadRow(lang)}
+  <p class="compare-thanks">${line(L.thanks)}</p>
+</section>`;
+}
+
 function professional(lang) {
   const t = COPY[lang].pro;
   const filesHref = u(proPath(lang) + 'file-types/');
@@ -944,11 +980,14 @@ function professional(lang) {
   // cards next to each other share one grid (2026-10-25: written rows, Chart
   // check, sizes and others have no web picture yet). Frames alternate sides
   // among themselves.
-  const ready = PRO_COMING_SOON ? '' : `<span class="badge badge-ready">${esc(t.readyLabel)}</span>`;
-  const textCard = (f) => `<li class="ccard" id="f-${f.key}">${ready}<h3>${line(f.title)}</h3><p>${line(f.body)}</p></li>`;
+  const L = PRO_COMING_SOON ? null : t.launch;
+  const badge = (f) => (!L ? '' : f.later
+    ? `<span class="badge badge-coming">${esc(L.laterLabel)}</span>`
+    : `<span class="badge badge-ready">${esc(t.readyLabel)}</span>`);
+  const textCard = (f) => `<li class="ccard" id="f-${f.key}">${badge(f)}<h3>${line(f.title)}</h3><p>${line(f.body)}</p></li>`;
   const frame = (f, i) => `<section class="pframe${i % 2 ? ' pframe-rev' : ''}" id="f-${f.key}">
   <div class="pframe-text">
-    ${PRO_COMING_SOON ? '' : `<span class="badge badge-ready">${esc(t.readyLabel)}</span>`}
+    ${badge(f)}
     <h3>${line(f.title)}</h3>
     <p>${line(f.body)}</p>
     ${f.points.length ? `<ul class="points">${f.points.map((p) => `<li>${line(p)}</li>`).join('')}</ul>` : ''}
@@ -958,15 +997,25 @@ function professional(lang) {
     ? `<span class="shot"><img class="img-light" src="${proAsset(`shots/${f.shot}.webp`)}" alt="${escAttr(plain(f.title))}" loading="lazy" /><img class="img-dark" src="${proAsset(`shots/${f.shot}_dark.webp`)}" alt="${escAttr(plain(f.title))}" loading="lazy" /></span>`
     : `<div class="svgcard" aria-hidden="true">${(f.chips || ['SVG', 'PNG', 'PDF']).map((c) => `<span>${esc(c)}</span>`).join('')}</div>`}</div>
 </section>`;
-  const parts = [];
-  let frames = 0;
-  for (const f of t.built) {
-    const last = parts[parts.length - 1];
-    if (f.shot || f.chips) parts.push(frame(f, frames++));
-    else if (Array.isArray(last)) last.push(textCard(f));
-    else parts.push([textCard(f)]);
-  }
-  const built = parts.map((p) => (Array.isArray(p) ? `<ul class="ccards bcards">${p.join('')}</ul>` : p)).join('\n');
+  const cards = (list) => {
+    const parts = [];
+    let frames = 0;
+    for (const f of list) {
+      const last = parts[parts.length - 1];
+      if (f.shot || f.chips) parts.push(frame(f, frames++));
+      else if (Array.isArray(last)) last.push(textCard(f));
+      else parts.push([textCard(f)]);
+    }
+    return parts.map((p) => (Array.isArray(p) ? `<ul class="ccards bcards">${p.join('')}</ul>` : p)).join('\n');
+  };
+  // At launch the dashboard's tools, not sold yet, follow under their own
+  // heading, and the table comes after On the way; before launch, every built
+  // card shows as one list and the page has no table.
+  const built = cards(L ? t.built.filter((f) => !f.later) : t.built) + (L ? `
+  <h2 class="section-title">${line(L.sectionLater)}</h2>
+  <p class="later-note">${line(L.laterNote)}</p>
+  ${cards(t.built.filter((f) => f.later))}` : '');
+  const compare = L ? `\n  ${proCompare(lang, L)}` : '';
   const coming = t.coming.map((c) => `<li class="ccard"><span class="badge badge-coming">${esc(t.comingLabel)}</span><h3>${line(c.title)}</h3><p>${line(c.body)}</p></li>`).join('');
   const tryButtons = t.tryMakers.map((m) => `<a class="trybtn" href="${escAttr(u(`${DEMO_PATH}${m.key}/`))}">${esc(m.label)}</a>`).join('');
   const trust = t.trust.map((c) => `<li class="tcard"><h3>${line(c.title)}</h3><p>${line(c.body)}</p></li>`).join('');
@@ -976,7 +1025,7 @@ function professional(lang) {
   <div class="phero-text">
     ${PRO_COMING_SOON ? `<p class="soon-pill"><span>${esc(t.trySoon)}</span></p>` : ''}
     <h1>${line(t.title)}</h1>
-    <p class="lsub">${line(t.lead)}</p>
+    <p class="lsub">${line(L ? L.lead : t.lead)}</p>
     ${PRO_COMING_SOON ? `<p class="soon-note">${line(t.heroNote)}</p>` : ''}
   </div>
   <div class="hero-stage" role="img" aria-label="${escAttr(plain(t.heroAlt))}">
@@ -989,10 +1038,10 @@ function professional(lang) {
   <div class="trybtns">${tryButtons}</div>
 </section>
 <section class="wrap wrap-pro">
-  <h2 class="section-title">${line(t.sectionBuilt)}</h2>
+  <h2 class="section-title">${line(L ? L.sectionToday : t.sectionBuilt)}</h2>
   ${built}
   <h2 class="section-title">${line(t.sectionComing)}</h2>
-  <ul class="ccards">${coming}</ul>
+  <ul class="ccards">${coming}</ul>${compare}
   <h2 class="section-title">${line(t.sectionTrust)}</h2>
   <ul class="tcards">${trust}</ul>
   <p class="files-link"><a href="${filesHref}">${line(t.filesLink)}</a></p>
