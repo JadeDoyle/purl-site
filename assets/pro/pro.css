@@ -95,6 +95,33 @@ a.trybtn:hover { background: var(--primary-dark); border-color: var(--primary-da
 .bcards .ccard p { color: var(--text); }
 .files-link { margin: 26px 0 60px; text-align: center; }
 
+/* Launch only: the note under Coming to Purl Professional, and the Purl and
+   Purl Professional table. The Professional column carries a faint plum wash
+   from its filled head down, so the eye reads it as one column. */
+.later-note { color: var(--muted); max-width: 620px; margin: 0; }
+/* Fixed columns, so a long Norwegian word breaks inside its cell instead of
+   widening the table past a phone's edge. */
+.ctable { width: 100%; table-layout: fixed; border-collapse: separate; border-spacing: 0; margin: 22px 0 0; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; font-size: 15px; text-align: left; }
+.ctable th, .ctable td { padding: 11px 16px; border-top: 1px solid var(--border); vertical-align: middle; overflow-wrap: break-word; hyphens: auto; }
+.ctable thead th { border-top: 0; font-weight: 700; }
+.ctable td, .ctable thead th + th { text-align: center; width: 26%; }
+.ctable tbody th { font-weight: 400; }
+.ctable .cpro { background: rgba(124, 94, 155, .07); }
+.ctable thead .cpro { background: #7C5E9B; color: #fff; }
+.ctable .cgroup th { background: var(--surface-alt); font-size: 12px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--muted); padding: 8px 16px; }
+.ctable tfoot th, .ctable tfoot td { font-weight: 700; background: var(--surface-alt); }
+.ctable tfoot .cpro { background: rgba(124, 94, 155, .14); }
+.tick svg { width: 20px; height: 20px; fill: none; stroke: var(--primary); stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; vertical-align: middle; }
+.dash { display: inline-block; width: 12px; height: 2px; border-radius: 1px; background: var(--muted); opacity: .55; vertical-align: middle; }
+.txt { font-size: 14px; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.compare-buy { text-align: center; color: var(--muted); margin: 24px 0 10px; }
+.compare-thanks { text-align: center; max-width: 560px; margin: 14px auto 0; }
+:root[data-theme="dark"] .ctable .cpro { background: rgba(169, 143, 201, .10); }
+:root[data-theme="dark"] .ctable thead .cpro { background: #7C5E9B; }
+:root[data-theme="dark"] .ctable tfoot .cpro { background: rgba(169, 143, 201, .18); }
+:root[data-theme="dark"] .badge-ready { background: #213A2D; color: #A3D6B9; }
+
 @media (max-width: 760px) {
   .pframe, .pframe-rev { flex-direction: column; gap: 14px; }
   .hero-stage { aspect-ratio: 16 / 10; }
@@ -107,6 +134,14 @@ a.trybtn:hover { background: var(--primary-dark); border-color: var(--primary-da
   .svgcard { width: 100%; aspect-ratio: auto; gap: 10px; }
   .svgcard span { padding: 12px 10px; }
   .files-link { margin-bottom: 40px; }
+  .ctable { font-size: 14px; }
+  .ctable th, .ctable td { padding: 9px 6px; }
+  .ctable th:first-child { padding-left: 12px; }
+  .ctable thead th { font-size: 13px; }
+  /* Measured at 375 px: the widest Norwegian label word is 132 px and
+     "Standardsettet" 80 px, which these widths hold. */
+  .ctable td, .ctable thead th + th { width: 28%; }
+  .txt { font-size: 12.5px; }
 }
 
 /* File types page */
