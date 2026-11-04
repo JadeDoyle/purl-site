@@ -205,15 +205,22 @@ def shadow_under(canvas, box, radius, blur, offset, alpha=70):
 
 
 def frame_tablet(screen, out_w=1600):
-    s = screen.resize((out_w - 2 * int(out_w * 0.035), round((out_w - 2 * int(out_w * 0.035)) * screen.height / screen.width)), Image.LANCZOS)
-    bez = int(out_w * 0.035)
+    # Ruling 142 (2026-11-04): the bezel is 60 px at a 2360 px wide screen,
+    # 2.5% of the screen's long side, as devices.ipad_device draws it. The
+    # body corner is the screen corner plus the bezel, so the two stay
+    # concentric.
+    long_k = max(1, screen.height / screen.width)
+    sw = round(out_w / (1 + 2 * long_k * 60 / 2360))
+    s = screen.resize((sw, round(sw * screen.height / screen.width)), Image.LANCZOS)
+    bez = round(max(s.size) * 60 / 2360)
     W, H = s.width + 2 * bez, s.height + 2 * bez
     m = 60
     c = Image.new('RGBA', (W + 2 * m, H + 2 * m), (0, 0, 0, 0))
+    r = int(W * 0.022)
     shadow_under(c, (m, m, m + W, m + H), int(W * 0.04), 26, 18)
     d = ImageDraw.Draw(c)
-    d.rounded_rectangle([m, m, m + W, m + H], radius=int(W * 0.045), fill=(42, 42, 45), outline=(140, 140, 146), width=3)
-    c.alpha_composite(round_corners(s, int(W * 0.022)), (m + bez, m + bez))
+    d.rounded_rectangle([m, m, m + W, m + H], radius=r + bez, fill=(42, 42, 45), outline=(140, 140, 146), width=3)
+    c.alpha_composite(round_corners(s, r), (m + bez, m + bez))
     return c
 
 

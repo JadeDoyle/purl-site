@@ -185,8 +185,11 @@ def shadowless_body(size, radius, fill, edge, edge_w, corners=(True, True, True,
 
 
 def ipad_device(screen):
-    # 247.6 x 178.5 mm at 264 ppi; screen 2360 x 1640, so a 107 px bezel.
-    bez = 107
+    # The iPad Air's 247.6 x 178.5 mm at 264 ppi would give a 107 px bezel
+    # round a 2360 x 1640 screen. Ruling 142 (2026-11-04) draws every iPad
+    # thinner than any real one: 60 px at a 2360 px wide screen, 2.5% of the
+    # screen's long side, so a portrait screen gets the same bezel.
+    bez = round(max(screen.size) * 60 / 2360)
     W, H = screen.width + 2 * bez, screen.height + 2 * bez
     c = shadowless_body((W, H), 36 + bez, (38, 38, 41, 255), (150, 150, 156, 255), 5)
     c.alpha_composite(screen, (bez, bez))

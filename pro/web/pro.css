@@ -32,10 +32,11 @@
 
 .dev-mac { left: 22%; top: 2%; width: 56%; }
 .dev-ipad { left: 6%; bottom: 8%; width: 36%; }   /* room for the pencil below it */
-/* The Apple Pencil (pencil.svg, drawn at its real 166 by 8.9 mm): 166 mm
-   of the iPad Air's 247.6 mm body is 67% of the iPad picture's width. */
+/* The Apple Pencil (pencil.svg, drawn at its real 166 by 8.9 mm): the iPad
+   picture is the Air's 227.1 mm screen in a 60 px bezel (ruling 142), 238.6
+   mm wide, so 166 mm is 69.6% of the picture's width. */
 .dev > .pencil {
-  position: absolute; width: 67%; height: auto; right: -6%; bottom: -7%;
+  position: absolute; width: 69.6%; height: auto; right: -6%; bottom: -7%;
   transform: rotate(-7deg); transform-origin: right center;
   filter: drop-shadow(0 5px 4px rgba(44,38,48,.22));
 }
