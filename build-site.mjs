@@ -476,7 +476,9 @@ function shotPair(lang, key, fallbackAlt, hero = false) {
 // stays in code; the editable text lives in copy.json's landing.feat).
 // Stash goes LAST: the hero already shows the stash screen, so the feature
 // tour runs patterns, projects, then closes on the stash + no-paywall punch.
-const FEAT_IMGS = ['patterns', 'projects', 'stash'];
+// Its picture is the Yarn library's front page (Purl ruling 170): the hero
+// shows the stash itself, and the library carries the shade colours.
+const FEAT_IMGS = ['patterns', 'projects', 'library'];
 
 // A fanned band (the maintainer, 2026-10-18 22:09): three phones over each
 // other, the middle one in front and the two beside it tilted back, with a
