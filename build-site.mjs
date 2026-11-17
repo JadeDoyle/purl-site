@@ -16,10 +16,11 @@
 //   - changelog, roadmap                    -> read from the app's own data
 //                                              (English, as in the app)
 //   - favicon + og.png                      -> rasterised from the real logo
+//   - .well-known/ (app links)              -> ../Purl/docs/site/well-known/
 //
 // Style rules, matching the app: no em dashes, no emojis in any output.
 
-import { readFileSync, writeFileSync, mkdirSync, existsSync, copyFileSync, readdirSync, statSync } from 'node:fs';
+import { readFileSync, writeFileSync, mkdirSync, existsSync, copyFileSync, readdirSync, statSync, unlinkSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { marked } from 'marked';
@@ -1646,10 +1647,35 @@ function robotsAndSitemap(paths) {
   writeFileSync(join(HERE, 'CNAME'), 'purl.no\n', 'utf8');
 }
 
+// --- app links (.well-known) ---------------------------------------------
+// The two files that let https://purl.no/a/... links open the Purl app (Purl
+// ruling 749): iOS reads apple-app-site-association, Android assetlinks.json.
+// Kept in the Purl repo beside app.json, which claims the same host and path,
+// and checked against it there (Purl gate NX). Copied as they are, by name
+// only. One gone from Purl is removed here too, so the site never claims more
+// than the app does. Served because .nojekyll keeps the dot folder.
+const WELL_KNOWN = ['apple-app-site-association', 'assetlinks.json'];
+function copyWellKnown() {
+  const from = join(PURL, 'docs', 'site', 'well-known');
+  const to = join(HERE, '.well-known');
+  for (const name of WELL_KNOWN) {
+    const src = join(from, name);
+    const dst = join(to, name);
+    if (existsSync(src)) {
+      JSON.parse(readFileSync(src, 'utf8'));
+      mkdirSync(to, { recursive: true });
+      copyFileSync(src, dst);
+    } else if (existsSync(dst)) {
+      unlinkSync(dst);
+    }
+  }
+}
+
 // --- run -----------------------------------------------------------------
 async function main() {
   if (!existsSync(PURL)) { console.error(`Sibling Purl repo not found at ${PURL}`); process.exit(1); }
   copyShots();
+  copyWellKnown();
 
   // English + Norwegian pages
   for (const lang of ['en', 'no']) {
