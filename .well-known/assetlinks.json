@@ -1,0 +1,13 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "no.purl.app",
+      "sha256_cert_fingerprints": [
+        "16:18:26:14:EC:15:FA:97:45:7F:7B:EE:C4:B1:3D:0C:3F:40:81:A2:E9:ED:59:5C:BA:43:3C:AD:5A:35:7C:A3",
+        "17:59:0C:DD:88:65:6E:10:B5:1B:31:86:11:4E:62:82:30:76:24:24:1B:1E:62:F7:40:C5:AB:33:B4:3C:92:EB"
+      ]
+    }
+  }
+]

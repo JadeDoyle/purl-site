@@ -1,0 +1,12 @@
+{
+  "applinks": {
+    "details": [
+      {
+        "appIDs": ["3YR9FLQ6MA.no.purl.app"],
+        "components": [
+          { "/": "/a/*", "comment": "Links made for the app. Nothing else on purl.no opens Purl." }
+        ]
+      }
+    ]
+  }
+}
